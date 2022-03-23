@@ -1,6 +1,6 @@
 .calculation_box input[type="range"]::-webkit-slider-thumb {
-  width: .5vw;
-  height: 1.5vw;
+  width: 0.9vh;
+  height: 2.5vh;
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
   border-radius: 10vw;
