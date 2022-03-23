@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script id="canvas-video" src="https://canvas-video-embed.web.app/animation.js"></script>
+  <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+
+  <title>Physics</title>
+  <link rel="icon" type="image/svg+xml" href="physics.svg">
+  
+  <script src="tools/canvas/shapes.js"></script>
+  <script src="tools/svg/shapes.js"></script>
+  <script src="equations.js"></script>
+  <link rel="stylesheet" type="text/css" href="physics.css" />
+</head>
+
+<body>
+<div class="page">
+<article class="page-content">
+
+<div id="magnetic_force" class="markdown">
+# <center><u style="font-family: 'Times New Roman';">Magnetic Force</u></center>
+<br/>
+I started this because I was sure that today's magnetic force equation that uses the right hand law is wrong.
+
+Lets take a look at the thing that triggered me the most:
+</div>
+<div id="their_force_example" class="animation_box">
+  <canvas width="1000" height="1000" class="animation_content"></canvas>
+</div>
+<div class="markdown">
+Both particles are positivly charged.
+
+The <span style="color:rgb(136, 255, 136)">green</span> particle goes right, and the <span style="color:rgb(253, 255, 136)">yellow</span> particle goes up.
+
+As you can see the <span style="color:rgb(253, 255, 136)">yellow</span> particle pushes <span style="color:rgb(136, 255, 136)">green</span> down,
+and the <span style="color:rgb(136, 255, 136)">green</span> particle doesnt creates any force at all on <span style="color:rgb(253, 255, 136)">yellow</span>.
+<br/>
+<br/>
+<br/>
+<br/>
+Since then I started thinking and trying to find new equation that will make a lot more sense.
+
+If you are interested, you can see my final [equation discovery](equation_discovery.html).
+<br/>
+<br/>
+
+---
+<br/>
+<br/>
+</div>
+<div id="new_equation" class="markdown">
+# <center><u>New Equation</u></center>
+Shortly the new equation is:
+
+$$F=\frac{(\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)}{r^2}$$
+
+</div>
+<div id="equation_anatomy" class="animation_box">
+  <canvas width="1000" height="1000"></canvas>
+</div>
+<div class="markdown">
+The force direction is always in \\(\hat r\\) direction.
+
+Now all I had to do is to compare the equations, and find the biggest difference between them to make an experiment and prove that the right hand law is wrong.
+
+If you are interested, you can see [exeperiment planning and comparing](experiment.html).
+
+---
+<br/>
+<br/>
+</div>
+<div id="experiment" class="markdown">
+# <center><u>Experiment</u></center>
+As a result, i decided to do the next experiment:
+
+<div style="text-align: center;">
+  <img src="https://drive.google.com/uc?export=view&id=11_Dx2MplXfS9ZIosMMUF8I0_xZ9Nxfd-"/>
+</div>
+
+And in drawing its:
+
+</div>
+<div id="experiment_anatomy" class="animation_box">
+  <canvas width="1000" height="1000"></canvas>
+</div>
+<div class="markdown">
+
+The pink arrows indicate the "current flow"
+
+The right hand law force says that there is always 0 force in the current direction:
+
+$$\vec F=q\vec v\times \vec B$$
+
+(because of the vector multiplication, \\(\vec F\\) will be always vertical to \\(\vec v\\))
+<br/>
+<br/>
+
+So shortly if the copper sticks moves sideways, then the right hand law is wrong and there is some force in \\(\vec v\\) direction.
+
+I made the experiment:
+
+<div style="text-align: center;">
+  <iframe src="https://drive.google.com/file/d/1cBhcy0vM_JDGsFyK2H8_eEqINV_yQSKI/preview" frameborder="0" scrolling="no" allowfullscreen onload="resizeIframe(this)" ></iframe>
+</div>
+
+Assuming the experiment is not perfect and maybe everything is sloped and thats why it goes right.
+
+So i flipped the battery, now if it gows left, so now its definitely the magnetic force:
+
+<div style="text-align: center;">
+  <iframe src="https://drive.google.com/file/d/1O8XtzPIspuUcUkl2b-rR3GuViGfW-int/preview" frameborder="0" scrolling="no" allowfullscreen onload="resizeIframe(this)" ></iframe>
+</div>
+
+And indeed it went left.
+
+Im not 100% sure about my experiment, so if you can, please read my [experiment inscruction](experiment.html) and try it yourself.
+
+my contact email: zfrhv2010@gmail.com
+</div>
+
+<script async>
+  // Parse markdown
+  document.querySelectorAll('.markdown').forEach(elmNode => elmNode.innerHTML = marked.parse(elmNode.innerHTML));
+  
+  function resizeIframe(obj) {
+    // my videos resolution are 1920x1080
+    obj.style.height = obj.offsetWidth * 1080/1920 + "px";
+  }
+</script>
+<script src="drawings.js"></script>
+<script id="physics.js">
+  // Draw their force wrong
+  draw_particles(
+    document.getElementById("their_force_example").getElementsByTagName("canvas")[0].getContext("2d"),
+    {place: {x: 250, y: 500}, speed: {x: 250, y: 0}},
+    {place: {x: 750, y: 500}, speed: {x: 0, y: -250}},
+    their_force,
+    570
+  )
+
+  draw_symbols_explanation();
+
+  draw_experiment();
+</script>
+</body>
+</html>

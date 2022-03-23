@@ -1,0 +1,126 @@
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  ::selection {
+    color: #091a50;
+    background: #f1f180;
+  }
+
+  body {
+    color: #d6d5d2;
+    background-color: #2a2a2c;
+  }
+
+  .page {
+    background-color: #494c50;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #3b3b3d;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #5c6064;
+  }
+
+  a {
+    color: #8aafff;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    color: #091a50;
+    background: #f1f180;
+  }
+
+  body {
+    color: #d6d5d2;
+    background-color: #2a2a2c;
+  }
+
+  .page {
+    background-color: #494c50;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #3b3b3d;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #5c6064;
+  }
+
+  a {
+    color: #8aafff;
+  }
+}
+
+
+body {
+  margin: 0;
+  font-family: Arial;
+}
+
+.page {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: min(920px, 100vw);
+
+  border-radius: 1vw;
+
+  display: flex;
+}
+
+.page-content {
+  margin: auto;
+  margin-top: 6.3vh;
+  margin-bottom: 6.3vh;
+
+  width: 80%;
+  height: 88%;
+
+  word-wrap: break-word;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}
+
+iframe {
+  border: 0.2vw solid #d6d5d2;
+  border-radius: 1vw;
+  width: 60%;
+}
+
+img {
+  border: 0.2vw solid #d6d5d2;
+  border-radius: 1vw;
+  width: 60%;
+}
+
+:target {
+  animation: temp-highlight 1s linear;
+}
+
+@keyframes temp-highlight {
+  0%   { background-color: transparent; }
+  50%  { background-color: #8f8f49; }
+  100% { background-color: transparent; }
+}
+
+/* smooth page laod */
+body > * {
+  animation: fadein .3s cubic-bezier(.66,0,.39,-0.17)
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
