@@ -8,7 +8,7 @@
     ],
     "redirects": [ {
       "source": "/",
-      "destination": "/animation.js",
+      "destination": "/physics.html",
       "type": 301
     } ]
   }
