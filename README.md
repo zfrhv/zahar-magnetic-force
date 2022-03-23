@@ -8,4 +8,4 @@
 - [ThreeJS](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene) for animating 3d objects.
 
 ### Info
-the code is being pushed to firebase, hosted at https://zahar-magnetic-force.web.app/ or https://zahar-magnetic-force.firebaseapp.com/
+the code is being pushed to firebase, hosted at [here](https://zahar-magnetic-force.web.app/) or [here](https://zahar-magnetic-force.firebaseapp.com/)
