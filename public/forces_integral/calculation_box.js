@@ -55,7 +55,7 @@ function create_arrow(class_name, color) {
     arrow.setAttributeNS(null, 'fill', color);
     arrow.setAttributeNS(null, 'stroke-linejoin', "round");
     arrow.setAttributeNS(null, 'stroke-linecap', "round");
-    arrow.setAttributeNS(null, 'stroke-width', "0.7");
+    arrow.setAttributeNS(null, 'stroke-width', "1.3");
     return arrow;
 }
 
