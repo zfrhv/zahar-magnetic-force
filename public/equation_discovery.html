@@ -87,9 +87,7 @@ When magnets are like that (blue circle is the magnet):
 <canvas-video type="threejs" object="3d_objects/magnets_merged.obj" material="3d_objects/magnets_merged.mtl" scale="0.4"></canvas-video>
 
 <div class="markdown">
-They pull to each other at some side (as demonstrated), and push each other on the other side (pushing force is not in the diagram).
-
-TODO add pushing forcce to the diagram
+They pull to each other at some side, and push each other on the other side (as demonstrated).
 
 there cant be force at the top/bottom that rotates the magnets.
 
@@ -97,36 +95,36 @@ so the pulling/pushing forces must be on the side of the magnet (just as the pin
 
 assuming the speed direction is vertical to their distance vector: \\(\vec I\ \bot\ \vec r\\).
 
-When 2 particles move in the same direction, the pull each other.
+When 2 particles move in the same direction, they pull each other.
 
 and when flipping the speed, 2 particles move in opposite directions, they push each other away (flip speed \\(\to\\) flip force).
 
-Now lets assume we are in 2d, and the gree particle goes up, while the yellow goes up+rigth:
+Now lets assume we are in 2d, and the <span style="color:rgb(136, 255, 136)">green</span> particle goes up, while the <span style="color:rgb(253, 255, 136)">yellow</span> goes up+rigth:
 
 (as demonstrated in this diagram. if you played it by accident just refresh the page.)
 </div>
 <canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
 <div class="markdown">
 
-if we flip the yellow particle speed, and we flip the gree particle speed we get:
+if we flip the <span style="color:rgb(253, 255, 136)">yellow</span> particle speed, and we flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed we get:
 
-green goes down, yellow goes down+left. and the force got flipped twice, so its the same amount.
+<span style="color:rgb(136, 255, 136)">green</span> goes down, <span style="color:rgb(253, 255, 136)">yellow</span> goes down+left. and the force got flipped twice, so it remains the same.
 
-now we can rotate the whole situation in 180 degrees on X axis and we get:
+now we can rotate the whole situation in 180 degrees around X axis and we get:
 
-green goes up, and yellow goes up+left. the force remains the same.
+<span style="color:rgb(136, 255, 136)">green</span> goes up, and <span style="color:rgb(253, 255, 136)">yellow</span> goes up+left. the force remains the same.
 
 so as a conclustion, we get:
 
-when green particle goes up, then the force when yellow goes up+right or up+left is the same no matter what is \\(\beta\\).
+when <span style="color:rgb(136, 255, 136)">green</span> particle goes up, then the force when <span style="color:rgb(253, 255, 136)">yellow</span> goes up+right or up+left is the same no matter what is \\(\beta\\).
 
-- and now when we look at situation where green goes up, and yellow goes right, its the same force as green up and yellow left.
+- and now when we look at situation where <span style="color:rgb(136, 255, 136)">green</span> goes up, and <span style="color:rgb(253, 255, 136)">yellow</span> goes right, its the same force as <span style="color:rgb(136, 255, 136)">green</span> up and yellow left.
 
-- when yellow goes up its pulling, when yellow goes down its pushing \\(\to\\) there must be some \\(\beta\\) at which F=0.
+- when <span style="color:rgb(253, 255, 136)">yellow</span> goes up its pulling, when <span style="color:rgb(253, 255, 136)">yellow</span> goes down its pushing \\(\to\\) there must be some \\(\beta\\) at which F=0.
 
-- because when yellow goes right = yellow goes left, its probably the point where F=0.
+- because when <span style="color:rgb(253, 255, 136)">yellow</span> goes right = <span style="color:rgb(253, 255, 136)">yellow</span> goes left, its probably the point where F=0.
 
-conclustion: when green goes up and yellow goes right or left then F=0.
+conclustion: when <span style="color:rgb(136, 255, 136)">green</span> goes up and <span style="color:rgb(253, 255, 136)">yellow</span> goes right or left then F=0.
 
 (you can play the video)
 </div>
@@ -135,7 +133,9 @@ conclustion: when green goes up and yellow goes right or left then F=0.
 
 ---
 
-the force in 3d? not sure but...
+# Force in 3d
+
+not sure 100%, but i have some idea.
 
 ### situation
 
@@ -145,19 +145,21 @@ the force in 3d? not sure but...
 
 Lets assume that those are the speeds of the particles (blue arrow = speed).
 
-now lets randomly assume the force that 1 yellow particle create on green particle.
+now lets randomly assume that <span style="color:rgb(253, 255, 136)">yellow</span> particle creates force on <span style="color:rgb(136, 255, 136)">green</span> particle (its random discition so i marked it with red arrow, F can be pulling, pushing, or 0).
 
-if we look from the top view, rotate everything 180 degrees, and flip the green particle speed, we can find the speed that the other yellow particle creates on the green particle.
+if we look from the top view, rotate everything 180 degrees, and flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed, we can find the speed that the other <span style="color:rgb(253, 255, 136)">yellow</span> particle creates on the <span style="color:rgb(136, 255, 136)">green</span> particle.
 
 we see that one force is pulling, and one is pushing, even tho its exactly symmetric situations.
 
-thus, to not violate the symmetricity, the forces must be 0.
+thus, to not violate the symmetricity, the forces between <span style="color:rgb(136, 255, 136)">green</span> and <span style="color:rgb(253, 255, 136)">yellow</span> must be 0.
 
-and this is true no matter whats the height of the green particle.
+and this is true no matter whats the height of the <span style="color:rgb(136, 255, 136)">green</span> particle.
 
 ### conclustion
 
 so its probably cos() between the speeds after doing sin() on each one.
+
+its same as doing scalar multiplication after finding the vertical value of the speeds: \\((\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)\\)
 
 ---
 
@@ -189,13 +191,17 @@ so its probably cos() between the speeds after doing sin() on each one.
 </div>
 <div class="markdown">
 
-The final equation is:
+And ofcource we also add some constant to the equation, and \\(1/r^2\\).
+
+why do we add \\(1/r^2\\) ? because the "magnetic field" comes out of a single point (from the particle), and when moving x distance to some direction, the area (in other words the amount of magnetic field) will change by \\(1/x^2\\).
+
+So the final equation is:
 
 $$F=\frac{(\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)}{r^2}$$
 
-$$I=q\cdot v$$
+$$\vec I=q\cdot \vec v$$
 
-(ofcource its not straight the function, there is probably some additional constant, but I didnt mentioned it in the equation so it wont confuse the understanding)
+(I didnt mentioned the constant on purspoe so it would be easier to focus on the logical content)
 
 [Return to main page](physics.html#new_equation)
 </div>
