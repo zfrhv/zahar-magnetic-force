@@ -151,8 +151,7 @@ window.addEventListener('load', () => {
         rotation_force.wire2*=2/3;
       }
     
-      // console.log("x = "+total_force.wire2.x)
-      // console.log("y = "+total_force.wire2.y)
+      console.log({force_on_orange: total_force.wire2})
     
       const arrow_head = 1/4;
     
