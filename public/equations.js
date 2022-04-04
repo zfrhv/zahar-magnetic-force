@@ -1,25 +1,60 @@
 
-function mine_force_new(
+function mine_force(
   wire1_place_i, wire1_place_f,
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
 
-
+  const distance_slope = Math.atan2(wire2_place_i.y-wire1_place_i.y, wire2_place_i.x-wire1_place_i.x);
+  const speed1_slope = Math.atan2(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x) - distance_slope;
+  const speed2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x) + Math.PI - distance_slope;
   
-  return {
-    total_force: {
-      wire1: {
-        x: total_force.x,
-        y: total_force.y
-      },
-      wire2: {
-        x: -total_force.x,
-        y: -total_force.y
-      }
+  const speed1_value = Math.hypot(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x);
+  const speed2_value = Math.hypot(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x);
+
+  const sum_speed = {
+    x: (wire1_place_f.x-wire1_place_i.x) - (wire2_place_f.x-wire2_place_i.x),
+    y: (wire1_place_f.y-wire1_place_i.y) - (wire2_place_f.y-wire2_place_i.y)
+  }
+  const sum_slope = Math.atan2(sum_speed.y, sum_speed.x) - distance_slope;
+  const sum_value = Math.hypot(sum_speed.y, sum_speed.x);
+
+  const f = {x:0, y:0};
+  
+  let f_current;
+
+  f_current = Math.pow(Math.sin(0)*0,2)
+  f.x += f_current * Math.cos(distance_slope);
+  f.y += f_current * Math.sin(distance_slope);
+
+  f_current = Math.pow(Math.sin(speed1_slope)*speed1_value,2)
+  f.x += f_current * Math.cos(distance_slope);
+  f.y += f_current * Math.sin(distance_slope);
+
+  f_current = Math.pow(Math.sin(speed2_slope)*speed2_value,2)
+  f.x += f_current * Math.cos(distance_slope);
+  f.y += f_current * Math.sin(distance_slope);
+
+  f_current = Math.pow(Math.sin(sum_slope)*sum_value,2)
+  f.x += f_current * Math.cos(distance_slope);
+  f.y += f_current * Math.sin(distance_slope);
+
+
+  total_force = {
+    wire1: {
+      x: f.x,
+      y: f.y
     },
+    wire2: {
+      x: -f.x,
+      y: -f.y
+    }
+  }
+
+  return {
+    total_force: total_force,
     rotation_force: {
-      wire1: rotation(),
-      wire2: rotation()
+      wire1: rotation(wire1_place_i, wire1_center, total_force.wire1),
+      wire2: rotation(wire2_place_i, wire2_center, total_force.wire2)
     }
   };
 }
@@ -36,7 +71,7 @@ function rotation(place, center, force) {
   return force_value * Math.sin(force_degree_from_distance) * distance_value
 }
 
-function mine_force(
+function mine_force_old(
   wire1_place_i, wire1_place_f,
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
