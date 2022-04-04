@@ -1,3 +1,41 @@
+
+function mine_force_new(
+  wire1_place_i, wire1_place_f,
+  wire2_place_i, wire2_place_f,
+  wire1_center, wire2_center) {
+
+
+  
+  return {
+    total_force: {
+      wire1: {
+        x: total_force.x,
+        y: total_force.y
+      },
+      wire2: {
+        x: -total_force.x,
+        y: -total_force.y
+      }
+    },
+    rotation_force: {
+      wire1: rotation(),
+      wire2: rotation()
+    }
+  };
+}
+
+function rotation(place, center, force) {
+  const force_value = Math.hypot(force.x, force.y);
+  const force_slope = Math.atan2(force.y, force.x);
+
+  const distance_value = Math.hypot(place.x-center.x, place.y-center.y);
+  const distance_slope = Math.atan2(place.y-center.y, place.x-center.x);
+
+  const force_degree_from_distance = force_slope - distance_slope;
+
+  return force_value * Math.sin(force_degree_from_distance) * distance_value
+}
+
 function mine_force(
   wire1_place_i, wire1_place_f,
   wire2_place_i, wire2_place_f,
