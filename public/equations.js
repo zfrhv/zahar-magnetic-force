@@ -8,6 +8,7 @@ function mine_force(
   const speed1_slope = Math.atan2(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x) - distance_slope;
   const speed2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x) + Math.PI - distance_slope;
   
+  const distance_value = Math.hypot(wire2_place_i.y-wire1_place_i.y, wire2_place_i.x-wire1_place_i.x);
   const speed1_value = Math.hypot(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x);
   const speed2_value = Math.hypot(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x);
 
@@ -22,22 +23,25 @@ function mine_force(
   
   let f_current;
 
-  f_current = Math.pow(Math.sin(0)*0,2)
+  f_current = Math.pow(Math.cos(speed1_slope)*speed1_value,2)/Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
-  f_current = Math.pow(Math.sin(speed1_slope)*speed1_value,2)
+  f_current = Math.pow(Math.cos(speed2_slope)*speed2_value,2)/Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
-  f_current = Math.pow(Math.sin(speed2_slope)*speed2_value,2)
+  f_current = -Math.pow(Math.cos(0)*0,2)/Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
-  f_current = Math.pow(Math.sin(sum_slope)*sum_value,2)
+  f_current = -Math.pow(Math.cos(sum_slope)*sum_value,2)/Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
+  // stabilize
+  f.x /= 6;
+  f.y /= 6;
 
   total_force = {
     wire1: {
