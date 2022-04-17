@@ -22,25 +22,25 @@ function mine_force(
   
   let f_current;
 
-  // works only if v1=v2
-  alpha = Math.abs(speed1_slope-speed2_slope)
-  D_v = (speed1_value+speed2_value)/2*Math.sin(alpha)/Math.sin((Math.PI-alpha)/2)
-  f_current = Math.pow(D_v, 2) / Math.pow(distance_value,2)
+  D_v_x = (wire1_place_f.x-wire1_place_i.x) - (wire2_place_f.x-wire2_place_i.x)
+  D_v_y = (wire1_place_f.y-wire1_place_i.y) - (wire2_place_f.y-wire2_place_i.y)
+  D_v = Math.hypot(D_v_x, D_v_y)
+  f_current = -Math.pow(D_v, 2) / Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope)
   f.y += f_current * Math.sin(distance_slope)
 
   D_v = 0
-  f_current = Math.pow(D_v, 2) / Math.pow(distance_value,2)
+  f_current = -Math.pow(D_v, 2) / Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
   D_v = speed1_value
-  f_current = -Math.pow(D_v, 2) / Math.pow(distance_value,2)
+  f_current = Math.pow(D_v, 2) / Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
   D_v = speed2_value
-  f_current = -Math.pow(D_v, 2) / Math.pow(distance_value,2)
+  f_current = Math.pow(D_v, 2) / Math.pow(distance_value,2)
   f.x += f_current * Math.cos(distance_slope);
   f.y += f_current * Math.sin(distance_slope);
 
