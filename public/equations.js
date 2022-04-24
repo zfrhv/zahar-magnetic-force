@@ -1,4 +1,4 @@
-function mine_force(
+function mine_force_old(
   wire1_place_i, wire1_place_f,
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
@@ -80,7 +80,7 @@ function rotation(place, center, force) {
   return force_value * Math.sin(force_degree_from_distance) * distance_value
 }
 
-function mine_force_old(
+function mine_force(
   wire1_place_i, wire1_place_f,
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
@@ -93,7 +93,7 @@ function mine_force_old(
   const v2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x) - radius_slope;
 
   const force_value = current1 * current2 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
-  const f_r = Math.sin(v1_slope) * Math.sin(v2_slope) * force_value;
+  const f_r = (Math.cos(v1_slope-v2_slope) - Math.cos(v1_slope)*Math.cos(v2_slope)) * force_value;
 
   const total_force = {
     x: f_r * Math.cos(radius_slope),
