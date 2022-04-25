@@ -93,7 +93,7 @@ function mine_force(
   const v2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x) - radius_slope;
 
   const force_value = current1 * current2 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
-  const f_r = Math.sin(v1_slope) * Math.sin(v2_slope) * force_value;
+  const f_r = (Math.sin(v1_slope) * Math.sin(v2_slope) - Math.cos(v1_slope) * Math.cos(v2_slope)) * force_value;
 
   const total_force = {
     x: f_r * Math.cos(radius_slope),
