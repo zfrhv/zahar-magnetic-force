@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script id="canvas-video" src="https://canvas-video-embed.web.app/animation.js"></script>
+  <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+
+  <title>Physics</title>
+  <link rel="icon" type="image/svg+xml" href="physics.svg">
+  
+  <script src="tools/canvas/shapes.js"></script>
+  <script src="tools/svg/shapes.js"></script>
+  <script src="equations.js"></script>
+  <link rel="stylesheet" type="text/css" href="physics.css" />
+</head>
+
+<body>
+<span id="myMenu" onclick="openNav()">&#9776;</span>
+<div id="mySidenav" class="sidenav">
+  <link rel="stylesheet" type="text/css" href="sidebar.css" />
+  <a href="physics.html">Main Page</a>
+  <a href="equation_discovery.html">Equation Discovery</a>
+  <a href="comparing_equations.html">Comparing Equations</a>
+  <a href="experiment.html">Experiment</a>
+  <a href="discussion.html">Discussion</a>
+  <script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "300px";
+    }
+    
+    window.addEventListener('click', function(e){   
+      if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)){
+        // Clicked in box
+        document.getElementById("mySidenav").style.width = "0px";  
+      } else{
+        
+      // document.getElementById("mySidenav").style.width = "0px";
+      }
+    });
+  </script>
+</div>
+
+<div class="page">
+<article class="page-content">
+
+<div id="magnetic_force" class="markdown">
+# <center><u style="font-family: 'Times New Roman';">Comparing Equations</u></center>
+<br/>
+
+idk if showing the 2 circles integrals results will be the thing thats needed,
+
+maybe more like the edgy situations or something?
+
+$$F=\frac{(\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)}{r^2}$$
+
+</div>
+
+<script async>
+  // Parse markdown
+  document.querySelectorAll('.markdown').forEach(elmNode => elmNode.innerHTML = marked.parse(elmNode.innerHTML));
+</script>
+<script src="drawings.js"></script>
+</body>
+</html>
