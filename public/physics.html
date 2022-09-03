@@ -19,6 +19,31 @@
 </head>
 
 <body>
+<span id="myMenu" onclick="openNav()">&#9776;</span>
+<div id="mySidenav" class="sidenav">
+  <link rel="stylesheet" type="text/css" href="sidebar.css" />
+  <a href="physics.html">Main Page</a>
+  <a href="equation_discovery.html">Equation Discovery</a>
+  <a href="comparing_equations.html">Comparing Equations</a>
+  <a href="experiment.html">Experiment</a>
+  <a href="discussion.html">Discussion</a>
+  <script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "300px";
+    }
+    
+    window.addEventListener('click', function(e){   
+      if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)){
+        // Clicked in box
+       document.getElementById("mySidenav").style.width = "0px";  
+      } else{
+       
+     // document.getElementById("mySidenav").style.width = "0px";
+      }
+    });
+  </script>
+</div>
+
 <div class="page">
 <article class="page-content">
 
@@ -55,6 +80,8 @@ If you are interested, check [my final equation discovery](equation_discovery.ht
 </div>
 <div id="new_equation" class="markdown">
 # <center><u>New Equation</u></center>
+[Here](comparing_equations.html) you can check why the new equation and the right hand law is almost the same thing.
+
 Shortly the new equation is:
 
 $$F=\frac{(\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)}{r^2}$$
