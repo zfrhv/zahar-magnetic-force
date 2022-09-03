@@ -1,95 +1,102 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
 
   <title>Physics</title>
   <link rel="icon" type="image/svg+xml" href="physics.svg">
-  
+
   <link rel="stylesheet" type="text/css" href="physics.css" />
 </head>
 
 <body>
-<span id="myMenu" onclick="openNav()">&#9776;</span>
-<div id="mySidenav" class="sidenav">
-  <link rel="stylesheet" type="text/css" href="sidebar.css" />
-  <a href="physics.html">Main Page</a>
-  <a href="equation_discovery.html">Equation Discovery</a>
-  <a href="comparing_equations.html">Comparing Equations</a>
-  <a href="experiment.html">Experiment</a>
-  <a href="discussion.html">Discussion</a>
-  <script>
-    function openNav() {
+  <span id="myMenu" onclick="openNav()">&#9776;</span>
+  <div id="mySidenav" class="sidenav">
+    <link rel="stylesheet" type="text/css" href="sidebar.css" />
+    <a href="physics.html">Main Page</a>
+    <a href="equation_discovery.html">Equation Discovery</a>
+    <a href="comparing_equations.html">Comparing Equations</a>
+    <a href="experiment.html">Experiment</a>
+    <a href="discussion.html">Discussion</a>
+    <script>
+      function openNav() {
         document.getElementById("mySidenav").style.width = "300px";
-    }
-    
-    window.addEventListener('click', function(e){   
-      if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)){
-        // Clicked in box
-       document.getElementById("mySidenav").style.width = "0px";  
-      } else{
-       
-     // document.getElementById("mySidenav").style.width = "0px";
       }
+
+      window.addEventListener('click', function (e) {
+        if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
+          // Clicked in box
+          document.getElementById("mySidenav").style.width = "0px";
+        } else {
+
+          // document.getElementById("mySidenav").style.width = "0px";
+        }
+      });
+    </script>
+  </div>
+
+  <div class="page">
+    <article class="page-content">
+
+      <div id="magnetic_force" class="markdown">
+        # <center><u style="font-family: 'Times New Roman';">Discussion</u></center>
+
+        there are many subjects that im not sure about, and requires more thinking and discovering. (if that new equation will interest people, then I will probably create more Documents explaining about the next subjects)
+
+        - In the force equation we have speed: \\(\vec v\\), speed comparing to what? from where its being measured?
+
+        particularly in this scenario I think the speed of electrons is compared to the speed of the wire. so if the wire starts to travel faster, the magnetic force wont change.
+
+        what about electrons in vaccume? the force exquation probably changes as the material disappears. (F depended on the material of the wire)
+
+        - When changing the particle speed, the potential energy changes \\(\to\\) it means it takes additinal energy to change the the speed \\(\to\\) there may be additional force when trying to change the speed.
+
+        need to discover it further.
+
+        - when we measure "current" inside the wire, we assume that \\(\vec I=q\cdot\vec v\\). but what about the material itself?
+
+        if we measure electrons thats are -q, and travel with v, then we also have to include the other part of the wire wthich is +q and v=0.
+
+        if we count the negative part of the wire (the electrons), then we also must count the positive part (the prutons).
+
+        I had a theory that the speed v of the electrons is not actually compared to the material they are running on (the wire), its actually \\(\Delta v\\) between the particles that the measure the force at.
+
+        for example, if we have 2 wires, we will have to measure:
+        - <span style="color:Tomato">negative</span> part of wire A with <span style="color:Tomato">negative</span> part of wire B
+        - <span style="color:MediumSeaGreen">positive</span> part of wire A with <span style="color:MediumSeaGreen">positive</span> part of wire B
+        - <span style="color:Tomato">negative</span> part of wire A with <span style="color:MediumSeaGreen">positive</span> part of wire B
+        - <span style="color:MediumSeaGreen">positive</span> part of wire A with <span style="color:Tomato">negative</span> part of wire B
+
+        when each time instead of doing \\(I_a \cdot I_b\\) we will do \\(q_a \cdot q_b \cdot \Delta v ^2\\)
+
+        must investigate furture.
+        ---
+
+        my contact email: zfrhv2010@gmail.com
+
+        you can also post any revies or contribute on github: [zahar-magnetic-force](https://github.com/zfrhv/zahar-magnetic-force)
+      </div>
+    </article>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
+
+    function resizeIframe(obj) {
+      // my videos resolution are 1920x1080
+      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
+    }
   </script>
-</div>
-
-<div class="page">
-<article class="page-content">
-
-<div id="magnetic_force" class="markdown">
-# <center><u style="font-family: 'Times New Roman';">Discussion</u></center>
-
-there are many subjects that im not sure about, and requires more thinking and discovering. (if that new equation will interest people, then I will probably create more Documents explaining about the next subjects)
-
-- In the force equation we have speed: \\(\vec v\\), speed comparing to what? from where its being measured?
-  
-  particularly in this scenario I think the speed of electrons is compared to the speed of the wire. so if the wire starts to travel faster, the magnetic force wont change.
-
-  what about electrons in vaccume? the force exquation probably changes as the material disappears. (F depended on the material of the wire)
-
-- When changing the particle speed, the potential energy changes \\(\to\\) it means it takes additinal energy to change the the speed \\(\to\\) there may be additional force when trying to change the speed.
-
-  need to discover it further.
-
-- when we measure "current" inside the wire, we assume that \\(\vec I=q\cdot\vec v\\). but what about the material itself?
-
-  if we measure electrons thats are -q, and travel with v, then we also have to include the other part of the wire wthich is +q and v=0.
-
-  if we count the negative part of the wire (the electrons), then we also must count the positive part (the prutons).
-
-  I had a theory that the speed v of the electrons is not actually compared to the material they are running on (the wire), its actually \\(\Delta v\\) between the particles that the measure the force at.
-
-  for example, if we have 2 wires, we will have to measure:
-  - <span style="color:Tomato">negative</span> part of wire A with <span style="color:Tomato">negative</span> part of wire B
-  - <span style="color:MediumSeaGreen">positive</span> part of wire A with <span style="color:MediumSeaGreen">positive</span> part of wire B
-  - <span style="color:Tomato">negative</span> part of wire A with <span style="color:MediumSeaGreen">positive</span> part of wire B
-  - <span style="color:MediumSeaGreen">positive</span> part of wire A with <span style="color:Tomato">negative</span> part of wire B
-
-  when each time instead of doing \\(I_a \cdot I_b\\) we will do \\(q_a \cdot q_b \cdot \Delta v ^2\\)
-
-  must investigate furture.
----
-
-my contact email: zfrhv2010@gmail.com
-
-you can also post any revies or contribute on github: [zahar-magnetic-force](https://github.com/zfrhv/zahar-magnetic-force)
-</div>
-
-<script async>
-  // Parse markdown
-  document.querySelectorAll('.markdown').forEach(elmNode => elmNode.innerHTML = marked.parse(elmNode.innerHTML));
-  
-  function resizeIframe(obj) {
-    // my videos resolution are 1920x1080
-    obj.style.height = obj.offsetWidth * 1080/1920 + "px";
-  }
-</script>
 </body>
+
 </html>
