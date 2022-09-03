@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <script id="canvas-video" src="https://canvas-video-embed.web.app/animation.js"></script>
   <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -7,7 +8,7 @@
   <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
 
   <title>Physics</title>
   <link rel="icon" type="image/svg+xml" href="physics.svg">
@@ -19,221 +20,241 @@
 </head>
 
 <body>
-<span id="myMenu" onclick="openNav()">&#9776;</span>
-<div id="mySidenav" class="sidenav">
-  <link rel="stylesheet" type="text/css" href="sidebar.css" />
-  <a href="physics.html">Main Page</a>
-  <a href="equation_discovery.html">Equation Discovery</a>
-  <a href="comparing_equations.html">Comparing Equations</a>
-  <a href="experiment.html">Experiment</a>
-  <a href="discussion.html">Discussion</a>
-  <script>
-    function openNav() {
+  <span id="myMenu" onclick="openNav()">&#9776;</span>
+  <div id="mySidenav" class="sidenav">
+    <link rel="stylesheet" type="text/css" href="sidebar.css" />
+    <a href="physics.html">Main Page</a>
+    <a href="equation_discovery.html">Equation Discovery</a>
+    <a href="comparing_equations.html">Comparing Equations</a>
+    <a href="experiment.html">Experiment</a>
+    <a href="discussion.html">Discussion</a>
+    <script>
+      function openNav() {
         document.getElementById("mySidenav").style.width = "300px";
-    }
-    
-    window.addEventListener('click', function(e){   
-      if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)){
-        // Clicked in box
-       document.getElementById("mySidenav").style.width = "0px";  
-      } else{
-       
-     // document.getElementById("mySidenav").style.width = "0px";
       }
+
+      window.addEventListener('click', function (e) {
+        if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
+          // Clicked in box
+          document.getElementById("mySidenav").style.width = "0px";
+        } else {
+
+          // document.getElementById("mySidenav").style.width = "0px";
+        }
+      });
+    </script>
+  </div>
+
+  <div class="page">
+    <article class="page-content">
+      <div class="markdown">
+        # <center><u style="font-family: 'Times New Roman';">Magnetic Force Experiment</u></center>
+        <br />
+
+        This decision is pretty interesting.
+
+        1. First of all, I had many equations theories before, and the hardest part is that when you do the integral of a whole wires circuit, the forces results are very familiar.
+        (after doing integral between two circuits its harder to notice special properties between the equation).
+
+            So I had to do experiment where the force will be only on some part of the circuit, then there will be less integral to do, and the equations will keep their special properties.
+
+        2. I can start comparing the equations, and see the biggest delta between the forces results (thats what i did at the start),
+        but it will be hard to notice the difference in experiment results, because now I will have to measure the force amount and start to calculate stuff.
+
+            The concusion was to find 2 shapes, where one equation shows 0 force, and the other equation shows some amount of force.
+
+        3. And this is exactly the biggest difference in equations, the force in the current direction.
+
+            Now I have to find experiment where my new equation tells there is some force in current direction, the right hand law tells that there is 0 force, and then just do the experiment.
+
+        4. First I tried to do with 2 wires, and pass current through them, but I always had not enough power.
+
+            Now the conclusion was to use magnets, because at the factory they can make them a lot more powerful than the current in my wires.
+
+        5. So now I had to use magnets, and some single part of the wire. which means I have 1 stick (copper wire that can freely move) and 1 circle (magnet), and i had to somehow make that my equation will tell there is some force, and right hand law tells there is 0 force.
+
+            not much of an option, its the next drawing, now all i have to decide is how much to move the magnet right or left.
+      </div>
+
+
+      <div class="animation_box calculation_box forces_integral">
+        <svg viewBox="0 0 100 100">
+          <g fill="none" stroke-width="0.8">
+            <path class="wire1" stroke="MediumSeaGreen" stroke-width="1.3" d="M 80,52 m -9,0 a 9,9 0 1,0 18, 0 a 9,9 0 1,0 -18, 0"></path>
+            <!--M 40,-5 l 0,40 l -40,0-->
+            <!--M 60,85 l 0,-40 l 40,0-->
+            <!--M 53,50 m -5,0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0-->
+            <path class="wire2" stroke="Tomato" stroke-width="1.3" d="M 70,40 l -40,0"></path>
+            <!--M 30,40 l 40,0-->
+            <!--M 25,50 m 20,0 l -30,17.32 l -0,-34.64 z-->
+          </g>
+        </svg>
+        <div>
+          <button>
+            <svg viewBox="0 0 512 512">
+              <use xlink:href="#calculator" />
+            </svg>
+          </button>
+          <label class="switch">
+            <input class="force_type" type="checkbox">
+            <span class="slider round">
+              <p></p>
+            </span>
+          </label>
+          <input class="accuracy" type="range" value="10" min="5" max="100">
+        </div>
+      </div>
+
+      <div class="markdown">
+        6. everything from the left of the magnet: pulling, everything from the right of the magnet: pushing.
+
+            so I just need to have as much pulling as I can, which is putting the magnet exatly on the edge where wire ends:
+
+      </div>
+      <div id="playground" class="animation_box calculation_box forces_integral">
+        <svg viewBox="0 0 100 100">
+          <g fill="none" stroke-width="0.8">
+            <path class="wire1" stroke="MediumSeaGreen" stroke-width="1.3" d="M 70,52 m -9,0 a 9,9 0 1,0 18, 0 a 9,9 0 1,0 -18, 0"></path>
+            <!--M 40,-5 l 0,40 l -40,0-->
+            <!--M 60,85 l 0,-40 l 40,0-->
+            <!--M 53,50 m -5,0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0-->
+            <path class="wire2" stroke="Tomato" stroke-width="1.3" d="M 70,40 l -40,0"></path>
+            <!--M 30,40 l 40,0-->
+            <!--M 25,50 m 20,0 l -30,17.32 l -0,-34.64 z-->
+          </g>
+        </svg>
+        <div>
+          <button>
+            <svg viewBox="0 0 512 512">
+              <use xlink:href="#calculator" />
+            </svg>
+          </button>
+          <label class="switch">
+            <input class="force_type" type="checkbox">
+            <span class="slider round">
+              <p></p>
+            </span>
+          </label>
+          <input class="accuracy" type="range" value="10" min="5" max="100">
+        </div>
+      </div>
+
+      <div class="markdown">
+        <br />
+
+        <details style="text-align: center;">
+          <summary>Inscructions of how to use <a href="#playground">this</a> tool</summary>
+          <div style="text-align: left;">
+
+            - When the switch is off then the right hand law equation used, when its on then my new equation is used.
+
+            - The slider is to how many parts to split the wires, more slices -> more accuracy. but its also harder to calculate.
+
+            - Pressing the calculator will calculate the forces.
+
+            - The filled arrows are the force, green arrow = the force that the green wire creates. same with purple arrow.
+
+            - The round arrows are how much the object wants to rotate, the green round arrow = how much the green wire wants to rotate the purple wire. same with purple round arrow.
+
+            - If you understand a little in svg path and programming, feel free to change the path by pressing f12 -> searching for "path" with "class=wire1" or "class=wire2" (just select the wire you want to modify),
+            change the "d="" field to the desired path, and then just press the clculator button again.
+
+            - after pressing the calculate button, the force of the orange object is printed to the logs (you can see \\(F_x\\) and \\(F_y\\) in console logs)
+          </div>
+        </details>
+
+        7. Then I put 2 the magnets in all 4 sides for more power:
+        <br />
+        <br />
+        <div style="text-align: center;">
+          <img src="https://drive.google.com/uc?export=view&id=1xzYyW03MAlA_7L4rkB7DP6P7n2KE0Kil" />
+        </div>
+        schema:
+        <div id="experiment_anatomy" class="animation_box">
+          <canvas width="1000" height="1000"></canvas>
+        </div>
+
+        ### Measurments
+
+        - everything in cm, if you want a bigger view, just right click on the picture and select "Open image in new tab". (or if you are from the phone then press and hold on the picture)
+
+        <div style="text-align: center;">
+          <img src="https://drive.google.com/uc?export=view&id=11Xnt_QAJEy7iiJomJFessOjS0TUnMyHe" />
+        </div>
+
+        - The batteries voltage was 14.6 volts.
+
+        - Aproximate magnet diameter: 1.8 cm
+
+        - Copper stick length: 4.2 cm
+
+        - Magnets used: Super magnets NdFeB 18/3 SMG 183B (I really recommend to use stronger magnets than mine)
+
+        ### Notes
+
+        - I suggest to use stronger magnets than mine + place something that will hold them in place.
+
+            I putted them on a ductape, if you use stronger magnets then you will probably need something better than ductape to keep the magnets in place.
+
+        - There is a lot of friction, to avoid that, round the wires brush:
+
+        <div style="text-align: center;">
+          <img src="https://drive.google.com/uc?export=view&id=1plLCp5ajAxmil9GPr_1LfnUTvmkT9knc" />
+        </div>
+
+        Because the circuit is square, its simple to check the force and see that the copper stick will be pushed right,
+
+        The rounded brush causes the stick to lift up, and then it will fall back down because of gravity.
+
+        Now the copper stick will keep going right -> up -> fall back down, which will reduse the friction.
+
+        ### WARNING:
+        - please wear safety glasses or stay far from the wires. The jumping copper stick may create a lot of sparks !
+
+        [Return to main page](physics.html#experiment)
+      </div>
+
+      <svg viewBox="0 0 512 512" style="display: none;">
+        <defs>
+          <!-- credit: https://www.svgrepo.com/svg/150257/calculator -->
+          <g id="calculator">
+            <path d="M403.357,512H108.641c-30.498,0-55.309-24.811-55.309-55.309V55.309  C53.333,24.811,78.143,0,108.641,0h294.717c30.497,0,55.307,24.811,55.307,55.309v300.247c0,7.855-6.369,14.222-14.222,14.222  s-14.222-6.367-14.222-14.222V55.309c0-14.812-12.052-26.864-26.864-26.864H108.641c-14.812,0-26.864,12.052-26.864,26.864v401.384  c0,14.811,12.052,26.863,26.864,26.863h294.717c14.812,0,26.864-12.052,26.864-26.864v-30.025c0-7.855,6.369-14.222,14.222-14.222  s14.222,6.367,14.222,14.222v30.025C458.666,487.189,433.855,512,403.357,512z" />
+            <path d="M368.355,199.111H143.644c-8.64,0-15.644-7.004-15.644-15.644v-82.489  c0-8.64,7.004-15.644,15.644-15.644h224.711c8.64,0,15.644,7.004,15.644,15.644v82.489  C383.999,192.107,376.995,199.111,368.355,199.111z" />
+            <g>
+              <path d="M368.355,213.333H143.644c-16.468,0-29.867-13.397-29.867-29.867v-82.489   c0-16.469,13.399-29.867,29.867-29.867h224.711c16.468,0,29.867,13.397,29.867,29.867v82.489   C398.222,199.936,384.823,213.333,368.355,213.333z M143.644,99.556c-0.785,0-1.422,0.639-1.422,1.422v82.489   c0,0.784,0.637,1.422,1.422,1.422h224.711c0.785,0,1.422-0.639,1.422-1.422v-82.489c0-0.784-0.637-1.422-1.422-1.422H143.644z" />
+              <path d="M307.819,321.398c-3.641,0-7.279-1.388-10.057-4.166c-5.554-5.554-5.554-14.559,0-20.113   l47.596-47.595c5.558-5.554,14.561-5.552,20.114,0c5.554,5.554,5.554,14.559,0,20.113l-47.596,47.595   C315.098,320.009,311.457,321.398,307.819,321.398z" />
+              <path d="M355.414,321.398c-3.641,0-7.279-1.388-10.057-4.166l-47.596-47.595   c-5.554-5.554-5.554-14.559,0-20.113c5.555-5.554,14.558-5.555,20.115,0l47.596,47.595c5.554,5.554,5.554,14.559,0,20.113   C362.694,320.009,359.055,321.398,355.414,321.398z" />
+              <path d="M214.037,420.787h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S221.892,420.787,214.037,420.787z" />
+              <path d="M180.383,454.443c-7.854,0-14.222-6.367-14.222-14.222v-67.31c0-7.855,6.369-14.222,14.222-14.222   s14.222,6.367,14.222,14.222v67.31C194.605,448.075,188.236,454.443,180.383,454.443z" />
+              <path d="M214.037,297.6h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S221.892,297.6,214.037,297.6z" />
+              <path d="M365.271,399.454h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S373.125,399.454,365.271,399.454z" />
+              <path d="M365.271,442.121h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S373.125,442.121,365.271,442.121z" />
+            </g>
+          </g>
+        </defs>
+      </svg>
+
+    </article>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
+
+    function resizeIframe(obj) {
+      // my videos resolution are 1920x1080
+      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
+    }
   </script>
-</div>
+  <script src="drawings.js"></script>
+  <script id="experiment.js">
+    draw_experiment();
+  </script>
 
-<div class="page">
-<article class="page-content">
-
-<div class="markdown">
-# <center><u style="font-family: 'Times New Roman';">Magnetic Force Experiment</u></center>
-<br/>
-
-This decision is pretty interesting.
-
-1. First of all, I had many equations theories before, and the hardest part is that when you do the integral of a whole wires circuit, the forces results are very familiar.
-(after doing integral between two circuits its harder to notice special properties between the equation).
-
-   So I had to do experiment where the force will be only on some part of the circuit, then there will be less integral to do, and the equations will keep their special properties.
-
-2. I can start comparing the equations, and see the biggest delta between the forces results (thats what i did at the start),
-   but it will be hard to notice the difference in experiment results, because now I will have to measure the force amount and start to calculate stuff.
-
-   The concusion was to find 2 shapes, where one equation shows 0 force, and the other equation shows some amount of force.
-
-3. And this is exactly the biggest difference in equations, the force in the current direction.
-
-   Now I have to find experiment where my new equation tells there is some force in current direction, the right hand law tells that there is 0 force, and then just do the experiment.
-
-4. First I tried to do with 2 wires, and pass current through them, but I always had not enough power.
-
-   Now the conclusion was to use magnets, because at the factory they can make them a lot more powerful than the current in my wires.
-
-5. So now I had to use magnets, and some single part of the wire. which means I have 1 stick (copper wire that can freely move) and 1 circle (magnet), and i had to somehow make that my equation will tell there is some force, and right hand law tells there is 0 force.
-
-   not much of an option, its the next drawing, now all i have to decide is how much to move the magnet right or left.
-</div>
-
-
-<div class="animation_box calculation_box forces_integral">
-  <svg viewBox="0 0 100 100">
-    <g fill="none" stroke-width="0.8">
-      <path class="wire1" stroke="MediumSeaGreen" stroke-width="1.3" d="M 80,52 m -9,0 a 9,9 0 1,0 18, 0 a 9,9 0 1,0 -18, 0"></path><!--M 40,-5 l 0,40 l -40,0-->   <!--M 60,85 l 0,-40 l 40,0-->     <!--M 53,50 m -5,0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0-->
-      <path class="wire2" stroke="Tomato" stroke-width="1.3" d="M 70,40 l -40,0"></path><!--M 30,40 l 40,0-->     <!--M 25,50 m 20,0 l -30,17.32 l -0,-34.64 z-->
-    </g>
-  </svg>
-  <div>
-    <button>
-      <svg viewBox="0 0 512 512">
-        <use xlink:href="#calculator"/>
-      </svg>
-    </button>
-    <label class="switch">
-      <input class="force_type" type="checkbox">
-      <span class="slider round"><p></p></span>
-    </label>
-    <input class="accuracy" type="range" value="10" min="5" max="100">
-  </div>
-</div>
-
-<div class="markdown">
-6. everything from the left of the magnet: pulling, everything from the right of the magnet: pushing.
-
-   so I just need to have as much pulling as I can, which is putting the magnet exatly on the edge where wire ends:
-
-</div>
-<div id="playground" class="animation_box calculation_box forces_integral">
-  <svg viewBox="0 0 100 100">
-    <g fill="none" stroke-width="0.8">
-      <path class="wire1" stroke="MediumSeaGreen" stroke-width="1.3" d="M 70,52 m -9,0 a 9,9 0 1,0 18, 0 a 9,9 0 1,0 -18, 0"></path><!--M 40,-5 l 0,40 l -40,0-->   <!--M 60,85 l 0,-40 l 40,0-->     <!--M 53,50 m -5,0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0-->
-      <path class="wire2" stroke="Tomato" stroke-width="1.3" d="M 70,40 l -40,0"></path><!--M 30,40 l 40,0-->     <!--M 25,50 m 20,0 l -30,17.32 l -0,-34.64 z-->
-    </g>
-  </svg>
-  <div>
-    <button>
-      <svg viewBox="0 0 512 512">
-        <use xlink:href="#calculator"/>
-      </svg>
-    </button>
-    <label class="switch">
-      <input class="force_type" type="checkbox">
-      <span class="slider round"><p></p></span>
-    </label>
-    <input class="accuracy" type="range" value="10" min="5" max="100">
-  </div>
-</div>
-
-<div class="markdown">
-<br/>
-
-<details style="text-align: center;"><summary>Inscructions of how to use <a href="#playground">this</a> tool</summary>
-<div style="text-align: left;">
-
-- When the switch is off then the right hand law equation used, when its on then my new equation is used.
-
-- The slider is to how many parts to split the wires, more slices -> more accuracy. but its also harder to calculate.
-
-- Pressing the calculator will calculate the forces.
-
-- The filled arrows are the force, green arrow = the force that the green wire creates. same with purple arrow.
-
-- The round arrows are how much the object wants to rotate, the green round arrow = how much the green wire wants to rotate the purple wire. same with purple round arrow.
-
-- If you understand a little in svg path and programming, feel free to change the path by pressing f12 -> searching for "path" with "class=wire1" or "class=wire2" (just select the wire you want to modify),
-  change the "d="" field to the desired path, and then just press the clculator button again.
-
-- after pressing the calculate button, the force of the orange object is printed to the logs (you can see \\(F_x\\) and \\(F_y\\) in console logs)
-</div>
-</details>
-
-7. Then I put 2 the magnets in all 4 sides for more power:
-<br/>
-<br/>
-<div style="text-align: center;">
-  <img src="https://drive.google.com/uc?export=view&id=1xzYyW03MAlA_7L4rkB7DP6P7n2KE0Kil"/>
-</div>
-schema:
-<div id="experiment_anatomy" class="animation_box">
-  <canvas width="1000" height="1000"></canvas>
-</div>
-
-### Measurments
-
-- everything in cm, if you want a bigger view, just right click on the picture and select "Open image in new tab". (or if you are from the phone then press and hold on the picture)
-
-<div style="text-align: center;">
-  <img src="https://drive.google.com/uc?export=view&id=11Xnt_QAJEy7iiJomJFessOjS0TUnMyHe"/>
-</div>
-
-- The batteries voltage was 14.6 volts.
-
-- Aproximate magnet diameter: 1.8 cm
-
-- Copper stick length: 4.2 cm
-
-- Magnets used: Super magnets NdFeB 18/3 SMG 183B (I really recommend to use stronger magnets than mine)
-
-### Notes
-
-- I suggest to use stronger magnets than mine + place something that will hold them in place.
-  
-  I putted them on a ductape, if you use stronger magnets then you will probably need something better than ductape to keep the magnets in place.
-
-- There is a lot of friction, to avoid that, round the wires brush:
-
-<div style="text-align: center;">
-  <img src="https://drive.google.com/uc?export=view&id=1plLCp5ajAxmil9GPr_1LfnUTvmkT9knc"/>
-</div>
-
-Because the circuit is square, its simple to check the force and see that the copper stick will be pushed right,
-
-The rounded brush causes the stick to lift up, and then it will fall back down because of gravity.
-
-Now the copper stick will keep going right -> up -> fall back down, which will reduse the friction.
-
-### WARNING:
-- please wear safety glasses or stay far from the wires. The jumping copper stick may create a lot of sparks !
-
-[Return to main page](physics.html#experiment)
-</div>
-
-  <svg viewBox="0 0 512 512" style="display: none;">
-    <defs>
-      <!-- credit: https://www.svgrepo.com/svg/150257/calculator -->
-      <g id="calculator">
-        <path d="M403.357,512H108.641c-30.498,0-55.309-24.811-55.309-55.309V55.309  C53.333,24.811,78.143,0,108.641,0h294.717c30.497,0,55.307,24.811,55.307,55.309v300.247c0,7.855-6.369,14.222-14.222,14.222  s-14.222-6.367-14.222-14.222V55.309c0-14.812-12.052-26.864-26.864-26.864H108.641c-14.812,0-26.864,12.052-26.864,26.864v401.384  c0,14.811,12.052,26.863,26.864,26.863h294.717c14.812,0,26.864-12.052,26.864-26.864v-30.025c0-7.855,6.369-14.222,14.222-14.222  s14.222,6.367,14.222,14.222v30.025C458.666,487.189,433.855,512,403.357,512z" />
-        <path d="M368.355,199.111H143.644c-8.64,0-15.644-7.004-15.644-15.644v-82.489  c0-8.64,7.004-15.644,15.644-15.644h224.711c8.64,0,15.644,7.004,15.644,15.644v82.489  C383.999,192.107,376.995,199.111,368.355,199.111z" />
-        <g>
-          <path d="M368.355,213.333H143.644c-16.468,0-29.867-13.397-29.867-29.867v-82.489   c0-16.469,13.399-29.867,29.867-29.867h224.711c16.468,0,29.867,13.397,29.867,29.867v82.489   C398.222,199.936,384.823,213.333,368.355,213.333z M143.644,99.556c-0.785,0-1.422,0.639-1.422,1.422v82.489   c0,0.784,0.637,1.422,1.422,1.422h224.711c0.785,0,1.422-0.639,1.422-1.422v-82.489c0-0.784-0.637-1.422-1.422-1.422H143.644z" />
-          <path d="M307.819,321.398c-3.641,0-7.279-1.388-10.057-4.166c-5.554-5.554-5.554-14.559,0-20.113   l47.596-47.595c5.558-5.554,14.561-5.552,20.114,0c5.554,5.554,5.554,14.559,0,20.113l-47.596,47.595   C315.098,320.009,311.457,321.398,307.819,321.398z" />
-          <path d="M355.414,321.398c-3.641,0-7.279-1.388-10.057-4.166l-47.596-47.595   c-5.554-5.554-5.554-14.559,0-20.113c5.555-5.554,14.558-5.555,20.115,0l47.596,47.595c5.554,5.554,5.554,14.559,0,20.113   C362.694,320.009,359.055,321.398,355.414,321.398z" />
-          <path d="M214.037,420.787h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S221.892,420.787,214.037,420.787z" />
-          <path d="M180.383,454.443c-7.854,0-14.222-6.367-14.222-14.222v-67.31c0-7.855,6.369-14.222,14.222-14.222   s14.222,6.367,14.222,14.222v67.31C194.605,448.075,188.236,454.443,180.383,454.443z" />
-          <path d="M214.037,297.6h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S221.892,297.6,214.037,297.6z" />
-          <path d="M365.271,399.454h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S373.125,399.454,365.271,399.454z" />
-          <path d="M365.271,442.121h-67.31c-7.854,0-14.222-6.367-14.222-14.222s6.369-14.222,14.222-14.222h67.31   c7.854,0,14.222,6.367,14.222,14.222S373.125,442.121,365.271,442.121z" />
-        </g>
-      </g>
-    </defs>
-  </svg>
-
-  
-<script async>
-  // Parse markdown
-  document.querySelectorAll('.markdown').forEach(elmNode => elmNode.innerHTML = marked.parse(elmNode.innerHTML));
-  
-  function resizeIframe(obj) {
-    // my videos resolution are 1920x1080
-    obj.style.height = obj.offsetWidth * 1080/1920 + "px";
-  }
-</script>
-<script src="drawings.js"></script>
-<script id="experiment.js">
-  draw_experiment();
-</script>
-
-<script src="forces_integral/calculation_box.js"></script>
+  <script src="forces_integral/calculation_box.js"></script>
 </body>
+
 </html>

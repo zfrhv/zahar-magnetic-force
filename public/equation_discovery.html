@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -11,7 +12,7 @@
     import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/OBJLoader.js';
     import { MTLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/MTLLoader.js';
     import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
-    
+
     window.THREE = THREE;
     window.OBJLoader = OBJLoader;
     window.MTLLoader = MTLLoader;
@@ -26,7 +27,7 @@
   <script id="CanvasVideo" src="https://canvas-video-embed.web.app/animation.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
 
   <title>Physics</title>
   <link rel="icon" type="image/svg+xml" href="physics.svg">
@@ -40,211 +41,210 @@
 </head>
 
 <body>
-<span id="myMenu" onclick="openNav()">&#9776;</span>
-<div id="mySidenav" class="sidenav">
-  <link rel="stylesheet" type="text/css" href="sidebar.css" />
-  <a href="physics.html">Main Page</a>
-  <a href="equation_discovery.html">Equation Discovery</a>
-  <a href="comparing_equations.html">Comparing Equations</a>
-  <a href="experiment.html">Experiment</a>
-  <a href="discussion.html">Discussion</a>
-  <script>
-    function openNav() {
+  <span id="myMenu" onclick="openNav()">&#9776;</span>
+  <div id="mySidenav" class="sidenav">
+    <link rel="stylesheet" type="text/css" href="sidebar.css" />
+    <a href="physics.html">Main Page</a>
+    <a href="equation_discovery.html">Equation Discovery</a>
+    <a href="comparing_equations.html">Comparing Equations</a>
+    <a href="experiment.html">Experiment</a>
+    <a href="discussion.html">Discussion</a>
+    <script>
+      function openNav() {
         document.getElementById("mySidenav").style.width = "300px";
-    }
-    
-    window.addEventListener('click', function(e){   
-      if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)){
-        // Clicked in box
-       document.getElementById("mySidenav").style.width = "0px";  
-      } else{
-       
-     // document.getElementById("mySidenav").style.width = "0px";
       }
+
+      window.addEventListener('click', function (e) {
+        if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
+          // Clicked in box
+          document.getElementById("mySidenav").style.width = "0px";
+        } else {
+
+          // document.getElementById("mySidenav").style.width = "0px";
+        }
+      });
+    </script>
+  </div>
+
+
+  <div class="page">
+    <article class="page-content">
+
+      <div class="markdown">
+        # <center><u style="font-family: 'Times New Roman';">Magnetic Force Equation</u></center>
+        <br />
+        Diagram of symbols:
+
+      </div>
+      <div id="equation_anatomy" class="animation_box">
+        <canvas width="1000" height="1000"></canvas>
+      </div>
+      <div class="markdown">
+        Im not proving that the right hand law magnetic forcce is wrong by math, im proving it by experiment.
+
+        I will start from deciding things that make the most sence, even if they dont have a good reason:
+        - Force that particle A creates on particle B, is the opposite of the force that particle B creates on A: \\(\vec F_a=-\vec F_b\\)
+        - The force is always only in \\(\hat r\\) direction.
+        - Energy rules work.
+        - when flipping the speed direction or the current: \\(\vec I \to -\vec I\\) then the force also flips: \\(\vec F \to -\vec F\\).
+
+        ---
+
+        Lets add additional symbol so it would be easier to understand.
+
+        assuming that the vertical value of \\({\color{Tomato}\vec A}\\) to \\(\color{MediumSeaGreen}{\vec B}\\) will be symbolized as \\({\color{Tomato}\vec A}\ \bot\ {\color{MediumSeaGreen}\vec B}={\color{DodgerBlue}\vec C}\\):
+
+      </div>
+      <div id="vertical_symbol" class="animation_box">
+        <canvas width="1000" height="1000"></canvas>
+      </div>
+      <div class="markdown">
+        ---
+
+        ## Getting conclusions from different situations
+
+        ### situation
+
+        When magnets are like that (blue circle is the magnet):
+
+        <center>(drag to rotate)</center>
+      </div>
+
+      <canvas-video type="threejs" object="3d_objects/magnets_merged.obj" material="3d_objects/magnets_merged.mtl" scale="0.4"></canvas-video>
+
+      <div class="markdown">
+        They pull to each other at some side, and push each other on the other side (as demonstrated).
+
+        there cant be force at the top/bottom that rotates the magnets.
+
+        so the pulling/pushing forces must be on the side of the magnet (just as the pink arrow indicate).
+
+        assuming the speed direction is vertical to their distance vector: \\(\vec I\ \bot\ \vec r\\).
+
+        When 2 particles move in the same direction, they pull each other.
+
+        and when flipping the speed, 2 particles move in opposite directions, they push each other away (flip speed \\(\to\\) flip force).
+
+        Now lets assume we are in 2d, and the <span style="color:rgb(136, 255, 136)">green</span> particle goes up, while the <span style="color:rgb(253, 255, 136)">yellow</span> goes up+rigth:
+
+        (as demonstrated in this diagram. if you played it by accident just refresh the page.)
+      </div>
+      <canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
+      <div class="markdown">
+        if we flip the <span style="color:rgb(253, 255, 136)">yellow</span> particle speed, and we flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed we get:
+
+        <span style="color:rgb(136, 255, 136)">green</span> goes down, <span style="color:rgb(253, 255, 136)">yellow</span> goes down+left. and the force got flipped twice, so it remains the same.
+
+        now we can rotate the whole situation in 180 degrees around X axis and we get:
+
+        <span style="color:rgb(136, 255, 136)">green</span> goes up, and <span style="color:rgb(253, 255, 136)">yellow</span> goes up+left. the force remains the same.
+
+        so as a conclustion, we get:
+
+        when <span style="color:rgb(136, 255, 136)">green</span> particle goes up, then the force when <span style="color:rgb(253, 255, 136)">yellow</span> goes up+right or up+left is the same no matter what is \\(\beta\\).
+
+        - and now when we look at situation where <span style="color:rgb(136, 255, 136)">green</span> goes up, and <span style="color:rgb(253, 255, 136)">yellow</span> goes right, its the same force as <span style="color:rgb(136, 255, 136)">green</span> up and yellow left.
+
+        - when <span style="color:rgb(253, 255, 136)">yellow</span> goes up its pulling, when <span style="color:rgb(253, 255, 136)">yellow</span> goes down its pushing \\(\to\\) there must be some \\(\beta\\) at which F=0.
+
+        - because when <span style="color:rgb(253, 255, 136)">yellow</span> goes right = <span style="color:rgb(253, 255, 136)">yellow</span> goes left, its probably the point where F=0.
+
+        conclustion: when <span style="color:rgb(136, 255, 136)">green</span> goes up and <span style="color:rgb(253, 255, 136)">yellow</span> goes right or left then F=0.
+
+        (you can play the video)
+      </div>
+      <canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
+      <div class="markdown">
+        ---
+
+        # Force in 3d
+
+        not sure 100%, but i have some idea.
+
+        ### situation
+
+      </div>
+      <canvas-video type="threejs" object="3d_objects/vertical_speeds.obj" material="3d_objects/vertical_speeds.mtl" scale="0.4"></canvas-video>
+      <div class="markdown">
+        Lets assume that those are the speeds of the particles (blue arrow = speed).
+
+        now lets randomly assume that <span style="color:rgb(253, 255, 136)">yellow</span> particle creates force on <span style="color:rgb(136, 255, 136)">green</span> particle (its random discition so i marked it with red arrow, F can be pulling, pushing, or 0).
+
+        if we look from the top view, rotate everything 180 degrees, and flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed, we can find the speed that the other <span style="color:rgb(253, 255, 136)">yellow</span> particle creates on the <span style="color:rgb(136, 255, 136)">green</span> particle.
+
+        we see that one force is pulling, and one is pushing, even tho its exactly symmetric situations.
+
+        thus, to not violate the symmetricity, the forces between <span style="color:rgb(136, 255, 136)">green</span> and <span style="color:rgb(253, 255, 136)">yellow</span> must be 0.
+
+        and this is true no matter whats the height of the <span style="color:rgb(136, 255, 136)">green</span> particle.
+
+        ### conclustion
+
+        so its probably cos() between the speeds after doing sin() on each one.
+
+        its same as doing scalar multiplication after finding the vertical value of the speeds: \\((\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)\\)
+
+        ---
+
+        ## comparing and understanding the equation differences
+
+      </div>
+      <div style="justify-content: space-around; display: flex;">
+        <span class="markdown"># Mine force</span>
+        <span class="markdown"># Their foce</span>
+      </div>
+      <div style="overflow: auto;">
+        <canvas-video name="speed_rotation_1_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="speed_rotation_1_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+      </div>
+      <br />
+      <div style="overflow: auto;">
+        <canvas-video name="rotate_mirror_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="rotate_mirror_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+      </div>
+      <br />
+      <div style="overflow: auto;">
+        <canvas-video name="rotate_sync_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="rotate_sync_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+      </div>
+      <br />
+      <div style="overflow: auto;">
+        <canvas-video name="spin_around_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="spin_around_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+      </div>
+      <div class="markdown">
+        And ofcource we also add some constant to the equation, and \\(1/r^2\\).
+
+        why do we add \\(1/r^2\\) ? because the "magnetic field" comes out of a single point (from the particle), and when moving x distance to some direction, the area (in other words the amount of magnetic field) will change by \\(1/x^2\\).
+
+        So the final equation is:
+
+        $$F=\frac{(\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)}{r^2}$$
+
+        $$\vec I=q\cdot \vec v$$
+
+        (I didnt mentioned the constant on purspoe so it would be easier to focus on the logical content)
+
+        [Return to main page](physics.html#new_equation)
+      </div>
+
+    </article>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
+
+    function resizeIframe(obj) {
+      // my videos resolution are 1920x1080
+      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
+    }
   </script>
-</div>
-
-
-<div class="page">
-<article class="page-content">
-
-<div class="markdown">
-# <center><u style="font-family: 'Times New Roman';">Magnetic Force Equation</u></center>
-<br/>
-Diagram of symbols:
-
-</div>
-<div id="equation_anatomy" class="animation_box">
-  <canvas width="1000" height="1000"></canvas>
-</div>
-<div class="markdown">
-Im not proving that the right hand law magnetic forcce is wrong by math, im proving it by experiment.
-
-I will start from deciding things that make the most sence, even if they dont have a good reason:
-- Force that particle A creates on particle B, is the opposite of the force that particle B creates on A: \\(\vec F_a=-\vec F_b\\)
-- The force is always only in \\(\hat r\\) direction.
-- Energy rules work.
-- when flipping the speed direction or the current: \\(\vec I \to -\vec I\\) then the force also flips: \\(\vec F \to -\vec F\\).
-
----
-
-Lets add additional symbol so it would be easier to understand.
-
-assuming that the vertical value of \\({\color{Tomato}\vec A}\\) to \\(\color{MediumSeaGreen}{\vec B}\\) will be symbolized as \\({\color{Tomato}\vec A}\ \bot\ {\color{MediumSeaGreen}\vec B}={\color{DodgerBlue}\vec C}\\):
-
-</div>
-<div id="vertical_symbol" class="animation_box">
-  <canvas width="1000" height="1000"></canvas>
-</div>
-<div class="markdown">
-
----
-
-## Getting conclusions from different situations
-
-### situation
-
-When magnets are like that (blue circle is the magnet):
-
-<center>(drag to rotate)</center>
-</div>
-
-<canvas-video type="threejs" object="3d_objects/magnets_merged.obj" material="3d_objects/magnets_merged.mtl" scale="0.4"></canvas-video>
-
-<div class="markdown">
-They pull to each other at some side, and push each other on the other side (as demonstrated).
-
-there cant be force at the top/bottom that rotates the magnets.
-
-so the pulling/pushing forces must be on the side of the magnet (just as the pink arrow indicate).
-
-assuming the speed direction is vertical to their distance vector: \\(\vec I\ \bot\ \vec r\\).
-
-When 2 particles move in the same direction, they pull each other.
-
-and when flipping the speed, 2 particles move in opposite directions, they push each other away (flip speed \\(\to\\) flip force).
-
-Now lets assume we are in 2d, and the <span style="color:rgb(136, 255, 136)">green</span> particle goes up, while the <span style="color:rgb(253, 255, 136)">yellow</span> goes up+rigth:
-
-(as demonstrated in this diagram. if you played it by accident just refresh the page.)
-</div>
-<canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
-<div class="markdown">
-
-if we flip the <span style="color:rgb(253, 255, 136)">yellow</span> particle speed, and we flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed we get:
-
-<span style="color:rgb(136, 255, 136)">green</span> goes down, <span style="color:rgb(253, 255, 136)">yellow</span> goes down+left. and the force got flipped twice, so it remains the same.
-
-now we can rotate the whole situation in 180 degrees around X axis and we get:
-
-<span style="color:rgb(136, 255, 136)">green</span> goes up, and <span style="color:rgb(253, 255, 136)">yellow</span> goes up+left. the force remains the same.
-
-so as a conclustion, we get:
-
-when <span style="color:rgb(136, 255, 136)">green</span> particle goes up, then the force when <span style="color:rgb(253, 255, 136)">yellow</span> goes up+right or up+left is the same no matter what is \\(\beta\\).
-
-- and now when we look at situation where <span style="color:rgb(136, 255, 136)">green</span> goes up, and <span style="color:rgb(253, 255, 136)">yellow</span> goes right, its the same force as <span style="color:rgb(136, 255, 136)">green</span> up and yellow left.
-
-- when <span style="color:rgb(253, 255, 136)">yellow</span> goes up its pulling, when <span style="color:rgb(253, 255, 136)">yellow</span> goes down its pushing \\(\to\\) there must be some \\(\beta\\) at which F=0.
-
-- because when <span style="color:rgb(253, 255, 136)">yellow</span> goes right = <span style="color:rgb(253, 255, 136)">yellow</span> goes left, its probably the point where F=0.
-
-conclustion: when <span style="color:rgb(136, 255, 136)">green</span> goes up and <span style="color:rgb(253, 255, 136)">yellow</span> goes right or left then F=0.
-
-(you can play the video)
-</div>
-<canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
-<div class="markdown">
-
----
-
-# Force in 3d
-
-not sure 100%, but i have some idea.
-
-### situation
-
-</div>
-<canvas-video type="threejs" object="3d_objects/vertical_speeds.obj" material="3d_objects/vertical_speeds.mtl" scale="0.4"></canvas-video>
-<div class="markdown">
-
-Lets assume that those are the speeds of the particles (blue arrow = speed).
-
-now lets randomly assume that <span style="color:rgb(253, 255, 136)">yellow</span> particle creates force on <span style="color:rgb(136, 255, 136)">green</span> particle (its random discition so i marked it with red arrow, F can be pulling, pushing, or 0).
-
-if we look from the top view, rotate everything 180 degrees, and flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed, we can find the speed that the other <span style="color:rgb(253, 255, 136)">yellow</span> particle creates on the <span style="color:rgb(136, 255, 136)">green</span> particle.
-
-we see that one force is pulling, and one is pushing, even tho its exactly symmetric situations.
-
-thus, to not violate the symmetricity, the forces between <span style="color:rgb(136, 255, 136)">green</span> and <span style="color:rgb(253, 255, 136)">yellow</span> must be 0.
-
-and this is true no matter whats the height of the <span style="color:rgb(136, 255, 136)">green</span> particle.
-
-### conclustion
-
-so its probably cos() between the speeds after doing sin() on each one.
-
-its same as doing scalar multiplication after finding the vertical value of the speeds: \\((\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)\\)
-
----
-
-## comparing and understanding the equation differences
-
-</div>
-<div style="justify-content: space-around; display: flex;">
-  <span class="markdown"># Mine force</span>
-  <span class="markdown"># Their foce</span>
-</div>
-<div style="overflow: auto;">
-  <canvas-video name="speed_rotation_1_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-  <canvas-video name="speed_rotation_1_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
-</div>
-<br/>
-<div style="overflow: auto;">
-  <canvas-video name="rotate_mirror_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-  <canvas-video name="rotate_mirror_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
-</div>
-<br/>
-<div style="overflow: auto;">
-  <canvas-video name="rotate_sync_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-  <canvas-video name="rotate_sync_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
-</div>
-<br/>
-<div style="overflow: auto;">
-  <canvas-video name="spin_around_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-  <canvas-video name="spin_around_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
-</div>
-<div class="markdown">
-
-And ofcource we also add some constant to the equation, and \\(1/r^2\\).
-
-why do we add \\(1/r^2\\) ? because the "magnetic field" comes out of a single point (from the particle), and when moving x distance to some direction, the area (in other words the amount of magnetic field) will change by \\(1/x^2\\).
-
-So the final equation is:
-
-$$F=\frac{(\vec I_1\ \bot\ \vec r)\cdot(\vec I_2\ \bot\ \vec r)}{r^2}$$
-
-$$\vec I=q\cdot \vec v$$
-
-(I didnt mentioned the constant on purspoe so it would be easier to focus on the logical content)
-
-[Return to main page](physics.html#new_equation)
-</div>
-
-</article>
-</div>
-
-<script async>
-  // Parse markdown
-  document.querySelectorAll('.markdown').forEach(elmNode => elmNode.innerHTML = marked.parse(elmNode.innerHTML));
-  
-  function resizeIframe(obj) {
-    // my videos resolution are 1920x1080
-    obj.style.height = obj.offsetWidth * 1080/1920 + "px";
-  }
-</script>
-<script src="drawings.js"></script>
-<script async src="equation_discovery.js"></script>
+  <script src="drawings.js"></script>
+  <script async src="equation_discovery.js"></script>
 </body>
+
 </html>
