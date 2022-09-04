@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
+
+  <!-- instead of using npm load threejs from url -->
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
+    import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/OBJLoader.js';
+    import { MTLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/MTLLoader.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+
+    window.THREE = THREE;
+    window.OBJLoader = OBJLoader;
+    window.MTLLoader = MTLLoader;
+    window.OrbitControls = OrbitControls;
+  </script>
+  <script>
+    THREE = window.THREE;
+    OBJLoader = window.OBJLoader;
+    MTLLoader = window.MTLLoader;
+    OrbitControls = window.OrbitControls;
+  </script>
+  <script id="CanvasVideo" src="https://canvas-video-embed.web.app/animation.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+
+  <title>Physics</title>
+  <link rel="icon" type="image/svg+xml" href="physics.svg">
+
+  <script src="forces_integral/calculation_box.js"></script>
+  <script src="tools/canvas/shapes.js"></script>
+  <script src="tools/svg/shapes.js"></script>
+  <script src="tools/threejs/shapes.js"></script>
+  <script src="equations.js"></script>
+  <link rel="stylesheet" type="text/css" href="physics.css" />
+</head>
+
+<body>
+  <div class="page">
+    <article class="page-content">
+
+      <div class="markdown">
+        # <center><u style="font-family: 'Times New Roman';">Bla</u></center>
+
+        <center>(drag to rotate)</center>
+      </div>
+
+      <canvas-video name="calc_force" type="calculate"></canvas-video>
+    </article>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
+    });
+
+    function resizeIframe(obj) {
+      // my videos resolution are 1920x1080
+      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
+    }
+  </script>
+  <script async>
+    function calc_force(scene) {
+      const geometry = new THREE.TorusGeometry( 300, 30, 16, 100 );
+      const material = new THREE.MeshBasicMaterial( { color: 0xa69e30 } );
+      
+      const wire1 = new THREE.Mesh( geometry, material );
+      wire1.rotation.x = Math.PI/2;
+      wire1.position.set(0, 300, 0);
+      scene.add( wire1 );
+
+      const wire2 = new THREE.Mesh( geometry, material );
+      wire2.rotation.x = Math.PI/2;
+      wire2.position.set(0, -300, 0);
+      scene.add( wire2 );
+    }
+
+    function calc_force_init(toolbar) {
+      toolbar.style.height = toolbar.offsetWidth/3+"px";
+
+      const sidebars = document.createElement('div');
+      sidebars.style.width = "85%";
+      sidebars.style.height = "100%";
+      sidebars.style.textAlign = "center";
+      toolbar.append(sidebars);
+
+      const inputs = ["R_1", "R_2", "R_3", "V_x", "V_y", "V_z"];
+      const height = sidebars.offsetHeight / (inputs.length+2);
+      sidebars.style.fontSize = height+"px";
+      inputs.forEach(name => {
+        let part = document.createElement('div');
+        part.style.width = "100%";
+        part.innerText = name+": ";
+        sidebars.append(part);
+
+        let play_proccess = document.createElement('input');
+        play_proccess.type = 'range';
+        play_proccess.value = 0;
+        play_proccess.min = 0;
+        play_proccess.max = 1000;
+        play_proccess.style.height = height+"px";
+        play_proccess.style.position = "relative";
+        play_proccess.style.top = height/3+"px";
+        part.append(play_proccess);
+      })
+    }
+  </script>
+</body>
+
+</html>
