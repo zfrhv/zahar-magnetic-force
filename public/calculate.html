@@ -67,49 +67,86 @@
     }
   </script>
   <script async>
-    function calc_force(scene) {
-      const geometry = new THREE.TorusGeometry( 300, 30, 16, 100 );
-      const material = new THREE.MeshBasicMaterial( { color: 0xa69e30 } );
+    function calc_force_init(toolbar, scene) {
+      // draw shapes
+      const geometry = new THREE.TorusGeometry( 150, 10, 20, 50 );
+      const material = new THREE.MeshBasicMaterial( { color: 0xb56912 } );
       
-      const wire1 = new THREE.Mesh( geometry, material );
+      const wire1 = new THREE.Mesh(geometry, material);
       wire1.rotation.x = Math.PI/2;
-      wire1.position.set(0, 300, 0);
-      scene.add( wire1 );
+      wire1.position.set(0, 200, 0);
+      scene.add(wire1);
 
-      const wire2 = new THREE.Mesh( geometry, material );
+      const wire2 = new THREE.Mesh(geometry, material);
       wire2.rotation.x = Math.PI/2;
-      wire2.position.set(0, -300, 0);
-      scene.add( wire2 );
-    }
+      wire2.position.set(0, -200, 0);
+      scene.add(wire2);
 
-    function calc_force_init(toolbar) {
+
+      // create slidebars
       toolbar.style.height = toolbar.offsetWidth/3+"px";
 
-      const sidebars = document.createElement('div');
-      sidebars.style.width = "85%";
-      sidebars.style.height = "100%";
-      sidebars.style.textAlign = "center";
-      toolbar.append(sidebars);
+      const slidebars = document.createElement('div');
+      slidebars.style.width = "85%";
+      slidebars.style.height = "100%";
+      slidebars.style.textAlign = "center";
+      toolbar.append(slidebars);
 
-      const inputs = ["R_1", "R_2", "R_3", "V_x", "V_y", "V_z"];
-      const height = sidebars.offsetHeight / (inputs.length+2);
-      sidebars.style.fontSize = height+"px";
-      inputs.forEach(name => {
-        let part = document.createElement('div');
+      const inputs = {
+        "R_1": function () { wire1.rotation.x = this.value/100*Math.PI*2 + Math.PI/2 },
+        "R_2": function () { wire1.rotation.y = this.value/100*Math.PI*2 },
+        "R_3": function () { wire2.rotation.y = this.value/100*Math.PI*2 },
+        "V_x": function () {console.log(this.value)},
+        "V_y": function () {console.log(this.value)},
+        "V_z": function () {console.log(this.value)}
+      }
+      const height = slidebars.offsetHeight / (Object.keys(inputs).length + 2);
+      slidebars.style.fontSize = height + "px";
+      for(const name in inputs) {
+        const part = document.createElement('div');
         part.style.width = "100%";
-        part.innerText = name+": ";
-        sidebars.append(part);
+        part.innerText = name + ": ";
+        slidebars.append(part);
 
-        let play_proccess = document.createElement('input');
-        play_proccess.type = 'range';
-        play_proccess.value = 0;
-        play_proccess.min = 0;
-        play_proccess.max = 1000;
-        play_proccess.style.height = height+"px";
-        play_proccess.style.position = "relative";
-        play_proccess.style.top = height/3+"px";
-        part.append(play_proccess);
-      })
+        const slidebar = document.createElement('input');
+        slidebar.type = 'range';
+        slidebar.value = 0;
+        slidebar.min = 0;
+        slidebar.max = 100;
+        slidebar.style.height = height + "px";
+        slidebar.style.position = "relative";
+        slidebar.style.top = height/3 + "px";
+        part.append(slidebar);
+
+        slidebar.onchange = inputs[name];
+        slidebar.oninput = inputs[name];
+      }
+    }
+
+    function calc_force(toolbar, scene) {
+      const inputs = {
+        "R_1": null,
+        "R_2": null,
+        "R_3": null,
+        "V_x": null,
+        "V_y": null,
+        "V_z": null
+      }
+
+      const keys = Object.keys(inputs);
+      toolbar.childNodes[1].childNodes.forEach(function(part, index) {
+        inputs[keys[index]] = part.childNodes[1].value;
+      });
+
+      console.log(inputs)
+
+      const dir = new THREE.Vector3( 1, 2, 0 );
+      dir.normalize();
+      const origin = new THREE.Vector3( 0, 0, 0 );
+      const length = 200;
+      const hex = 0xffff00;
+      const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex, 0.15*length, 0.1*length );
+      scene.add(arrowHelper);
     }
   </script>
 </body>
