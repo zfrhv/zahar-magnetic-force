@@ -73,11 +73,14 @@
       const material = new THREE.MeshBasicMaterial( { color: 0xb56912 } );
       
       const wire1 = new THREE.Mesh(geometry, material);
+      wire1.name = "wire1";
+      wire1.speed = new THREE.Vector3( );
       wire1.rotation.x = Math.PI/2;
       wire1.position.set(0, 200, 0);
       scene.add(wire1);
 
       const wire2 = new THREE.Mesh(geometry, material);
+      wire2.name = "wire2";
       wire2.rotation.x = Math.PI/2;
       wire2.position.set(0, -200, 0);
       scene.add(wire2);
@@ -96,9 +99,9 @@
         "R_1": function () { wire1.rotation.x = this.value/100*Math.PI*2 + Math.PI/2 },
         "R_2": function () { wire1.rotation.y = this.value/100*Math.PI*2 },
         "R_3": function () { wire2.rotation.y = this.value/100*Math.PI*2 },
-        "V_x": function () {console.log(this.value)},
-        "V_y": function () {console.log(this.value)},
-        "V_z": function () {console.log(this.value)}
+        "V_x": function () { wire1.speed.x = (this.value-50)/10 },
+        "V_y": function () { wire1.speed.y = (this.value-50)/10 },
+        "V_z": function () { wire1.speed.z = (this.value-50)/10 }
       }
       const height = slidebars.offsetHeight / (Object.keys(inputs).length + 2);
       slidebars.style.fontSize = height + "px";
@@ -110,7 +113,7 @@
 
         const slidebar = document.createElement('input');
         slidebar.type = 'range';
-        slidebar.value = 0;
+        slidebar.value = /^V_.$/.test(name) ? 50 : 0;
         slidebar.min = 0;
         slidebar.max = 100;
         slidebar.style.height = height + "px";
@@ -124,29 +127,43 @@
     }
 
     function calc_force(toolbar, scene) {
-      const inputs = {
-        "R_1": null,
-        "R_2": null,
-        "R_3": null,
-        "V_x": null,
-        "V_y": null,
-        "V_z": null
-      }
-
-      const keys = Object.keys(inputs);
-      toolbar.childNodes[1].childNodes.forEach(function(part, index) {
-        inputs[keys[index]] = part.childNodes[1].value;
-      });
-
-      console.log(inputs)
-
-      const dir = new THREE.Vector3( 1, 2, 0 );
+      const dir = new THREE.Vector3( 0, 1, 0 );
       dir.normalize();
       const origin = new THREE.Vector3( 0, 0, 0 );
       const length = 200;
       const hex = 0xffff00;
       const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex, 0.15*length, 0.1*length );
       scene.add(arrowHelper);
+
+      const wire1 = {};
+      const wire2 = {};
+
+      const wire1_mesh = scene.getObjectByName("wire1");
+      const wire2_mesh = scene.getObjectByName("wire2");
+
+      wire1.radius = wire1_mesh.geometry.parameters.radius;
+      wire1.position = wire1_mesh.position;
+      wire1.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire1_mesh.rotation);
+      wire1.speed = wire1_mesh.speed;
+
+      wire2.radius = wire2_mesh.geometry.parameters.radius;
+      wire2.position = wire2_mesh.position;
+      wire2.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire2_mesh.rotation);
+
+      console.log(wire1)
+
+      const F_1_T = new THREE.Vector3();
+      const F_2_T = new THREE.Vector3();
+      const F_1_rotating_T = new THREE.Vector3();
+      const F_2_rotating_T = new THREE.Vector3();
+      let Voltage_2 = 0;
+      const parts = 16;
+
+      // finding dot
+      const new_x_1 = Math.round(wire1.rotation.x/wire1.rotation.norm(), 4) == 0 ? wire1.rotation.cross_product(vector([1,0,0])).normalized() : wire1.rotation.cross_product(vector([0,1,0])).normalized();
+
+      const new_y_1 = wire1.rotation.cross_product(new_x_1)
+      new_x_1 = new_x_1*wire1.rotation.norm()
     }
   </script>
 </body>
