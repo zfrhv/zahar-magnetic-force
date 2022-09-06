@@ -72,22 +72,30 @@
     function calc_force_init(toolbar, scene) {
       // draw shapes
       const geometry = new THREE.TorusGeometry( 150, 10, 20, 50 );
-      const material = new THREE.MeshBasicMaterial( { color: 0xb56912 } );
       
-      const wire1 = new THREE.Mesh(geometry, material);
+      const wire1_material = new THREE.MeshBasicMaterial({ color: 0x3e8207 });
+      const wire1 = new THREE.Mesh(geometry, wire1_material);
       wire1.name = "wire1";
       wire1.speed = new THREE.Vector3( );
       wire1.rotation.x = pi/2;
       wire1.position.set(0, 200, 0);
       scene.add(wire1);
 
-      const wire2 = new THREE.Mesh(geometry, material);
+      const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc });
+      const wire2 = new THREE.Mesh(geometry, wire2_material);
       wire2.name = "wire2";
       wire2.rotation.x = pi/2;
       wire2.position.set(0, -200, 0);
       scene.add(wire2);
 
       // TODO create forces speeds rotations... arrows
+      const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color);
+      force_on_1.name = "force_on_1";
+      scene.add(force_on_1);
+
+      const force_on_2 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire2.position, 0, wire1_material.color);
+      force_on_2.name = "force_on_2";
+      scene.add(force_on_2);
 
       // create force toggle
       const toggle_force = document.createElement('label');
@@ -149,25 +157,16 @@
         slidebar.onchange = inputs[name];
         slidebar.oninput = inputs[name];
       }
-
-      // TODO create toggle for mine or their force equation (under calculator button?)
     }
 
     function calc_force(toolbar, scene) {
-      // TODO remove this arrow
-      const dir = new THREE.Vector3( 0, 1, 0 );
-      dir.normalize();
-      const origin = new THREE.Vector3( 0, 0, 0 );
-      const length = 200;
-      const hex = 0xffff00;
-      const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex, 0.15*length, 0.1*length );
-      scene.add(arrowHelper);
-
       const wire1 = {};
       const wire2 = {};
 
-      const wire1_mesh = scene.getObjectByName("wire1");
-      const wire2_mesh = scene.getObjectByName("wire2");
+      const wire1_mesh = scene.getObjectByName("wire1")
+      const wire2_mesh = scene.getObjectByName("wire2")
+      const force_on_1 = scene.getObjectByName("force_on_1")
+      const force_on_2 = scene.getObjectByName("force_on_2")
 
       wire1.radius = wire1_mesh.geometry.parameters.radius;
       wire1.position = wire1_mesh.position;
@@ -179,17 +178,21 @@
       wire2.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire2_mesh.rotation);
       wire2.voltage = 0;
 
+      const mine_force = toolbar.children[0].children[1].children[0].checked;
+
       const F_1_T = new THREE.Vector3();
       const F_2_T = new THREE.Vector3();
       const F_1_rotating_T = new THREE.Vector3();
       const F_2_rotating_T = new THREE.Vector3();
-      const parts = 16;
+      const parts = 100;
 
       // creating new axis on circles
-      const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)).normalize() : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0)).normalize();
-      const new_y_1 = wire1.rotation.clone().cross(new_x_1);
+      const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0))
+      new_x_1.normalize().multiplyScalar(wire1.radius)
+      const new_y_1 = wire1.rotation.clone().cross(new_x_1)
 
-      const new_x_2 = Math.round(wire2.rotation.x, 4) == 0 ? wire2.rotation.clone().cross(new THREE.Vector3(1,0,0)).normalize() : wire2.rotation.clone().cross(new THREE.Vector3(0,1,0)).normalize();
+      const new_x_2 = Math.round(wire2.rotation.x, 4) == 0 ? wire2.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire2.rotation.clone().cross(new THREE.Vector3(0,1,0))
+      new_x_2.normalize().multiplyScalar(wire2.radius)
       const new_y_2 = wire2.rotation.clone().cross(new_x_1);
 
       for (let part1 = 0; part1 < parts; part1++) {
@@ -209,28 +212,56 @@
           const R = absolute_place_2.sub(absolute_place_1)
           const R_hat = R.clone().normalize()
 
-          // "mine" force calculation
-          const f_2 = R_hat.clone().multiplyScalar( Math.pow(v_1.clone().dot(R_hat), 2) + Math.pow(v_2.clone().dot(R_hat), 2) - Math.pow((v_1.clone().sub(v_2)).dot(R_hat), 2) / (2*Math.pow(R.length(), 2)) )
-          const f_1 = f_2.clone().negate()
+          let f_1 = null
+          let f_2 = null
 
-          // "their" force calculation
-          // const f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1) / Math.pow(R.length(), 2)
-          // const f_2 = v_1.clone().cross(R_hat).cross(v_2) / Math.pow(R.length(), 2)
-
-          const f_1_rotating = f_1.clone().cross(relative_place_1)
-          const f_2_rotating = f_2.clone().cross(relative_place_2)
+          if (mine_force) {
+            // "mine" force calculation
+            f_2 = R_hat.clone().multiplyScalar( Math.pow(v_1.clone().dot(R_hat), 2) + Math.pow(v_2.clone().dot(R_hat), 2) - Math.pow((v_1.clone().sub(v_2)).dot(R_hat), 2) / (Math.pow(R.length(), 2)) )
+            f_1 = f_2.clone().negate()
+          } else {
+            // "their" force calculation
+            f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
+            f_2 = v_1.clone().cross(R_hat).cross(v_2).divideScalar(Math.pow(R.length(), 2))
+          }
 
           F_1_T.add(f_1)
           F_2_T.add(f_2)
 
-          F_1_rotating_T.add(f_1_rotating)
-          F_2_rotating_T.add(f_2_rotating)
+          F_1_rotating_T.add(f_1.clone().cross(relative_place_1))
+          F_2_rotating_T.add(f_2.clone().cross(relative_place_2))
         }
       }
 
-      console.log(F_1_T)
+      // add dx
+      F_1_T.divideScalar(parts*parts)
+      F_2_T.divideScalar(parts*parts)
+      F_1_rotating_T.divideScalar(parts*parts)
+      F_2_rotating_T.divideScalar(parts*parts)
 
-      // TODO: multiply by dx but not insiude the loop, cuz not efficient, multiply outside
+      // scale forces to equal values
+      const their_foce_const = -133539732.425
+      const my_foce_const = -1007.8
+      if (mine_force) {
+        F_1_T.multiplyScalar(my_foce_const)
+        F_2_T.multiplyScalar(my_foce_const)
+        F_1_rotating_T.multiplyScalar(my_foce_const)
+        F_2_rotating_T.multiplyScalar(my_foce_const)
+      } else {
+        F_1_T.multiplyScalar(their_foce_const)
+        F_2_T.multiplyScalar(their_foce_const)
+        F_1_rotating_T.multiplyScalar(their_foce_const)
+        F_2_rotating_T.multiplyScalar(their_foce_const)
+      }
+
+      force_on_1.setDirection(F_1_T.clone().normalize())
+      force_on_1.setLength(F_1_T.length(), F_1_T.length()*0.2, F_1_T.length()*0.2)
+      force_on_2.setDirection(F_2_T.clone().normalize())
+      force_on_2.setLength(F_2_T.length(), F_2_T.length()*0.2, F_2_T.length()*0.2)
+
+      // console.log(F_1_rotating_T)
+      // console.log(F_2_rotating_T)
+
     }
   </script>
 </body>
