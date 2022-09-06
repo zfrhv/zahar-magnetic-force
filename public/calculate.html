@@ -67,6 +67,8 @@
     }
   </script>
   <script async>
+    const pi = Math.PI;
+
     function calc_force_init(toolbar, scene) {
       // draw shapes
       const geometry = new THREE.TorusGeometry( 150, 10, 20, 50 );
@@ -75,15 +77,17 @@
       const wire1 = new THREE.Mesh(geometry, material);
       wire1.name = "wire1";
       wire1.speed = new THREE.Vector3( );
-      wire1.rotation.x = Math.PI/2;
+      wire1.rotation.x = pi/2;
       wire1.position.set(0, 200, 0);
       scene.add(wire1);
 
       const wire2 = new THREE.Mesh(geometry, material);
       wire2.name = "wire2";
-      wire2.rotation.x = Math.PI/2;
+      wire2.rotation.x = pi/2;
       wire2.position.set(0, -200, 0);
       scene.add(wire2);
+
+      // TODO create forces speeds rotations... arrows
 
 
       // create slidebars
@@ -96,9 +100,9 @@
       toolbar.append(slidebars);
 
       const inputs = {
-        "R_1": function () { wire1.rotation.x = this.value/100*Math.PI*2 + Math.PI/2 },
-        "R_2": function () { wire1.rotation.y = this.value/100*Math.PI*2 },
-        "R_3": function () { wire2.rotation.y = this.value/100*Math.PI*2 },
+        "R_1": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
+        "R_2": function () { wire1.rotation.y = this.value/100*pi*2 },
+        "R_3": function () { wire2.rotation.y = this.value/100*pi*2 },
         "V_x": function () { wire1.speed.x = (this.value-50)/10 },
         "V_y": function () { wire1.speed.y = (this.value-50)/10 },
         "V_z": function () { wire1.speed.z = (this.value-50)/10 }
@@ -124,9 +128,12 @@
         slidebar.onchange = inputs[name];
         slidebar.oninput = inputs[name];
       }
+
+      // TODO create toggle for mine or their force equation (under calculator button?)
     }
 
     function calc_force(toolbar, scene) {
+      // TODO remove this arrow
       const dir = new THREE.Vector3( 0, 1, 0 );
       dir.normalize();
       const origin = new THREE.Vector3( 0, 0, 0 );
@@ -149,21 +156,60 @@
       wire2.radius = wire2_mesh.geometry.parameters.radius;
       wire2.position = wire2_mesh.position;
       wire2.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire2_mesh.rotation);
-
-      console.log(wire1)
+      wire2.voltage = 0;
 
       const F_1_T = new THREE.Vector3();
       const F_2_T = new THREE.Vector3();
       const F_1_rotating_T = new THREE.Vector3();
       const F_2_rotating_T = new THREE.Vector3();
-      let Voltage_2 = 0;
       const parts = 16;
 
-      // finding dot
-      const new_x_1 = Math.round(wire1.rotation.x/wire1.rotation.norm(), 4) == 0 ? wire1.rotation.cross_product(vector([1,0,0])).normalized() : wire1.rotation.cross_product(vector([0,1,0])).normalized();
+      // creating new axis on circles
+      const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)).normalize() : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0)).normalize();
+      const new_y_1 = wire1.rotation.clone().cross(new_x_1);
 
-      const new_y_1 = wire1.rotation.cross_product(new_x_1)
-      new_x_1 = new_x_1*wire1.rotation.norm()
+      const new_x_2 = Math.round(wire2.rotation.x, 4) == 0 ? wire2.rotation.clone().cross(new THREE.Vector3(1,0,0)).normalize() : wire2.rotation.clone().cross(new THREE.Vector3(0,1,0)).normalize();
+      const new_y_2 = wire2.rotation.clone().cross(new_x_1);
+
+      for (let part1 = 0; part1 < parts; part1++) {
+        for (let part2 = 0; part2 < parts; part2++) {
+          const alpha = 2*pi * part1/parts;
+          const beta  = 2*pi * part2/parts;
+
+          const relative_place_1 = new_x_1.clone().multiplyScalar(Math.sin(alpha)).add(new_y_1.clone().multiplyScalar(Math.cos(alpha)));
+          const relative_place_2 = new_x_2.clone().multiplyScalar(Math.sin(beta)).add(new_y_2.clone().multiplyScalar(Math.cos(beta)));
+
+          const v_1 = wire1.rotation.clone().cross(relative_place_1).normalize();
+          const v_2 = wire2.rotation.clone().cross(relative_place_2).normalize();
+
+          const absolute_place_1 = wire1.position.clone().add(relative_place_1)
+          const absolute_place_2 = wire2.position.clone().add(relative_place_2)
+
+          const R = absolute_place_2.sub(absolute_place_1)
+          const R_hat = R.clone().normalize()
+
+          // "mine" force calculation
+          const f_2 = R_hat.clone().multiplyScalar( Math.pow(v_1.clone().dot(R_hat), 2) + Math.pow(v_2.clone().dot(R_hat), 2) - Math.pow((v_1.clone().sub(v_2)).dot(R_hat), 2) / (2*Math.pow(R.length(), 2)) )
+          const f_1 = f_2.clone().negate()
+
+          // "their" force calculation
+          // const f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1) / Math.pow(R.length(), 2)
+          // const f_2 = v_1.clone().cross(R_hat).cross(v_2) / Math.pow(R.length(), 2)
+
+          const f_1_rotating = f_1.clone().cross(relative_place_1)
+          const f_2_rotating = f_2.clone().cross(relative_place_2)
+
+          F_1_T.add(f_1)
+          F_2_T.add(f_2)
+
+          F_1_rotating_T.add(f_1_rotating)
+          F_2_rotating_T.add(f_2_rotating)
+        }
+      }
+
+      console.log(F_1_T)
+
+      // TODO: multiply by dx but not insiude the loop, cuz not efficient, multiply outside
     }
   </script>
 </body>
