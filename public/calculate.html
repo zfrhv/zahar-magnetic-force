@@ -219,6 +219,11 @@
             // "mine" force calculation
             f_2 = R_hat.clone().multiplyScalar( Math.pow(v_1.clone().dot(R_hat), 2) + Math.pow(v_2.clone().dot(R_hat), 2) - Math.pow((v_1.clone().sub(v_2)).dot(R_hat), 2) / (Math.pow(R.length(), 2)) )
             f_1 = f_2.clone().negate()
+
+            if (part1 == 0 && part2 == 25) {
+              console.log( Math.pow(v_1.clone().dot(R_hat), 2))
+              console.log( Math.pow(v_2.clone().dot(R_hat), 2))
+            }
           } else {
             // "their" force calculation
             f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
