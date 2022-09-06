@@ -89,6 +89,24 @@
 
       // TODO create forces speeds rotations... arrows
 
+      // create force toggle
+      const toggle_force = document.createElement('label');
+      toggle_force.classList.add("switch");
+      toolbar.append(toggle_force);
+
+      const input = document.createElement('input');
+      input.classList.add("force_type");
+      input.type = "checkbox";
+      toggle_force.append(input);
+
+      const span = document.createElement('span');
+      span.classList.add("slider");
+      span.classList.add("round");
+      toggle_force.append(span);
+      
+      const p = document.createElement('p');
+      span.append(p);
+
 
       // create slidebars
       toolbar.style.height = toolbar.offsetWidth/3+"px";
