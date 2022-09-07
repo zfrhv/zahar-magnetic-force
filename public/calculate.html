@@ -64,12 +64,12 @@
         - you can also zoom in or zoom out with fingers / mouse scroll
         - you can also move in space by gragging with 2 fingers in the same direction or with keyboard arrows
         - refresh the page to reset
+      </div>
 
-
-        <details style="text-align: center;">
-          <summary>Inscructions of how to use <a href="#calc_force">this</a> tool</summary>
-          <div style="text-align: left;">
-
+      <details style="text-align: center;">
+        <summary>Inscructions of how to use <a href="#calc_force">this</a> tool</summary>
+        <div style="text-align: left;">
+          <div class="markdown">
             - When the switch is off then the right hand law equation used, when its on then my new equation is used.
 
             - The slider is to how many parts to split the wires, more slices -> more accuracy. but its also harder to calculate.
@@ -81,14 +81,14 @@
             - The round arrows are how much the object wants to rotate, the green round arrow = how much the green wire wants to rotate the purple wire. same with purple round arrow.
 
             - If you understand a little in svg path and programming, feel free to change the path by pressing f12 -> searching for "path" with "class=wire1" or "class=wire2" (just select the wire you want to modify),
-            change the "d="" field to the desired path, and then just press the clculator button again.
+              change the "d="" field to the desired path, and then just press the clculator button again.
 
             - after pressing the calculate button, the force of the orange object is printed to the logs (you can see \\(F_x\\) and \\(F_y\\) in console logs)
           </div>
-        </details>
-      </div>
+        </div>
+      </details>
 
-      <canvas-video id="calc_force" name="calc_force" type="calculate"></canvas-video>
+      <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%;"></canvas-video>
     </article>
   </div>
 
