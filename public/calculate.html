@@ -37,7 +37,7 @@
   <script src="tools/svg/shapes.js"></script>
   <script src="tools/threejs/shapes.js"></script>
   <script src="equations.js"></script>
-  <link rel="stylesheet" type="text/css" href="physics.css" />
+  <link rel="stylesheet" type="text/css" href="physics.css"/>
 </head>
 
 <body>
@@ -64,9 +64,31 @@
         - you can also zoom in or zoom out with fingers / mouse scroll
         - you can also move in space by gragging with 2 fingers in the same direction or with keyboard arrows
         - refresh the page to reset
+
+
+        <details style="text-align: center;">
+          <summary>Inscructions of how to use <a href="#calc_force">this</a> tool</summary>
+          <div style="text-align: left;">
+
+            - When the switch is off then the right hand law equation used, when its on then my new equation is used.
+
+            - The slider is to how many parts to split the wires, more slices -> more accuracy. but its also harder to calculate.
+
+            - Pressing the calculator will calculate the forces.
+
+            - The filled arrows are the force, green arrow = the force that the green wire creates. same with purple arrow.
+
+            - The round arrows are how much the object wants to rotate, the green round arrow = how much the green wire wants to rotate the purple wire. same with purple round arrow.
+
+            - If you understand a little in svg path and programming, feel free to change the path by pressing f12 -> searching for "path" with "class=wire1" or "class=wire2" (just select the wire you want to modify),
+            change the "d="" field to the desired path, and then just press the clculator button again.
+
+            - after pressing the calculate button, the force of the orange object is printed to the logs (you can see \\(F_x\\) and \\(F_y\\) in console logs)
+          </div>
+        </details>
       </div>
 
-      <canvas-video name="calc_force" type="calculate"></canvas-video>
+      <canvas-video id="calc_force" name="calc_force" type="calculate"></canvas-video>
     </article>
   </div>
 
@@ -126,8 +148,6 @@
       wire2.position.y = -200
       wire2.traverse((node) => { if (node.isMesh) { node.material = wire2_material } })
       scene.add(wire2)
-
-      // TODO draw current flow arrows
 
       // total force arrows
       const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color);
@@ -203,11 +223,10 @@
         "R_2": function () { wire1.rotation.y = this.value/100*pi*2 },
         "R_3": function () { wire2.rotation.y = this.value/100*pi*2 }
       }
-      const height = slidebars.offsetHeight / (Object.keys(inputs).length + 2);
-      slidebars.style.fontSize = height*0.9 + "px";
+      const height = slidebars.offsetHeight / (Object.keys(inputs).length);
+      slidebars.style.fontSize = height*0.8 + "px";
       for(const name in inputs) {
         const part = document.createElement('div');
-        part.style.width = "100%";
         part.innerText = name + ": ";
         slidebars.append(part);
 
@@ -216,9 +235,9 @@
         slidebar.value = 0;
         slidebar.min = 0;
         slidebar.max = 100;
-        slidebar.style.height = height + "px";
-        slidebar.style.position = "relative";
-        slidebar.style.top = height/3 + "px";
+        slidebar.style.width = "60%";
+        slidebar.style.verticalAlign = "middle";
+        slidebar.classList.add("measure_slide");
         part.append(slidebar);
 
         slidebar.onchange = inputs[name];
@@ -312,13 +331,13 @@
       if (mine_force) {
         F_1_T.multiplyScalar(my_foce_const)
         F_2_T.multiplyScalar(my_foce_const)
-        F_1_rotating_T.multiplyScalar(my_foce_const)
-        F_2_rotating_T.multiplyScalar(my_foce_const)
+        F_1_rotating_T.multiplyScalar(my_foce_const*2/3)
+        F_2_rotating_T.multiplyScalar(my_foce_const*2/3)
       } else {
         F_1_T.multiplyScalar(their_foce_const)
         F_2_T.multiplyScalar(their_foce_const)
-        F_1_rotating_T.multiplyScalar(their_foce_const)
-        F_2_rotating_T.multiplyScalar(their_foce_const)
+        F_1_rotating_T.multiplyScalar(their_foce_const*2/3)
+        F_2_rotating_T.multiplyScalar(their_foce_const*2/3)
       }
 
       // update total force arrows
