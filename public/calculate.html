@@ -315,8 +315,8 @@
           F_1_T.add(f_1)
           F_2_T.add(f_2)
 
-          F_1_rotating_T.add(f_1.clone().cross(relative_place_1))
-          F_2_rotating_T.add(f_2.clone().cross(relative_place_2))
+          F_1_rotating_T.add(relative_place_1.clone().cross(f_1))
+          F_2_rotating_T.add(relative_place_2.clone().cross(f_2))
         }
       }
 
@@ -360,15 +360,15 @@
       if (Math.round(rotation_1_direction.y,10) == 0 && Math.round(rotation_1_direction.z,10) == 0) {
         curve_1.rotation.x = 0
       } else {
-        curve_1.rotation.x = Math.atan2(-rotation_1_direction.y, -rotation_1_direction.z)
+        curve_1.rotation.x = Math.atan2(rotation_1_direction.y, rotation_1_direction.z)
       }
       if (Math.round(rotation_2_direction.y,10) == 0 && Math.round(rotation_2_direction.z,10) == 0) {
         curve_2.rotation.x = 0
       } else {
-        curve_2.rotation.x = Math.atan2(-rotation_2_direction.y, -rotation_2_direction.z)
+        curve_2.rotation.x = Math.atan2(rotation_2_direction.y, rotation_2_direction.z)
       }
-      curve_1.rotation.y = Math.asin(-rotation_1_direction.x)
-      curve_2.rotation.y = Math.asin(-rotation_2_direction.x)
+      curve_1.rotation.y = Math.asin(rotation_1_direction.x)
+      curve_2.rotation.y = Math.asin(rotation_2_direction.x)
     }
   </script>
 </body>
