@@ -54,6 +54,16 @@
         - then explain that when current changes inside wire, in my opinion its just differente charges that cause volatage
 
         <center>(drag to rotate)</center>
+        symbols:
+        - rotating arrow...
+        - straight arrow...
+        usage:
+        - toggle switch is for force type
+        - inputs are for rotation (drag/tap to choose)
+        - you can also rotate the object just by dragging it
+        - you can also zoom in or zoom out with fingers / mouse scroll
+        - you can also move in space by gragging with 2 fingers in the same direction or with keyboard arrows
+        - refresh the page to reset
       </div>
 
       <canvas-video name="calc_force" type="calculate"></canvas-video>
@@ -217,7 +227,7 @@
       const F_2_T = new THREE.Vector3();
       const F_1_rotating_T = new THREE.Vector3();
       const F_2_rotating_T = new THREE.Vector3();
-      const parts = 100;
+      const parts = 200;
 
       // creating new axis on circles
       const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0))
@@ -226,7 +236,7 @@
 
       const new_x_2 = Math.round(wire2.rotation.x, 4) == 0 ? wire2.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire2.rotation.clone().cross(new THREE.Vector3(0,1,0))
       new_x_2.normalize().multiplyScalar(wire2.radius)
-      const new_y_2 = wire2.rotation.clone().cross(new_x_1);
+      const new_y_2 = wire2.rotation.clone().cross(new_x_2);
 
       for (let part1 = 0; part1 < parts; part1++) {
         for (let part2 = 0; part2 < parts; part2++) {
@@ -242,7 +252,7 @@
           const absolute_place_1 = wire1.position.clone().add(relative_place_1)
           const absolute_place_2 = wire2.position.clone().add(relative_place_2)
 
-          const R = absolute_place_2.sub(absolute_place_1)
+          const R = absolute_place_1.sub(absolute_place_2)
           const R_hat = R.clone().normalize()
 
           let f_1 = null
@@ -255,7 +265,7 @@
           } else {
             // "their" force calculation
             f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
-            f_2 = v_1.clone().cross(R_hat).cross(v_2).divideScalar(Math.pow(R.length(), 2))
+            f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2))
           }
 
           F_1_T.add(f_1)
@@ -265,6 +275,8 @@
           F_2_rotating_T.add(f_2.clone().cross(relative_place_2))
         }
       }
+      console.log(F_1_rotating_T.length())
+      console.log(F_2_rotating_T.length())
 
       // add dx
       F_1_T.divideScalar(parts*parts)
@@ -273,8 +285,8 @@
       F_2_rotating_T.divideScalar(parts*parts)
 
       // scale forces to equal values
-      const their_foce_const = -267079464.85
-      const my_foce_const    = -801238394.55
+      const their_foce_const = 267079464.85
+      const my_foce_const    = their_foce_const*3
       if (mine_force) {
         F_1_T.multiplyScalar(my_foce_const)
         F_2_T.multiplyScalar(my_foce_const)
@@ -308,15 +320,15 @@
       if (Math.round(rotation_1_direction.y,10) == 0 && Math.round(rotation_1_direction.z,10) == 0) {
         degree_x_1 = 0
       } else {
-        degree_x_1 = Math.atan2(-rotation_1_direction.y, rotation_1_direction.z)
+        degree_x_1 = Math.atan2(-rotation_1_direction.y, -rotation_1_direction.z)
       }
       if (Math.round(rotation_2_direction.y,10) == 0 && Math.round(rotation_2_direction.z,10) == 0) {
         degree_x_2 = 0
       } else {
-        degree_x_2 = Math.atan2(-rotation_2_direction.y, rotation_2_direction.z)
+        degree_x_2 = Math.atan2(-rotation_2_direction.y, -rotation_2_direction.z)
       }
-      curve_1.rotation.set( degree_x_1, Math.asin(rotation_1_direction.x), 0 )
-      curve_2.rotation.set( degree_x_2, Math.asin(rotation_2_direction.x), 0 )
+      curve_1.rotation.set( degree_x_1, Math.asin(-rotation_1_direction.x), 0 )
+      curve_2.rotation.set( degree_x_2, Math.asin(-rotation_2_direction.x), 0 )
     }
   </script>
 </body>
