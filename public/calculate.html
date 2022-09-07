@@ -87,28 +87,45 @@
 
     function calc_force_init(toolbar, scene) {
       // draw shapes
-      const wire_shape = new THREE.TorusGeometry( 150, 10, 20, 50 );
+      const wire_shape = new THREE.TorusGeometry( 150, 10, 20, 50 )
       
-      // const wire1 = new THREE.Group()
+      const wire1 = new THREE.Group()
       const wire1_material = new THREE.MeshBasicMaterial({ color: 0x3e8207 })
+      wire1.name = "wire1"
 
-      const t = new THREE.Mesh(new THREE.ConeGeometry( 25, 25, 32 ))
-      t.position.y = 150
-      t.rotation.z = -pi / 2
-      scene.add(t)
+      const wire1_shape = new THREE.Mesh(wire_shape, wire1_material)
+      wire1_shape.name = "wire_shape"
+      wire1.add(wire1_shape)
 
-      const wire1 = new THREE.Mesh(wire_shape, wire1_material);
-      wire1.name = "wire1";
-      wire1.rotation.x = pi/2;
+      const arrow_1 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      arrow_1.position.y = 150
+      arrow_1.rotation.z = -pi / 2
+      wire1.add(arrow_1)
+
+      const arrow_2 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      arrow_2.position.y = -150
+      arrow_2.rotation.z = pi / 2
+      wire1.add(arrow_2)
+
+      const arrow_3 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      arrow_3.position.x = 150
+      arrow_3.rotation.z = pi
+      wire1.add(arrow_3)
+
+      const arrow_4 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      arrow_4.position.x = -150
+      wire1.add(arrow_4)
+
+      wire1.rotation.x = pi/2
       wire1.position.y = 200
-      scene.add(wire1);
+      scene.add(wire1)
 
-      const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc });
-      const wire2 = new THREE.Mesh(wire_shape, wire2_material);
+      const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc })
+      const wire2 = wire1.clone()
       wire2.name = "wire2";
-      wire2.rotation.x = pi/2;
       wire2.position.y = -200
-      scene.add(wire2);
+      wire2.traverse((node) => { if (node.isMesh) { node.material = wire2_material } })
+      scene.add(wire2)
 
       // TODO draw current flow arrows
 
@@ -220,11 +237,11 @@
       const curve_1    = scene.getObjectByName("curve_1")
       const curve_2    = scene.getObjectByName("curve_2")
 
-      wire1.radius = wire1_mesh.geometry.parameters.radius;
+      wire1.radius = wire1_mesh.getObjectByName("wire_shape").geometry.parameters.radius;
       wire1.position = wire1_mesh.position;
       wire1.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire1_mesh.rotation);
 
-      wire2.radius = wire2_mesh.geometry.parameters.radius;
+      wire2.radius = wire2_mesh.getObjectByName("wire_shape").geometry.parameters.radius;
       wire2.position = wire2_mesh.position;
       wire2.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire2_mesh.rotation);
 
