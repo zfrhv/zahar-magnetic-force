@@ -52,6 +52,7 @@
         - show that the forces are the same (total force + rotation force)
         - explain that moving wire 1 can cause volate in wire2
         - then explain that when current changes inside wire, in my opinion its just differente charges that cause volatage
+        - then show that with this equation, when friction/wire changes -> v/q changes, the force is still the same !
 
         <center>(drag to rotate)</center>
         symbols:
@@ -303,8 +304,8 @@
 
           if (mine_force) {
             // very simplified "mine" force calculation
-            f_1 = R_hat.clone().multiplyScalar( v_1.clone().dot(R_hat) * v_2.clone().dot(R_hat) / (Math.pow(R.length(), 2)) )
-            f_2 = f_1.clone().negate()
+            f_2 = R_hat.clone().multiplyScalar( v_1.clone().dot(R_hat) * v_2.clone().dot(R_hat) / (Math.pow(R.length(), 2)) )
+            f_1 = f_2.clone().negate()
           } else {
             // "their" force calculation
             f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
