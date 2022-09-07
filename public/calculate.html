@@ -87,20 +87,27 @@
 
     function calc_force_init(toolbar, scene) {
       // draw shapes
-      const geometry = new THREE.TorusGeometry( 150, 10, 20, 50 );
+      const wire_shape = new THREE.TorusGeometry( 150, 10, 20, 50 );
       
-      const wire1_material = new THREE.MeshBasicMaterial({ color: 0x3e8207 });
-      const wire1 = new THREE.Mesh(geometry, wire1_material);
+      // const wire1 = new THREE.Group()
+      const wire1_material = new THREE.MeshBasicMaterial({ color: 0x3e8207 })
+
+      const t = new THREE.Mesh(new THREE.ConeGeometry( 25, 25, 32 ))
+      t.position.y = 150
+      t.rotation.z = -pi / 2
+      scene.add(t)
+
+      const wire1 = new THREE.Mesh(wire_shape, wire1_material);
       wire1.name = "wire1";
       wire1.rotation.x = pi/2;
-      wire1.position.set(0, 200, 0);
+      wire1.position.y = 200
       scene.add(wire1);
 
       const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc });
-      const wire2 = new THREE.Mesh(geometry, wire2_material);
+      const wire2 = new THREE.Mesh(wire_shape, wire2_material);
       wire2.name = "wire2";
       wire2.rotation.x = pi/2;
-      wire2.position.set(0, -200, 0);
+      wire2.position.y = -200
       scene.add(wire2);
 
       // TODO draw current flow arrows
@@ -119,8 +126,8 @@
       const points = circle.getSpacedPoints(10);
       const curve_1_body = new THREE.Line(new THREE.Path().createGeometry(points));
       const curve_1_head = new THREE.Mesh(new THREE.ConeGeometry( 15, 40, 32 ));
-      curve_1_head.position.set(0, -80, 0);
-      curve_1_head.rotation.z = -pi / 2;
+      curve_1_head.position.y = -80
+      curve_1_head.rotation.z = -pi / 2
 
       const curve_1 = new THREE.Group()
       curve_1.add(curve_1_body)
@@ -275,8 +282,6 @@
           F_2_rotating_T.add(f_2.clone().cross(relative_place_2))
         }
       }
-      console.log(F_1_rotating_T.length())
-      console.log(F_2_rotating_T.length())
 
       // add dx
       F_1_T.divideScalar(parts*parts)
@@ -312,23 +317,21 @@
       curve_1.scale.set(scale_1, scale_1, scale_1)
       curve_2.scale.set(scale_2, scale_2, scale_2)
 
-      rotation_1_direction = F_1_rotating_T.clone().normalize()
-      rotation_2_direction = F_2_rotating_T.clone().normalize()
+      const rotation_1_direction = F_1_rotating_T.clone().normalize()
+      const rotation_2_direction = F_2_rotating_T.clone().normalize()
 
-      let degree_x_1
-      let degree_x_2
       if (Math.round(rotation_1_direction.y,10) == 0 && Math.round(rotation_1_direction.z,10) == 0) {
-        degree_x_1 = 0
+        curve_1.rotation.x = 0
       } else {
-        degree_x_1 = Math.atan2(-rotation_1_direction.y, -rotation_1_direction.z)
+        curve_1.rotation.x = Math.atan2(-rotation_1_direction.y, -rotation_1_direction.z)
       }
       if (Math.round(rotation_2_direction.y,10) == 0 && Math.round(rotation_2_direction.z,10) == 0) {
-        degree_x_2 = 0
+        curve_2.rotation.x = 0
       } else {
-        degree_x_2 = Math.atan2(-rotation_2_direction.y, -rotation_2_direction.z)
+        curve_2.rotation.x = Math.atan2(-rotation_2_direction.y, -rotation_2_direction.z)
       }
-      curve_1.rotation.set( degree_x_1, Math.asin(-rotation_1_direction.x), 0 )
-      curve_2.rotation.set( degree_x_2, Math.asin(-rotation_2_direction.x), 0 )
+      curve_1.rotation.y = Math.asin(-rotation_1_direction.x)
+      curve_2.rotation.y = Math.asin(-rotation_2_direction.x)
     }
   </script>
 </body>
