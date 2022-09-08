@@ -304,7 +304,7 @@
 
           if (mine_force) {
             // very simplified "mine" force calculation
-            f_2 = R_hat.clone().multiplyScalar( v_1.clone().dot(R_hat) * v_2.clone().dot(R_hat) / (Math.pow(R.length(), 2)) )
+            f_2 = R_hat.clone().multiplyScalar( v_1.clone().dot(v_2) / (Math.pow(R.length(), 2)) )
             f_1 = f_2.clone().negate()
           } else {
             // "their" force calculation
@@ -327,19 +327,11 @@
       F_2_rotating_T.divideScalar(parts*parts)
 
       // scale forces to equal values
-      const their_foce_const = 267079464.85
-      const my_foce_const    = their_foce_const*3
-      if (mine_force) {
-        F_1_T.multiplyScalar(my_foce_const)
-        F_2_T.multiplyScalar(my_foce_const)
-        F_1_rotating_T.multiplyScalar(my_foce_const*2/3)
-        F_2_rotating_T.multiplyScalar(my_foce_const*2/3)
-      } else {
-        F_1_T.multiplyScalar(their_foce_const)
-        F_2_T.multiplyScalar(their_foce_const)
-        F_1_rotating_T.multiplyScalar(their_foce_const*2/3)
-        F_2_rotating_T.multiplyScalar(their_foce_const*2/3)
-      }
+      const foce_const = 267079464.85
+      F_1_T.multiplyScalar(foce_const)
+      F_2_T.multiplyScalar(foce_const)
+      F_1_rotating_T.multiplyScalar(foce_const*2/3)
+      F_2_rotating_T.multiplyScalar(foce_const*2/3)
 
       // update total force arrows
       force_on_1.setDirection(F_1_T.clone().normalize())
