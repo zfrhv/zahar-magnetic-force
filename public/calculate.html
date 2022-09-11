@@ -71,6 +71,8 @@
       <div class="markdown">
         # <center><u style="font-family: 'Times New Roman';">Bla</u></center>
 
+        TODO: make all the accurate constants in force + voltage so i could fully relay on the equations
+
         TODO:
         - tell how i discovered the function
           tell about my theory and rules, then how i did vertical speed value -0.5 in R direction
@@ -370,7 +372,21 @@
     }
   </script>
   <script async>
-    const pi = Math.PI;
+    const pi = Math.PI
+
+    function vec_to_euler(vector) {
+      const rotation = new THREE.Euler()
+      const vector_unit = vector.clone().normalize()
+
+      if (Math.round(vector_unit.y, 10) == 0 && Math.round(vector_unit.z, 10) == 0) {
+        rotation.x = 0
+      } else {
+        rotation.x = Math.atan2(vector_unit.y, vector_unit.z)
+      }
+      rotation.y = Math.asin(vector_unit.x)
+
+      return rotation
+    }
 
     function calc_force_init(toolbar, scene) {
       // draw shapes
@@ -380,10 +396,12 @@
       const wire1_material = new THREE.MeshBasicMaterial({ color: 0x3e8207 })
       wire1.name = "wire1"
 
+      // draw circle wire
       const wire1_shape = new THREE.Mesh(wire_shape, wire1_material)
       wire1_shape.name = "wire_shape"
       wire1.add(wire1_shape)
 
+      // draw current flow
       const arrow_1 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
       arrow_1.position.y = 150
       arrow_1.rotation.z = -pi / 2
@@ -403,10 +421,12 @@
       arrow_4.position.x = -150
       wire1.add(arrow_4)
 
+      // transform the whole shape
       wire1.rotation.x = pi/2
       wire1.position.y = 200
       scene.add(wire1)
 
+      // duplicate to wire2
       const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc })
       const wire2 = wire1.clone()
       wire2.name = "wire2";
@@ -414,20 +434,33 @@
       wire2.traverse((node) => { if (node.isMesh) { node.material = wire2_material } })
       scene.add(wire2)
 
-      // total force arrows
-      const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color);
-      force_on_1.name = "force_on_1";
-      scene.add(force_on_1);
+      // speed arrows
+      const speed_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,150,0), 0, wire1_material.color)
+      wire1.add(speed_1)
 
-      const force_on_2 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire2.position, 0, wire1_material.color);
-      force_on_2.name = "force_on_2";
-      scene.add(force_on_2);
+      const speed_2 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,-150,0), 0, wire1_material.color)
+      wire1.add(speed_2)
+
+      const speed_3 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(150,0,0), 0, wire1_material.color)
+      wire1.add(speed_3)
+
+      const speed_4 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(-150,0,0), 0, wire1_material.color)
+      wire1.add(speed_4)
+
+      // total force arrows
+      const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color)
+      force_on_1.name = "force_on_1"
+      scene.add(force_on_1)
+
+      const force_on_2 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire2.position, 0, wire1_material.color)
+      force_on_2.name = "force_on_2"
+      scene.add(force_on_2)
 
       // rotation force arrows
-      const circle = new THREE.EllipseCurve(0, 0, 80, 80, 0, 3/2 * pi, false);
-      const points = circle.getSpacedPoints(10);
-      const curve_1_body = new THREE.Line(new THREE.Path().createGeometry(points));
-      const curve_1_head = new THREE.Mesh(new THREE.ConeGeometry( 15, 40, 32 ));
+      const circle = new THREE.EllipseCurve(0, 0, 80, 80, 0, 3/2 * pi, false)
+      const points = circle.getSpacedPoints(10)
+      const curve_1_body = new THREE.Line(new THREE.Path().createGeometry(points))
+      const curve_1_head = new THREE.Mesh(new THREE.ConeGeometry( 15, 40, 32 ))
       curve_1_head.position.y = -80
       curve_1_head.rotation.z = -pi / 2
 
@@ -446,8 +479,8 @@
       curve_1.children.forEach(child => { child.material.color.set(wire2_material.color) })
       curve_2.children.forEach(child => { child.material.color.set(wire1_material.color) })
 
-      curve_1.scale.set(0,0,0)
-      curve_2.scale.set(0,0,0)
+      curve_1.scale.setScalar(0)
+      curve_2.scale.setScalar(0)
 
       scene.add(curve_1)
       scene.add(curve_2)
@@ -483,10 +516,26 @@
       slidebars.style.textAlign = "center";
       toolbar.append(slidebars);
 
+      wire1.speed = new THREE.Vector3( );
+      function update_speeds() {
+        const length = wire1.speed.length()*25
+        speed_1.setLength(length, length*0.2, length*0.2)
+        speed_2.setLength(length, length*0.2, length*0.2)
+        speed_3.setLength(length, length*0.2, length*0.2)
+        speed_4.setLength(length, length*0.2, length*0.2)
+        speed_1.setDirection(wire1.speed.clone().normalize())
+        speed_2.setDirection(wire1.speed.clone().normalize())
+        speed_3.setDirection(wire1.speed.clone().normalize())
+        speed_4.setDirection(wire1.speed.clone().normalize())
+      }
+
       const inputs = {
         "R_1": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
         "R_2": function () { wire1.rotation.y = this.value/100*pi*2 },
-        "R_3": function () { wire2.rotation.y = this.value/100*pi*2 }
+        "R_3": function () { wire2.rotation.y = this.value/100*pi*2 },
+        "V_x": function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
+        "V_y": function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
+        "V_z": function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
       }
       const height = slidebars.offsetHeight / (Object.keys(inputs).length);
       slidebars.style.fontSize = height*0.8 + "px";
@@ -497,7 +546,7 @@
 
         const slidebar = document.createElement('input');
         slidebar.type = 'range';
-        slidebar.value = 0;
+        slidebar.value = /^V_.$/.test(name) ? 50 : 0;
         slidebar.min = 0;
         slidebar.max = 100;
         slidebar.style.width = "60%";
@@ -511,8 +560,8 @@
     }
 
     function calc_force(toolbar, scene) {
-      const wire1 = {};
-      const wire2 = {};
+      const wire1 = {}
+      const wire2 = {}
 
       const wire1_mesh = scene.getObjectByName("wire1")
       const wire2_mesh = scene.getObjectByName("wire2")
@@ -521,21 +570,23 @@
       const curve_1    = scene.getObjectByName("curve_1")
       const curve_2    = scene.getObjectByName("curve_2")
 
-      wire1.radius = wire1_mesh.getObjectByName("wire_shape").geometry.parameters.radius;
-      wire1.position = wire1_mesh.position;
-      wire1.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire1_mesh.rotation);
+      wire1.radius = wire1_mesh.getObjectByName("wire_shape").geometry.parameters.radius
+      wire1.position = wire1_mesh.position
+      wire1.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire1_mesh.rotation)
+      wire1.speed = wire1_mesh.speed
 
-      wire2.radius = wire2_mesh.getObjectByName("wire_shape").geometry.parameters.radius;
-      wire2.position = wire2_mesh.position;
-      wire2.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire2_mesh.rotation);
+      wire2.radius = wire2_mesh.getObjectByName("wire_shape").geometry.parameters.radius
+      wire2.position = wire2_mesh.position
+      wire2.rotation = new THREE.Vector3(0, 0, 1).applyEuler(wire2_mesh.rotation)
+      wire2.voltage = new THREE.Vector3()
 
-      const mine_force = toolbar.children[0].children[1].children[0].checked;
+      const mine_force = toolbar.children[0].children[1].children[0].checked
 
-      const F_1_T = new THREE.Vector3();
-      const F_2_T = new THREE.Vector3();
-      const F_1_rotating_T = new THREE.Vector3();
-      const F_2_rotating_T = new THREE.Vector3();
-      const parts = 200;
+      const F_1_T = new THREE.Vector3()
+      const F_2_T = new THREE.Vector3()
+      const F_1_rotating_T = new THREE.Vector3()
+      const F_2_rotating_T = new THREE.Vector3()
+      const parts = 200
 
       // creating new axis on circles
       const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0))
@@ -567,6 +618,8 @@
           let f_2 = null
 
           if (mine_force) {
+            // full "mine" force calculation
+            
             // very simplified "mine" force calculation
             f_2 = R_hat.clone().multiplyScalar( (2*v_1.clone().dot(v_2) - 3*v_1.clone().dot(R_hat)*v_2.clone().dot(R_hat)) / (Math.pow(R.length(), 2)) )
             f_1 = f_2.clone().negate()
@@ -604,27 +657,10 @@
       force_on_2.setLength(F_2_T.length(), F_2_T.length()*0.2, F_2_T.length()*0.2)
 
       // update rotation force arrows
-      const scale_1 = F_1_rotating_T.length() / 20500
-      const scale_2 = F_2_rotating_T.length() / 20500
-
-      curve_1.scale.set(scale_1, scale_1, scale_1)
-      curve_2.scale.set(scale_2, scale_2, scale_2)
-
-      const rotation_1_direction = F_1_rotating_T.clone().normalize()
-      const rotation_2_direction = F_2_rotating_T.clone().normalize()
-
-      if (Math.round(rotation_1_direction.y,10) == 0 && Math.round(rotation_1_direction.z,10) == 0) {
-        curve_1.rotation.x = 0
-      } else {
-        curve_1.rotation.x = Math.atan2(rotation_1_direction.y, rotation_1_direction.z)
-      }
-      if (Math.round(rotation_2_direction.y,10) == 0 && Math.round(rotation_2_direction.z,10) == 0) {
-        curve_2.rotation.x = 0
-      } else {
-        curve_2.rotation.x = Math.atan2(rotation_2_direction.y, rotation_2_direction.z)
-      }
-      curve_1.rotation.y = Math.asin(rotation_1_direction.x)
-      curve_2.rotation.y = Math.asin(rotation_2_direction.x)
+      curve_1.scale.setScalar(F_1_rotating_T.length() / 20500)
+      curve_2.scale.setScalar(F_2_rotating_T.length() / 20500)
+      curve_1.rotation.setFromVector3(vec_to_euler(F_1_rotating_T))
+      curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
     }
   </script>
 </body>
