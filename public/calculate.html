@@ -692,7 +692,7 @@
       // update voltage
       voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage*foce_const/100000).toFixed(2))
 
-      // TODO: when there is sideways speed, my equation tells that there is some weird sideways force. why?
+      // TODO: when there is sideways speed, my equation tells that there is some weird sideways force. why? could it be because its not enough accurate? maybe should try to add more parts in the for loops
     }
   </script>
 </body>
