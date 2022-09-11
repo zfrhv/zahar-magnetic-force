@@ -49,6 +49,7 @@
     <a href="comparing_equations.html">Comparing Equations</a>
     <a href="experiment.html">Experiment</a>
     <a href="discussion.html">Discussion</a>
+    <a href="calculate.html">Calculate</a>
     <script>
       function openNav() {
         document.getElementById("mySidenav").style.width = "300px";
@@ -63,7 +64,6 @@
       openNav()
     </script>
   </div>
-
 
   <div class="page">
     <article class="page-content">
@@ -127,7 +127,7 @@
 
         (as demonstrated in this diagram. if you played it by accident just refresh the page.)
       </div>
-      <canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
+      <canvas-video name="speed_rotation_1_mine_wire" start="125"></canvas-video>
       <div class="markdown">
         if we flip the <span style="color:rgb(253, 255, 136)">yellow</span> particle speed, and we flip the <span style="color:rgb(136, 255, 136)">green</span> particle speed we get:
 
@@ -151,7 +151,7 @@
 
         (you can play the video)
       </div>
-      <canvas-video name="speed_rotation_1_mine" start="125"></canvas-video>
+      <canvas-video name="speed_rotation_1_mine_wire" start="125"></canvas-video>
       <div class="markdown">
         ---
 
@@ -188,27 +188,32 @@
 
       </div>
       <div style="justify-content: space-around; display: flex;">
-        <span class="markdown"># Mine force</span>
-        <span class="markdown"># Their foce</span>
+        <span class="markdown"># Mine charge</span>
+        <span class="markdown"># Mine wire</span>
+        <span class="markdown"># Their force</span>
       </div>
       <div style="overflow: auto;">
-        <canvas-video name="speed_rotation_1_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-        <canvas-video name="speed_rotation_1_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
-      </div>
-      <br />
-      <div style="overflow: auto;">
-        <canvas-video name="rotate_mirror_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-        <canvas-video name="rotate_mirror_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="speed_rotation_1_mine_particle" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="speed_rotation_1_mine_wire" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="speed_rotation_1_their" start="125" style="width: 32.5%; float: left;"></canvas-video>
       </div>
       <br />
       <div style="overflow: auto;">
-        <canvas-video name="rotate_sync_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-        <canvas-video name="rotate_sync_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="rotate_mirror_mine_particle" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="rotate_mirror_mine_wire" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="rotate_mirror_their" start="125" style="width: 32.5%; float: left;"></canvas-video>
       </div>
       <br />
       <div style="overflow: auto;">
-        <canvas-video name="spin_around_mine" start="125" style="width: 48.9%; float: left;"></canvas-video>
-        <canvas-video name="spin_around_their" start="125" style="width: 48.9%; float: left;"></canvas-video>
+        <canvas-video name="rotate_sync_mine_particle" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="rotate_sync_mine_wire" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="rotate_sync_their" start="125" style="width: 32.5%; float: left;"></canvas-video>
+      </div>
+      <br />
+      <div style="overflow: auto;">
+        <canvas-video name="spin_around_mine_particle" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="spin_around_mine_wire" start="125" style="width: 32.5%; float: left;"></canvas-video>
+        <canvas-video name="spin_around_their" start="125" style="width: 32.5%; float: left;"></canvas-video>
       </div>
       <div class="markdown">
         And ofcource we also add some constant to the equation, and \\(1/r^2\\).
