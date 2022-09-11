@@ -690,7 +690,9 @@
       curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
       // update voltage
-      voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + wire2.voltage*foce_const)
+      voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage*foce_const/100000).toFixed(2))
+
+      // TODO: when there is sideways speed, my equation tells that there is some weird sideways force. why?
     }
   </script>
 </body>
