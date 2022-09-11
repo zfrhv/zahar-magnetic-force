@@ -41,6 +41,30 @@
 </head>
 
 <body>
+  <span id="myMenu" onclick="openNav()">&#9776;</span>
+  <div id="mySidenav" class="sidenav">
+    <link rel="stylesheet" type="text/css" href="sidebar.css" />
+    <a href="physics.html">Main Page</a>
+    <a href="equation_discovery.html">Equation Discovery</a>
+    <a href="comparing_equations.html">Comparing Equations</a>
+    <a href="experiment.html">Experiment</a>
+    <a href="discussion.html">Discussion</a>
+    <a href="calculate.html">Calculate</a>
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "300px";
+      }
+
+      window.addEventListener('click', function (e) {
+        if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
+          document.getElementById("mySidenav").style.width = "0px";
+        }
+      })
+
+      openNav()
+    </script>
+  </div>
+  
   <div class="page">
     <article class="page-content">
 
@@ -110,7 +134,7 @@
         
         So the equation is:
 
-        $$\color{aqua} \vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2(\vec{v_1} - \vec{v_2})^2 - 3(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2)}{2 \cdot \vec{r}\ ^2}$$
+        $$\color{aqua} \vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot ((\vec{v_1} - \vec{v_2})^2 - 3/2(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2)}{\vec{r}\ ^2}$$
 
         TEST TO TRY TO MAKE SENSE FROM THE EQUATION
 
