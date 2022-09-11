@@ -3,18 +3,14 @@ function mine_force_particle(
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
 
-  const current1 = Math.hypot(wire1_place_f.x - wire1_place_i.x, wire1_place_f.y - wire1_place_i.y);
-  const current2 = Math.hypot(wire2_place_f.x - wire2_place_i.x, wire2_place_f.y - wire2_place_i.y);
-
   const radius_slope = Math.atan2(wire2_place_i.y-wire1_place_i.y, wire2_place_i.x-wire1_place_i.x); // from now on the degrees here will be measured compared to the radius direction (radius = line between the particles)
-  const v1_slope = Math.atan2(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x) - radius_slope;
-  const v2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x) - radius_slope;
-  const v1_value = Math.hypot(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x);
-  const v2_value = Math.hypot(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x);
+  const v1_slope = Math.atan2(wire1_place_f.y - wire1_place_i.y, wire1_place_f.x - wire1_place_i.x) - radius_slope;
+  const v2_slope = Math.atan2(wire2_place_f.y - wire2_place_i.y, wire2_place_f.x - wire2_place_i.x) - radius_slope;
+  const v1_value = Math.hypot(wire1_place_f.y - wire1_place_i.y, wire1_place_f.x - wire1_place_i.x);
+  const v2_value = Math.hypot(wire2_place_f.y - wire2_place_i.y, wire2_place_f.x - wire2_place_i.x);
 
-  const force_value = current1 * current2 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
+  const force_value = 1 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
   const f_r = ( Math.pow(Math.hypot((wire1_place_f.y-wire1_place_i.y)-(wire2_place_f.y-wire2_place_i.y), (wire1_place_f.x-wire1_place_i.x)-(wire2_place_f.x-wire2_place_i.x)),2) - 3/2*Math.pow(Math.cos(v1_slope)*v1_value - Math.cos(v2_slope)*v2_value,2) ) * force_value;
-  // TODO whats wrong? why f_r is so big?
 
   const total_force = {
     x: f_r * Math.cos(radius_slope),
@@ -59,15 +55,14 @@ function mine_force_wire(
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
 
-  const current1 = Math.hypot(wire1_place_f.x - wire1_place_i.x, wire1_place_f.y - wire1_place_i.y);
-  const current2 = Math.hypot(wire2_place_f.x - wire2_place_i.x, wire2_place_f.y - wire2_place_i.y);
-
   const radius_slope = Math.atan2(wire2_place_i.y-wire1_place_i.y, wire2_place_i.x-wire1_place_i.x); // from now on the degrees here will be measured compared to the radius direction (radius = line between the particles)
-  const v1_slope = Math.atan2(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x) - radius_slope;
-  const v2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x) - radius_slope;
+  const v1_slope = Math.atan2(wire1_place_f.y - wire1_place_i.y, wire1_place_f.x - wire1_place_i.x) - radius_slope;
+  const v2_slope = Math.atan2(wire2_place_f.y - wire2_place_i.y, wire2_place_f.x - wire2_place_i.x) - radius_slope;
+  const v1_value = Math.hypot(wire1_place_f.y - wire1_place_i.y, wire1_place_f.x - wire1_place_i.x);
+  const v2_value = Math.hypot(wire2_place_f.y - wire2_place_i.y, wire2_place_f.x - wire2_place_i.x);
 
-  const force_value = current1 * current2 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
-  const f_r = ( Math.cos(v1_slope-v2_slope) - 3/2*Math.cos(v1_slope)*Math.cos(v2_slope) ) * force_value;
+  const force_value = 1 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
+  const f_r = v1_value * v2_value * ( Math.cos(v1_slope-v2_slope) - 3/2*Math.cos(v1_slope)*Math.cos(v2_slope) ) * force_value;
 
   const total_force = {
     x: f_r * Math.cos(radius_slope),
@@ -100,14 +95,13 @@ function their_force(
   wire2_place_i, wire2_place_f,
   wire1_center, wire2_center) {
 
-  const current1 = Math.hypot(wire1_place_f.x - wire1_place_i.x, wire1_place_f.y - wire1_place_i.y);
-  const current2 = Math.hypot(wire2_place_f.x - wire2_place_i.x, wire2_place_f.y - wire2_place_i.y);
-
   const radius_slope = Math.atan2(wire2_place_i.y-wire1_place_i.y, wire2_place_i.x-wire1_place_i.x);
-  const v1_slope = Math.atan2(wire1_place_f.y-wire1_place_i.y, wire1_place_f.x-wire1_place_i.x);
-  const v2_slope = Math.atan2(wire2_place_f.y-wire2_place_i.y, wire2_place_f.x-wire2_place_i.x);
+  const v1_slope = Math.atan2(wire1_place_f.y - wire1_place_i.y, wire1_place_f.x - wire1_place_i.x);
+  const v2_slope = Math.atan2(wire2_place_f.y - wire2_place_i.y, wire2_place_f.x - wire2_place_i.x);
+  const v1_value = Math.hypot(wire1_place_f.y - wire1_place_i.y, wire1_place_f.x - wire1_place_i.x);
+  const v2_value = Math.hypot(wire2_place_f.y - wire2_place_i.y, wire2_place_f.x - wire2_place_i.x);
 
-  const force_value = current1 * current2 / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
+  const force_value = v1_value * v2_value / (Math.pow(wire1_place_i.x - wire2_place_i.x, 2) + Math.pow(wire1_place_i.y - wire2_place_i.y, 2));
 
   const f_on1 = Math.sin(v2_slope-radius_slope) * force_value;
 
