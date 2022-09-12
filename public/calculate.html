@@ -5,27 +5,15 @@
   <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
-
   <!-- instead of using npm load threejs from url -->
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
-    import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/OBJLoader.js';
-    import { MTLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/MTLLoader.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
-
-    window.THREE = THREE;
-    window.OBJLoader = OBJLoader;
-    window.MTLLoader = MTLLoader;
-    window.OrbitControls = OrbitControls;
+  <script id="ThreeJS" type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/"
+      }
+    }
   </script>
-  <script>
-    THREE = window.THREE;
-    OBJLoader = window.OBJLoader;
-    MTLLoader = window.MTLLoader;
-    OrbitControls = window.OrbitControls;
-  </script>
-  <script id="CanvasVideo" src="https://canvas-video-embed.web.app/animation.js"></script>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8" />
 
@@ -371,14 +359,16 @@
       obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
     }
   </script>
-  <script async>
+  <script type="module">
+    import * as THREE from 'three'
+    
     const pi = Math.PI
 
     function vec_to_euler(vector) {
       return new THREE.Euler().setFromRotationMatrix(new THREE.Matrix4().lookAt(vector, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)))
     }
 
-    function calc_force_init(toolbar, scene) {
+    window.calc_force_init = function (toolbar, scene) {
       // draw shapes
       const wire_shape = new THREE.TorusGeometry( 150, 10, 20, 50 )
       
@@ -392,22 +382,22 @@
       wire1.add(wire1_shape)
 
       // draw current flow
-      const arrow_1 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      const arrow_1 = new THREE.Mesh(new THREE.ConeGeometry( 25, 55, 32 ), wire1_material)
       arrow_1.position.y = 150
       arrow_1.rotation.z = -pi / 2
       wire1.add(arrow_1)
 
-      const arrow_2 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      const arrow_2 = new THREE.Mesh(new THREE.ConeGeometry( 25, 55, 32 ), wire1_material)
       arrow_2.position.y = -150
       arrow_2.rotation.z = pi / 2
       wire1.add(arrow_2)
 
-      const arrow_3 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      const arrow_3 = new THREE.Mesh(new THREE.ConeGeometry( 25, 55, 32 ), wire1_material)
       arrow_3.position.x = 150
       arrow_3.rotation.z = pi
       wire1.add(arrow_3)
 
-      const arrow_4 = new THREE.Mesh(new THREE.ConeGeometry( 25, 35, 32 ), wire1_material)
+      const arrow_4 = new THREE.Mesh(new THREE.ConeGeometry( 25, 55, 32 ), wire1_material)
       arrow_4.position.x = -150
       wire1.add(arrow_4)
 
@@ -428,7 +418,7 @@
       const voltage = document.createElement('div');
       toolbar.parentElement.appendChild(voltage);
       voltage.style.position = 'absolute';
-      voltage.innerHTML = "Voltage (bottom figure): 0";
+      voltage.innerHTML = "Voltage (blue wire): 0";
       voltage.style.top = (toolbar.parentElement.children[0].offsetHeight - voltage.offsetHeight)+'px';
       voltage.style.left = '5%';
       voltage.style.pointerEvents = 'none';
@@ -464,7 +454,7 @@
       // rotation force arrows
       const circle = new THREE.EllipseCurve(0, 0, 80, 80, 0, 3/2 * pi, false)
       const points = circle.getSpacedPoints(10)
-      const curve_1_body = new THREE.Line(new THREE.Path().createGeometry(points))
+      const curve_1_body = new THREE.Line(new THREE.BufferGeometry().setFromPoints( points ))
       const curve_1_head = new THREE.Mesh(new THREE.ConeGeometry( 15, 40, 32 ))
       curve_1_head.position.y = -80
       curve_1_head.rotation.z = -pi / 2
@@ -564,7 +554,7 @@
       }
     }
 
-    function calc_force(toolbar, scene) {
+    window.calc_force = function (toolbar, scene) {
       const wire1 = {}
       const wire2 = {}
 
@@ -692,6 +682,7 @@
       // TODO: also it tells that when speeds are 0, and wire 2 is vertical (rotate 90), and wire 1 is looking at it (135), then there is a lot of voltage. but there is supposed to be 0? because its infinite energy? (is it really infinite energy? i dont think so?)
     }
   </script>
+  <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
 </body>
 
 </html>
