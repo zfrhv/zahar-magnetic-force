@@ -426,17 +426,12 @@
 
       // voltage text
       const voltage = document.createElement('div');
+      toolbar.parentElement.appendChild(voltage);
       voltage.style.position = 'absolute';
-      voltage.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
-      voltage.style.width = '80%';
-      voltage.style.height = '30%';
-      // voltage.style.backgroundColor = "blue";
       voltage.innerHTML = "Voltage (bottom figure): 0";
-      voltage.style.top = '3%';
+      voltage.style.top = (toolbar.parentElement.children[0].offsetHeight - voltage.offsetHeight)+'px';
       voltage.style.left = '5%';
       voltage.style.pointerEvents = 'none';
-      toolbar.parentElement.appendChild(voltage);
-
       wire2.voltage = voltage
 
       // speed arrows
@@ -599,7 +594,7 @@
       const F_2_T = new THREE.Vector3()
       const F_1_rotating_T = new THREE.Vector3()
       const F_2_rotating_T = new THREE.Vector3()
-      const parts = 200
+      const parts = 100
 
       // creating new axis on circles
       const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0))
@@ -669,6 +664,7 @@
       F_2_T.divideScalar(parts*parts)
       F_1_rotating_T.divideScalar(parts*parts)
       F_2_rotating_T.divideScalar(parts*parts)
+      wire2.voltage /= parts*parts
 
       // scale forces to equal values
       const foce_const = 267079464.85
@@ -690,9 +686,10 @@
       curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
       // update voltage
-      voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage*foce_const/100000).toFixed(2))
+      voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage*foce_const).toFixed(2))
 
       // TODO: when there is sideways speed, my equation tells that there is some weird sideways force. why? could it be because its not enough accurate? maybe should try to add more parts in the for loops
+      // TODO: also it tells that when speeds are 0, and wire 2 is vertical (rotate 90), and wire 1 is looking at it (135), then there is a lot of voltage. but there is supposed to be 0? because its infinite energy? (is it really infinite energy? i dont think so?)
     }
   </script>
 </body>
