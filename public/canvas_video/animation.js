@@ -1,8 +1,3 @@
-import * as THREE from 'three'
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
-import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-
 // Append css
 const animation_css_link = document.createElement("link");
 animation_css_link.href = "./canvas_video/animation.css";
@@ -56,7 +51,13 @@ const calculator_svg = `
 </svg>
 `;
 
-function calculate(looping_animation, animation_main) {
+async function calculate(looping_animation, animation_main) {
+  const [THREE, { OrbitControls }] =
+  await Promise.all([
+    import('three'),
+    import('three/addons/controls/OrbitControls.js')
+  ]);
+
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, 1, 1, 10000);
@@ -64,7 +65,7 @@ function calculate(looping_animation, animation_main) {
   renderer.setSize(1000, 1000);
 
   // transparent background
-  renderer.setClearColor( 0xffffff, 0);
+  renderer.setClearColor( 0x000000, 0 );
 
   // let css decide width + height
   renderer.domElement.style.width = null;
@@ -108,7 +109,15 @@ function calculate(looping_animation, animation_main) {
 }
 
 
-function insert_obj(looping_animation, animation_main) {
+async function insert_obj(looping_animation, animation_main) {
+  const [THREE, { OrbitControls }, { OBJLoader }, { MTLLoader }] =
+  await Promise.all([
+    import('three'),
+    import('three/addons/controls/OrbitControls.js'),
+    import('three/addons/loaders/OBJLoader.js'),
+    import('three/addons/loaders/MTLLoader.js')
+  ]);
+
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
