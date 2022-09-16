@@ -586,24 +586,50 @@
       const F_2_T = new THREE.Vector3()
       const F_1_rotating_T = new THREE.Vector3()
       const F_2_rotating_T = new THREE.Vector3()
-      const parts = 100
+      let parts = 100
 
       // creating new axis on circles
       const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0))
-      new_x_1.normalize().multiplyScalar(wire1.radius)
+      new_x_1.normalize()
       const new_y_1 = wire1.rotation.clone().cross(new_x_1)
+      const radius_1_x = new_x_1.clone().multiplyScalar(wire1.radius)
+      const radius_1_y = new_y_1.clone().multiplyScalar(wire1.radius)
 
       const new_x_2 = Math.round(wire2.rotation.x, 4) == 0 ? wire2.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire2.rotation.clone().cross(new THREE.Vector3(0,1,0))
-      new_x_2.normalize().multiplyScalar(wire2.radius)
-      const new_y_2 = wire2.rotation.clone().cross(new_x_2);
+      new_x_2.normalize()
+      const new_y_2 = wire2.rotation.clone().cross(new_x_2)
+      const radius_2_x = new_x_2.clone().multiplyScalar(wire2.radius)
+      const radius_2_y = new_y_2.clone().multiplyScalar(wire2.radius)
 
+      let area_value = 0
+      const areas = []
+      if (!mine_force) {
+        // calculate which parts are in the circle
+        const step = pi / 4 * wire2.radius*2 / Math.sqrt(parts)
+        let height = -wire2.radius
+        let width = -wire2.radius
+
+        while (height < wire2.radius) {
+          if (Math.hypot(width, height) < wire2.radius) {
+            areas.push(new_x_2.clone().multiplyScalar(width).add(new_y_2.clone().multiplyScalar(height)).add(wire2.position))
+          }
+
+          width += step
+          if (width > wire2.radius) {
+            width = -wire2.radius
+            height += step
+          }
+        }
+        parts = areas.length
+        area_value = 1/parts
+      }
       for (let part1 = 0; part1 < parts; part1++) {
         for (let part2 = 0; part2 < parts; part2++) {
           const alpha = 2*pi * part1/parts;
           const beta  = 2*pi * part2/parts;
 
-          const relative_place_1 = new_x_1.clone().multiplyScalar(Math.sin(alpha)).add(new_y_1.clone().multiplyScalar(Math.cos(alpha)));
-          const relative_place_2 = new_x_2.clone().multiplyScalar(Math.sin(beta)).add(new_y_2.clone().multiplyScalar(Math.cos(beta)));
+          const relative_place_1 = radius_1_x.clone().multiplyScalar(Math.sin(alpha)).add(radius_1_y.clone().multiplyScalar(Math.cos(alpha)));
+          const relative_place_2 = radius_2_x.clone().multiplyScalar(Math.sin(beta)).add(radius_2_y.clone().multiplyScalar(Math.cos(beta)));
 
           const v_1 = wire1.rotation.clone().cross(relative_place_1).normalize();
           const v_2 = wire2.rotation.clone().cross(relative_place_2).normalize();
@@ -611,16 +637,19 @@
           const absolute_place_1 = wire1.position.clone().add(relative_place_1)
           const absolute_place_2 = wire2.position.clone().add(relative_place_2)
 
-          const R = absolute_place_1.sub(absolute_place_2)
+          const R = absolute_place_1.clone().sub(absolute_place_2)
           const R_hat = R.clone().normalize()
 
           let f_1 = null
           let f_2 = null
 
           if (mine_force) {
+            // TODO my equation tells that when the current in wire 2 is 0, and even though that wire 1 is moving, the voltage on wire 2 will be 0. its probably wrong equation..
+
             // full "mine" force calculation
             const v_1_n = v_1.clone().add(wire1.speed)
-            const v_2_n = v_2.clone().add(wire1.speed)
+            // const v_2_n = v_2.clone().add(wire1.speed)
+            const v_2_n = new THREE.Vector3()
             const v_1_p = wire1.speed.clone()
             const v_2_p = new THREE.Vector3()
 
@@ -641,6 +670,19 @@
             // "their" force calculation
             f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
             f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2))
+
+            const dt = 0.00001
+            const area_place = areas[part2]
+
+            const R_A_old = absolute_place_1.clone().sub(area_place)
+            const R_A_hat_old = R_A_old.clone().normalize()
+            const old_flux = v_1.clone().cross(R_A_hat_old).dot(wire2.rotation) / Math.pow(R_A_old.length(), 2) * area_value
+
+            const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
+            const R_A_hat_new = R_A_new.clone().normalize()
+            const new_flux = v_1.clone().cross(R_A_hat_new).dot(wire2.rotation) / Math.pow(R_A_new.length(), 2) * area_value
+
+            wire2.voltage += (new_flux - old_flux) / dt
           }
 
           F_1_T.add(f_1)
@@ -656,7 +698,12 @@
       F_2_T.divideScalar(parts*parts)
       F_1_rotating_T.divideScalar(parts*parts)
       F_2_rotating_T.divideScalar(parts*parts)
-      wire2.voltage /= parts*parts
+      if (mine_force) {
+        wire2.voltage /= parts*parts
+      } else {
+        wire2.voltage /= parts
+        wire2.voltage *= -673
+      }
 
       // scale forces to equal values
       const foce_const = 267079464.85
@@ -679,9 +726,6 @@
 
       // update voltage
       voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage*foce_const).toFixed(2))
-
-      // TODO: when there is sideways speed, my equation tells that there is some weird sideways force. why? could it be because its not enough accurate? maybe should try to add more parts in the for loops
-      // TODO: also it tells that when speeds are 0, and wire 2 is vertical (rotate 90), and wire 1 is looking at it (135), then there is a lot of voltage. but there is supposed to be 0? because its infinite energy? (is it really infinite energy? i dont think so?)
     }
   </script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
