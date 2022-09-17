@@ -84,231 +84,114 @@
 
         TODO: put these all calculations in collapse
 
-        Simplification:
+        TODO: change the colors, cuz they are horrible (use hex colors)
+        TODO: also color the summaries, cuz its hard to see them
+
         $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot Top\ Part}{\vec{r}\ ^2}$$
         <br/>
         $$Top\ Part = \begin{aligned}
         \+ ((\vec{v_1} - \vec{v_2})\ \bot\ \hat{r})^2 \\\\
         \- ((\vec{v_1} - \vec{v_2})\ \parallel\ \hat{r})^2\ /\ 2 \end{aligned}$$
         <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ ((\vec{v_1} - \vec{v_2})\ \bot\ \hat{r})^2\ \cdot\ 2 \\\\
-        \- ((\vec{v_1} - \vec{v_2})\ \parallel\ \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ ((\vec{v_1} - \vec{v_2}) - ((\vec{v_1} - \vec{v_2}) \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
-        \- (((\vec{v_1} - \vec{v_2}) \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ ((\vec{v_1} - \vec{v_2}) - (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
-        \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ ((\vec{v_1} - \vec{v_2}) - (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
-        \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ ((\vec{v_1} - \vec{v_2})^2 - 2 \cdot (\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2)\ \cdot\ 2 \\\\
-        \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + {\color{lime}2}((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \\\\
-        \color{lime}\- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 $$
-        <br/>
-        $$\color{aqua}(s \cdot \hat{v})^2 = s^2 \cdot \hat{v}^2 = s^2 \cdot 1 = s^2$$
-        <br/>
-        $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) + (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
-        <br/>
-        $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - {\color{lime}4}(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 \color{lime} + (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
-        <br/>
-        $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 3(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
-        
+      </div>
+      <details style="text-align: center;">
+        <summary>Simplification: (click the arrow)</summary>
+        <div style="text-align: left;">
+          <div class="markdown">
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ ((\vec{v_1} - \vec{v_2})\ \bot\ \hat{r})^2\ \cdot\ 2 \\\\
+            \- ((\vec{v_1} - \vec{v_2})\ \parallel\ \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ ((\vec{v_1} - \vec{v_2}) - ((\vec{v_1} - \vec{v_2}) \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
+            \- (((\vec{v_1} - \vec{v_2}) \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ ((\vec{v_1} - \vec{v_2}) - (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
+            \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ ((\vec{v_1} - \vec{v_2}) - (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
+            \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ ((\vec{v_1} - \vec{v_2})^2 - 2 \cdot (\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2)\ \cdot\ 2 \\\\
+            \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + {\color{lime}2}((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \\\\
+            \color{lime}\- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 $$
+            <br/>
+            $$\color{aqua}(s \cdot \hat{v})^2 = s^2 \cdot \hat{v}^2 = s^2 \cdot 1 = s^2$$
+            <br/>
+            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) + (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
+            <br/>
+            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - {\color{lime}4}(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 \color{lime} + (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
+            <br/>
+            $$\color{aqua} 2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 3(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$      
+          </div>
+        </div>
+      </details>
+      <div class="markdown">
         So the equation is:
 
         $$\color{aqua} \vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot ((\vec{v_1} - \vec{v_2})^2 - 3/2(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2)}{\vec{r}\ ^2}$$
 
-        TEST TO TRY TO MAKE SENSE FROM THE EQUATION
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2(\vec{v_1}^2 - 2 \cdot \vec{v_1} \cdot \vec{v_2} + \vec{v_2}^2) \\\\
-        \- 3((\vec{v_1} \cdot \hat{r})^2 - 2 \cdot (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) + (\vec{v_2} \cdot \hat{r})^2) \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2\vec{v_1}^2 - 4\vec{v_1} \cdot \vec{v_2} + 2\vec{v_2}^2 - 3(\vec{v_1} \cdot \hat{r})^2 \\\\
-        \+ 6(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) - 3(\vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2((\vec{v_1} \cdot \hat{r}) \cdot \hat{r} + \vec{v_1}\ \bot\ \hat{r})^2 \\\\
-        \- 4((\vec{v_1} \cdot \hat{r}) \cdot \hat{r} + \vec{v_1}\ \bot\ \hat{r}) \cdot ((\vec{v_2} \cdot \hat{r}) \cdot \hat{r} + \vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2((\vec{v_2} \cdot \hat{r}) \cdot \hat{r} + \vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \- 3(\vec{v_1} \cdot \hat{r})^2 \\\\
-        \+ 6(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \- 3(\vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2(((\vec{v_1} \cdot \hat{r}) \cdot \hat{r})^2 + 2 \cdot (\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_1}\ \bot\ \hat{r}) + (\vec{v_1}\ \bot\ \hat{r})^2) \\\\
-        \- 4(((\vec{v_1} \cdot \hat{r}) \cdot \hat{r}) \cdot ((\vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + (\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) + (\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) + (\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r})) \\\\
-        \+ 2(((\vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 + 2 \cdot (\vec{v_2}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) + (\vec{v_2}\ \bot\ \hat{r})^2) \\\\
-        \- 3(\vec{v_1} \cdot \hat{r})^2 \\\\
-        \+ 6(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \- 3(\vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2((\vec{v_1} \cdot \hat{r})^2 + (\vec{v_1}\ \bot\ \hat{r})^2) \\\\
-        \- 4((\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) + (\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) + (\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) + (\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r})) \\\\
-        \+ 2((\vec{v_2} \cdot \hat{r})^2 + (\vec{v_2}\ \bot\ \hat{r})^2) \\\\
-        \- 3(\vec{v_1} \cdot \hat{r})^2 \\\\
-        \+ 6(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \- 3(\vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2(\vec{v_1} \cdot \hat{r})^2 + 2(\vec{v_1}\ \bot\ \hat{r})^2 \\\\
-        \- 4(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) - 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 4(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) - 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2(\vec{v_2} \cdot \hat{r})^2 + 2(\vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \- 3(\vec{v_1} \cdot \hat{r})^2 \\\\
-        \+ 6(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \- 3(\vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2(\vec{v_1}\ \bot\ \hat{r})^2 \\\\
-        \- 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 4(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) - 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2(\vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \- (\vec{v_1} \cdot \hat{r})^2 \\\\
-        \+ 2(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \- (\vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \- 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 4(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2( (\vec{v_1}\ \bot\ \hat{r})^2 - 2(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) + (\vec{v_2}\ \bot\ \hat{r})^2 ) \\\\
-        \- ( (\vec{v_1} \cdot \hat{r})^2 - 2(\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) + (\vec{v_2} \cdot \hat{r})^2 ) \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \- 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 4(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2(\vec{v_1}\ \bot\ \hat{r} - \vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \- (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 \end{aligned}$$
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \- 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 4(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2(\vec{v_1}\ \bot\ \hat{r} - \vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \- (\vec{v_1}\ \parallel\ \hat{r} - \vec{v_2}\ \parallel\ \hat{r})^2 \end{aligned}$$
-
-        IT FEELS LIKE ITS SUPPOSED TO BE
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \- 4(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 4(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ 2(\vec{v_1}\ \bot\ \hat{r} - \vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \+ 2(\vec{v_1}\ \parallel\ \hat{r} - \vec{v_2}\ \parallel\ \hat{r})^2 \end{aligned}$$
-
-        $$Top\ Part = \begin{aligned}
-        \- 2(\vec{v_1}\ \bot\ \hat{r}) \cdot (\vec{v_2}\ \parallel\ \hat{r}) - 2(\vec{v_1}\ \parallel\ \hat{r}) \cdot (\vec{v_2}\ \bot\ \hat{r}) \\\\
-        \+ (\vec{v_1}\ \bot\ \hat{r} - \vec{v_2}\ \bot\ \hat{r})^2 \\\\
-        \+ (\vec{v_1}\ \parallel\ \hat{r} - \vec{v_2}\ \parallel\ \hat{r})^2 \end{aligned}$$
-
-        $$\color{pink} Top\ Part = ( (\vec{v_1}\ \parallel\ \hat{r} - \vec{v_2}\ \parallel\ \hat{r}) - (\vec{v_1}\ \bot\ \hat{r} - \vec{v_2}\ \bot\ \hat{r}) )^2 $$
-
-        $$Top\ Part = ( \vec{v_1}\ \parallel\ \hat{r} - \vec{v_2}\ \parallel\ \hat{r} - \vec{v_1}\ \bot\ \hat{r} + \vec{v_2}\ \bot\ \hat{r} )^2 $$
-
-        $$\color{pink} Top\ Part = ( (\vec{v_1}\ \parallel\ \hat{r} - \vec{v_1}\ \bot\ \hat{r}) - (\vec{v_2}\ \parallel\ \hat{r} - \vec{v_2}\ \bot\ \hat{r}) )^2 $$
-
-        WIRE:
-
-        $$Top\ Part = \begin{aligned}
-        \+ ( (\vec{v_1}_\+\ \parallel\ \hat{r} - \vec{v_1}_\+\ \bot\ \hat{r}) - (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) )^2 \\\\
-        \+ ( (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) - (\vec{v_2}_\+\ \parallel\ \hat{r} - \vec{v_2}_\+\ \bot\ \hat{r}) )^2 \\\\
-        \- ( (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) - (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) )^2 \\\\
-        \- ( (\vec{v_1}_\+\ \parallel\ \hat{r} - \vec{v_1}_\+\ \bot\ \hat{r}) - (\vec{v_2}_\+\ \parallel\ \hat{r} - \vec{v_2}_\+\ \bot\ \hat{r}) )^2 \end{aligned}$$
-
-        STANDING WIRE:
-
-        $$Top\ Part = \begin{aligned}
-        \+ ( (0\ \parallel\ \hat{r} -0\ \bot\ \hat{r}) - (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) )^2 \\\\
-        \+ ( (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) - (0\ \parallel\ \hat{r} - 0\ \bot\ \hat{r}) )^2 \\\\
-        \- ( (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) - (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) )^2 \\\\
-        \- ( (0\ \parallel\ \hat{r} - 0\ \bot\ \hat{r}) - (0\ \parallel\ \hat{r} - 0\ \bot\ \hat{r}) )^2 \end{aligned}$$
-
-        $$Top\ Part = \begin{aligned}
-        \+ ( \vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r} )^2 \\\\
-        \+ ( \vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r} )^2 \\\\
-        \- ( (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) - (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) )^2 \end{aligned}$$
-
-        $$Top\ Part = \begin{aligned}
-        \+ ( \vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r} )^2 \\\\
-        \+ ( \vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r} )^2 \\\\
-        \- (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r})^2 + 2 \cdot (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) \cdot (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) - (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r})^2 \end{aligned}$$
-
-        $$\color{pink} Top\ Part =  2 \cdot (\vec{v_1}_\-\ \parallel\ \hat{r} - \vec{v_1}_\-\ \bot\ \hat{r}) \cdot (\vec{v_2}_\-\ \parallel\ \hat{r} - \vec{v_2}_\-\ \bot\ \hat{r}) $$
-
-        $$Top\ Part =  2 \cdot ((\vec{v_1} \cdot \hat{r}) \cdot \hat{r} - (\vec{v_1} - (\vec{v_1} \cdot \hat{r})) \cdot \hat{r}) \cdot ((\vec{v_2} \cdot \hat{r}) \cdot \hat{r} - (\vec{v_2} - (\vec{v_2} \cdot \hat{r}) \cdot \hat{r})) $$
-
-        $$Top\ Part =  2 \cdot ( \begin{aligned}
-        \+ ((\vec{v_1} \cdot \hat{r}) \cdot \hat{r}) \cdot ((\vec{v_2} \cdot \hat{r}) \cdot \hat{r}) \\\\
-        \- (\vec{v_1} - (\vec{v_1} \cdot \hat{r}) \cdot \hat{r}) \cdot ((\vec{v_2} \cdot \hat{r}) \cdot \hat{r}) \\\\
-        \- ((\vec{v_1} \cdot \hat{r}) \cdot \hat{r}) \cdot (\vec{v_2} - (\vec{v_2} \cdot \hat{r}) \cdot \hat{r}) \\\\
-        \+ (\vec{v_1} - (\vec{v_1} \cdot \hat{r}) \cdot \hat{r}) \cdot (\vec{v_2} - (\vec{v_2} \cdot \hat{r}) \cdot \hat{r}) ) \end{aligned}$$
-
-        $$Top\ Part =  2 \cdot ( \begin{aligned}
-        \+ (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \- ((\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) - (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r})) \\\\
-        \- ((\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) - (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r})) \\\\
-        \+ (\vec{v_1} \cdot \vec{v_2} - (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) - (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) + (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) ) ) \end{aligned}$$
-
-        $$Top\ Part =  2 \cdot ( \begin{aligned}
-        \+ (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) \\\\
-        \+ \vec{v_1} \cdot \vec{v_2} - (\vec{v_1} \cdot \hat{r}) \cdot (\vec{v_2} \cdot \hat{r}) ) \end{aligned}$$
-
-        $$Top\ Part =  2 \cdot \vec{v_1} \cdot \vec{v_2} $$
-
-        thats probably not right :/
-
-        And if we check between wires, there are 4 parts:
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        {\color{pink} {q_1}_\+ + {q_2}_\- \rightarrow} + 2(\vec{v_1}_\+ - \vec{v_2}_\-)^2 - 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
-        {\color{pink} {q_1}_\- + {q_2}_\+ \rightarrow} + 2(\vec{v_1}_\- - \vec{v_2}_\+)^2 - 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\+ \cdot \hat{r})^2 \\\\
-        {\color{pink} {q_1}_\- + {q_2}_\- \rightarrow} - 2(\vec{v_1}_\- - \vec{v_2}_\-)^2 + 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
-        {\color{pink} {q_1}_\+ + {q_2}_\+ \rightarrow} - 2(\vec{v_1}_\+ - \vec{v_2}_\+)^2 + 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\+ \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \+ 2(\vec{v_1}_\+^2 - 2 \cdot \vec{v_1}_\+ \cdot \vec{v_2}_\- + \vec{v_2}_\-^2) - 3((\vec{v_1}_\+ \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) + (\vec{v_2}_\- \cdot \hat{r})^2) \\\\
-        \+ 2(\vec{v_1}_\-^2 - 2 \cdot \vec{v_1}_\- \cdot \vec{v_2}_\+ + \vec{v_2}_\+^2) - 3((\vec{v_1}_\- \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) + (\vec{v_2}_\+ \cdot \hat{r})^2) \\\\
-        \- 2(\vec{v_1}_\-^2 - 2 \cdot \vec{v_1}_\- \cdot \vec{v_2}_\- + \vec{v_2}_\-^2) + 3((\vec{v_1}_\- \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) + (\vec{v_2}_\- \cdot \hat{r})^2) \\\\
-        \- 2(\vec{v_1}_\+^2 - 2 \cdot \vec{v_1}_\+ \cdot \vec{v_2}_\+ + \vec{v_2}_\+^2) + 3((\vec{v_1}_\+ \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) + (\vec{v_2}_\+ \cdot \hat{r})^2) \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        {\color{lime} \+ 2\vec{v_1}_\+^2} - 4\vec{v_1}_\+ \cdot \vec{v_2}_\- {\color{lime} + 2\vec{v_2}_\-^2 - 3(\vec{v_1}_\+ \cdot \hat{r})^2} + 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \color{lime} - 3(\vec{v_2}_\- \cdot \hat{r})^2 \\\\
-        {\color{lime} \+ 2\vec{v_1}_\-^2} - 4\vec{v_1}_\- \cdot \vec{v_2}_\+ {\color{lime} + 2\vec{v_2}_\+^2 - 3(\vec{v_1}_\- \cdot \hat{r})^2} + 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \color{lime} - 3(\vec{v_2}_\+ \cdot \hat{r})^2 \\\\
-        {\color{lime} \- 2\vec{v_1}_\-^2} + 4\vec{v_1}_\- \cdot \vec{v_2}_\- {\color{lime} - 2\vec{v_2}_\-^2 + 3(\vec{v_1}_\- \cdot \hat{r})^2} - 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \color{lime} + 3(\vec{v_2}_\- \cdot \hat{r})^2 \\\\
-        {\color{lime} \- 2\vec{v_1}_\+^2} + 4\vec{v_1}_\+ \cdot \vec{v_2}_\+ {\color{lime} - 2\vec{v_2}_\+^2 + 3(\vec{v_1}_\+ \cdot \hat{r})^2} - 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \color{lime} + 3(\vec{v_2}_\+ \cdot \hat{r})^2 \end{aligned}$$
-        <br/>
-        $$2 \cdot Top\ Part = \begin{aligned}
-        \- 4\vec{v_1}_\+ \cdot \vec{v_2}_\- + 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-        \- 4\vec{v_1}_\- \cdot \vec{v_2}_\+ + 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
-        \+ 4\vec{v_1}_\- \cdot \vec{v_2}_\- - 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-        \+ 4\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
-        <br/>
-        $$Top\ Part = \begin{aligned}
-        \- 2\vec{v_1}_\+ \cdot \vec{v_2}_\- + 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-        \- 2\vec{v_1}_\- \cdot \vec{v_2}_\+ + 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
-        \+ 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-        \+ 2\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
-
-        But in real life when we measure force between the wires, the material is not moving, so the speed of the protons is 0:
-
-        $$Top\ Part = 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) $$
-
-        So we will get:
-        Force\ between\ two\ wires\ parts
-
-        $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
-        <br/>
-        $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2 \cdot |v_1| \cdot |v_2| \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(|v_1| \cdot \hat{v_1}_\- \cdot \hat{r}) \cdot (|v_2| \cdot \hat{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
-        <br/>
-        $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot |v_1| \cdot |v_2| \cdot (2 \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(\hat{v_1}_\- \cdot \hat{r}) \cdot (\hat{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
-        <br/>
-        $$\vec{F} = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{2\vec{r}\ ^2}$$
-        <br/>
+      </div>
+      <details style="text-align: center;">
+        <summary>And if we check between wires, there are 4 parts: (click the arrow)</summary>
+        <div style="text-align: left;">
+          <div class="markdown">
+            $$2 \cdot Top\ Part = \begin{aligned}
+            {\color{pink} {q_1}_\+ + {q_2}_\- \rightarrow} + 2(\vec{v_1}_\+ - \vec{v_2}_\-)^2 - 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
+            {\color{pink} {q_1}_\- + {q_2}_\+ \rightarrow} + 2(\vec{v_1}_\- - \vec{v_2}_\+)^2 - 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\+ \cdot \hat{r})^2 \\\\
+            {\color{pink} {q_1}_\- + {q_2}_\- \rightarrow} - 2(\vec{v_1}_\- - \vec{v_2}_\-)^2 + 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
+            {\color{pink} {q_1}_\+ + {q_2}_\+ \rightarrow} - 2(\vec{v_1}_\+ - \vec{v_2}_\+)^2 + 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\+ \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \+ 2(\vec{v_1}_\+^2 - 2 \cdot \vec{v_1}_\+ \cdot \vec{v_2}_\- + \vec{v_2}_\-^2) - 3((\vec{v_1}_\+ \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) + (\vec{v_2}_\- \cdot \hat{r})^2) \\\\
+            \+ 2(\vec{v_1}_\-^2 - 2 \cdot \vec{v_1}_\- \cdot \vec{v_2}_\+ + \vec{v_2}_\+^2) - 3((\vec{v_1}_\- \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) + (\vec{v_2}_\+ \cdot \hat{r})^2) \\\\
+            \- 2(\vec{v_1}_\-^2 - 2 \cdot \vec{v_1}_\- \cdot \vec{v_2}_\- + \vec{v_2}_\-^2) + 3((\vec{v_1}_\- \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) + (\vec{v_2}_\- \cdot \hat{r})^2) \\\\
+            \- 2(\vec{v_1}_\+^2 - 2 \cdot \vec{v_1}_\+ \cdot \vec{v_2}_\+ + \vec{v_2}_\+^2) + 3((\vec{v_1}_\+ \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) + (\vec{v_2}_\+ \cdot \hat{r})^2) \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            {\color{lime} \+ 2\vec{v_1}_\+^2} - 4\vec{v_1}_\+ \cdot \vec{v_2}_\- {\color{lime} + 2\vec{v_2}_\-^2 - 3(\vec{v_1}_\+ \cdot \hat{r})^2} + 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \color{lime} - 3(\vec{v_2}_\- \cdot \hat{r})^2 \\\\
+            {\color{lime} \+ 2\vec{v_1}_\-^2} - 4\vec{v_1}_\- \cdot \vec{v_2}_\+ {\color{lime} + 2\vec{v_2}_\+^2 - 3(\vec{v_1}_\- \cdot \hat{r})^2} + 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \color{lime} - 3(\vec{v_2}_\+ \cdot \hat{r})^2 \\\\
+            {\color{lime} \- 2\vec{v_1}_\-^2} + 4\vec{v_1}_\- \cdot \vec{v_2}_\- {\color{lime} - 2\vec{v_2}_\-^2 + 3(\vec{v_1}_\- \cdot \hat{r})^2} - 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \color{lime} + 3(\vec{v_2}_\- \cdot \hat{r})^2 \\\\
+            {\color{lime} \- 2\vec{v_1}_\+^2} + 4\vec{v_1}_\+ \cdot \vec{v_2}_\+ {\color{lime} - 2\vec{v_2}_\+^2 + 3(\vec{v_1}_\+ \cdot \hat{r})^2} - 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \color{lime} + 3(\vec{v_2}_\+ \cdot \hat{r})^2 \end{aligned}$$
+            <br/>
+            $$2 \cdot Top\ Part = \begin{aligned}
+            \- 4\vec{v_1}_\+ \cdot \vec{v_2}_\- + 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
+            \- 4\vec{v_1}_\- \cdot \vec{v_2}_\+ + 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
+            \+ 4\vec{v_1}_\- \cdot \vec{v_2}_\- - 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
+            \+ 4\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
+            <br/>
+            $$Top\ Part = \begin{aligned}
+            \- 2\vec{v_1}_\+ \cdot \vec{v_2}_\- + 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
+            \- 2\vec{v_1}_\- \cdot \vec{v_2}_\+ + 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
+            \+ 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
+            \+ 2\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
+    
+            But in real life when we measure force between the wires, the material is not moving, so the speed of the protons is 0:
+    
+            $$Top\ Part = 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) $$
+    
+            So we will get:
+    
+            $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
+            <br/>
+            $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2 \cdot |v_1| \cdot |v_2| \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(|v_1| \cdot \hat{v_1}_\- \cdot \hat{r}) \cdot (|v_2| \cdot \hat{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
+            <br/>
+            $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot |v_1| \cdot |v_2| \cdot (2 \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(\hat{v_1}_\- \cdot \hat{r}) \cdot (\hat{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
+            <br/>
+            $$\vec{F} = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{2\vec{r}\ ^2}$$    
+          </div>
+        </div>
+      </details>
+      <div class="markdown">
+        Final equation:
         $$\color{aqua} Force\ between\ two\ wire\ parts = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (\hat{I_1} \cdot \hat{I_2} - 3/2(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{\vec{r}\ ^2}$$
 
         <center>(drag to rotate)</center>
@@ -322,10 +205,12 @@
         - you can also zoom in or zoom out with fingers \\ mouse scroll
         - you can also move in space by gragging with 2 fingers in the same direction or with keyboard arrows
         - refresh the page to reset
+
+        TODO wshow them many positions, includint when both wires are a bit skewec (R_2 and R_3) like wire 1 moved a bit, and also add speed to it and show that its almost the same voltage
       </div>
 
       <details style="text-align: center;">
-        <summary>Inscructions of how to use <a href="#calc_force">this</a> tool</summary>
+        <summary>Inscructions of how to use <a href="#calc_force">this</a> tool (click the arrow)</summary>
         <div style="text-align: left;">
           <div class="markdown">
             - When the switch is off then the right hand law equation used, when its on then my new equation is used.
@@ -345,7 +230,7 @@
           </div>
         </div>
       </details>
-
+      <br/>
       <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%; position: relative;"></canvas-video>
     </article>
   </div>
@@ -421,7 +306,7 @@
       const voltage = document.createElement('div');
       toolbar.parentElement.appendChild(voltage);
       voltage.style.position = 'absolute';
-      voltage.innerHTML = "Voltage (blue wire): 0";
+      voltage.innerHTML = "(blue wire) Voltage: 0";
       voltage.style.top = (toolbar.parentElement.children[0].offsetHeight - voltage.offsetHeight)+'px';
       voltage.style.left = '5%';
       voltage.style.pointerEvents = 'none';
