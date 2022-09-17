@@ -160,6 +160,11 @@ function draw_vertical_symbol() {
   ctx.moveTo(750, 450);
   ctx.lineTo(684, 362);
   ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(750, 450);
+  ctx.lineTo(573, 595);
+  ctx.stroke();
   ctx.restore();
 
   ctx.strokeStyle = "MediumSeaGreen";
@@ -181,5 +186,12 @@ function draw_vertical_symbol() {
     ctx,
     500, 500,
     684, 362
+  );
+
+  ctx.strokeStyle = "GoldenRod";
+  draw_arrow(
+    ctx,
+    500, 500,
+    573, 595
   );
 }
