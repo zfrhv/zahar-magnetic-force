@@ -191,8 +191,16 @@
       <div class="markdown">
         Final equation:
         $$\color{#f7c860} Force\ between\ two\ wire\ parts = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (\hat{I_1} \cdot \hat{I_2} - 3/2(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{\vec{r}\ ^2}$$
-        when the constant is probalby:
+        when the constant is:
         $$\color{#f7c860} Constant = \frac{μ_0}{4\pi}$$
+
+        # Now about the "changing magnetic field"
+
+        when current changes its charges blah blah
+
+        when wire is being moved its like giving extra speed to the particles.
+
+
 
         <center>(drag to rotate)</center>
         symbols:
@@ -206,7 +214,7 @@
         - you can also move in space by gragging with 2 fingers in the same direction or with keyboard arrows
         - refresh the page to reset
 
-        TODO wshow them many positions, includint when both wires are a bit skewec (R_2 and R_3) like wire 1 moved a bit, and also add speed to it and show that its almost the same voltage
+        TODO show them many positions, includint when both wires are a bit skewec (R_2 and R_3) like wire 1 moved a bit, and also add speed to it and show that its almost the same voltage
       </div>
 
       <details style="text-align: center;">
@@ -490,12 +498,13 @@
       const areas = []
       if (!mine_force) {
         // calculate which parts are in the circle
-        const step = pi / 4 * wire2.radius*2 / Math.sqrt(parts)
+        // step = sqrt(circle area / square area) * whole distance to make / in how much steps
+        const step = Math.sqrt((wire2.radius*wire2.radius*pi) / (2*wire2.radius*2*wire2.radius)) * (2*wire2.radius) / Math.sqrt(parts)
         let height = -wire2.radius
         let width = -wire2.radius
 
         while (height < wire2.radius) {
-          if (Math.hypot(width, height) < wire2.radius) {
+          if (Math.hypot(width, height) <= wire2.radius) {
             areas.push(new_x_2.clone().multiplyScalar(width).add(new_y_2.clone().multiplyScalar(height)).add(wire2.position))
           }
 
@@ -506,7 +515,7 @@
           }
         }
         parts = areas.length
-        area_value = 1/parts
+        area_value = step*step
       }
       for (let part1 = 0; part1 < parts; part1++) {
         for (let part2 = 0; part2 < parts; part2++) {
@@ -529,7 +538,7 @@
           let f_2 = null
 
           if (mine_force) {
-            // TODO when i will add constants into the equations, notice that my v_1 and v_2 values are always 1, and i reply on that in calculations. so just muliply the apropiate q for the matching I.
+            // TODO when i will add constants into the equations, notice that my v_1 and v_2 values are always 1, and i relay on that in some calculations. so just muliply the apropiate q for the matching I.
 
             // full "mine" force calculation
             const v_1_n = v_1.clone().add(wire1.speed)
@@ -546,9 +555,12 @@
             f_1 = f_2.clone().negate()
 
             // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
-            const f_diff = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
+            const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
             // check its vlue in the wire direction because on other directions the electricity cant flow
-            wire2.voltage += f_diff.clone().dot(v_2)
+            const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
+            const distance = 2*pi*wire2.radius / parts
+            // voltage = how much energy it takes to move a 1 charge from point A to point B
+            wire2.voltage += field_difference_in_wire_direction * distance
           } else {
             // "their" force calculation
             f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
@@ -576,21 +588,16 @@
         }
       }
 
-      // add dx
+      // add dx (doing f/(parts*parts) is the same as doing f*q1*q2)
       F_1_T.divideScalar(parts*parts)
       F_2_T.divideScalar(parts*parts)
       F_1_rotating_T.divideScalar(parts*parts)
       F_2_rotating_T.divideScalar(parts*parts)
-      if (mine_force) {
-        wire2.voltage /= parts*parts
-        wire2.voltage /= 200
-      } else {
-        wire2.voltage /= parts
-        wire2.voltage /= 1.344
-      }
+      wire2.voltage /= parts
 
-      // scale forces to equal values
-      const foce_const = 267079464.85
+      // scale for better display
+      wire2.voltage   *= 2_670.7946485
+      const foce_const = 267_079_464.85
       F_1_T.multiplyScalar(foce_const)
       F_2_T.multiplyScalar(foce_const)
       F_1_rotating_T.multiplyScalar(foce_const*2/3)
@@ -609,7 +616,7 @@
       curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
       // update voltage
-      voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage*foce_const).toFixed(2))
+      voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage).toFixed(2))
     }
   </script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
