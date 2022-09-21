@@ -71,6 +71,10 @@
           then show how i simplify it (the full way, even when material moves), and check if there is anything i can learn from the result, for example how the particle is built.
         - show that the forces are the same (total force + rotation force)
         - explain that moving wire 1 can cause volate in wire2, and that it almost perfectly matches
+          that it seems like i need to calculate (force on electron - force on proton), but actually the voltage is the amount of energy that takes to move the electron.
+          so it will be force on the electron * distance to make = energy / voltage
+          and we almost dont notince the force on the protons because the mass of the atom is huge relative to electron, so we dont see any movement.
+          (is it true?)
         - then explain that when current changes inside wire, in my opinion its just differente charges that cause volatage
         - then show that with this equation, when friction\\wire changes -> v\\q changes, the force is still the same !
         - mention that  its possible that this is not the final perfect equation, because i was making this equation to fit perfectly the right hand law (cuz was assuming all experiments matched the results)
@@ -555,7 +559,8 @@
             f_1 = f_2.clone().negate()
 
             // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
-            const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
+            // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
+            const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
             // check its vlue in the wire direction because on other directions the electricity cant flow
             const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
             const distance = 2*pi*wire2.radius / parts
