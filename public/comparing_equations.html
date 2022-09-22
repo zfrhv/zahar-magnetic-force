@@ -18,27 +18,7 @@
 </head>
 
 <body>
-  <span id="myMenu" onclick="openNav()">&#9776;</span>
-  <div id="mySidenav" class="sidenav">
-    <link rel="stylesheet" type="text/css" href="sidebar.css" />
-    <a href="physics.html">Main Page</a>
-    <a href="discovering_equation.html">Discovering Equation</a>
-    <a href="comparing_equations.html">Comparing Equations</a>
-    <a href="discussion.html">Discussion</a>
-    <script>
-      function openNav() {
-        document.getElementById("mySidenav").style.width = "300px";
-      }
-
-      window.addEventListener('click', function (e) {
-        if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
-          document.getElementById("mySidenav").style.width = "0px";
-        }
-      })
-
-      openNav()
-    </script>
-  </div>
+  <script id="SideBar" src="./sidebar/sidebar.js"></script>
 
   <div class="page">
     <article class="page-content">
