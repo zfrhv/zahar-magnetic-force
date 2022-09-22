@@ -2,7 +2,6 @@
 <html>
 
 <head>
-  <script id="canvas-video" src="https://canvas-video-embed.web.app/animation.js"></script>
   <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
@@ -24,11 +23,9 @@
   <div id="mySidenav" class="sidenav">
     <link rel="stylesheet" type="text/css" href="sidebar.css" />
     <a href="physics.html">Main Page</a>
-    <a href="equation_discovery.html">Equation Discovery</a>
+    <a href="discovering_equation.html">Discovering Equation</a>
     <a href="comparing_equations.html">Comparing Equations</a>
-    <a href="experiment.html">Experiment</a>
     <a href="discussion.html">Discussion</a>
-    <a href="calculate.html">Calculate</a>
     <script>
       function openNav() {
         document.getElementById("mySidenav").style.width = "300px";
@@ -101,60 +98,6 @@
 
         If you are interested, you can see [exeperiment planning and comparing](experiment.html).
 
-      </div>
-
-    </article>
-  </div>
-  <div class="page">
-    <article class="page-content">
-
-      <div id="experiment" class="markdown">
-        # <center><u>Experiment</u></center>
-        As a result, i decided to do the next experiment:
-
-        <div style="text-align: center;">
-          <img src="https://drive.google.com/uc?export=view&id=11_Dx2MplXfS9ZIosMMUF8I0_xZ9Nxfd-" />
-        </div>
-
-        Diagram:
-
-      </div>
-      <div id="experiment_anatomy" class="animation_box">
-        <canvas width="1000" height="1000"></canvas>
-      </div>
-      <div class="markdown">
-        The pink arrows indicate the "current flow"
-
-        The right hand law force says that there is always 0 force in the current direction:
-
-        $$\vec F=q\vec v\times \vec B$$
-
-        (because of the vector multiplication, \\(\vec F\\) will be always vertical to \\(\vec v\\))
-        <br />
-        <br />
-
-        So shortly if the copper stick moves sideways, then the right hand law is wrong and there is some force in
-        \\(\vec v\\) direction.
-
-        I made the experiment:
-
-        <div style="text-align: center;">
-          <iframe src="https://drive.google.com/file/d/1cBhcy0vM_JDGsFyK2H8_eEqINV_yQSKI/preview" frameborder="0" scrolling="no" allowfullscreen onload="resizeIframe(this)"></iframe>
-        </div>
-
-        Assuming the experiment is not perfect and maybe everything is sloped and thats why it goes right.
-
-        So i flipped the battery. if it gows left now, then its definitely the magnetic force:
-
-        <div style="text-align: center;">
-          <iframe src="https://drive.google.com/file/d/1O8XtzPIspuUcUkl2b-rR3GuViGfW-int/preview" frameborder="0" scrolling="no" allowfullscreen onload="resizeIframe(this)"></iframe>
-        </div>
-
-        And indeed it went left.
-
-        Im not 100% sure about my experiment, so if you can, please read my [experiment inscruction](experiment.html)
-        and try it yourself.
-
         ---
 
         You can also check [A little more about the subject](discussion.html)
@@ -169,11 +112,6 @@
       fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
       elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
-
-    function resizeIframe(obj) {
-      // my videos resolution are 1920x1080
-      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
-    }
   </script>
   <script src="drawings.js"></script>
   <script id="physics.js">
@@ -190,6 +128,7 @@
 
     draw_experiment();
   </script>
+  <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
 </body>
 
 </html>

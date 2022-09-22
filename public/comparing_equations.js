@@ -1,8 +1,3 @@
-
-draw_symbols_explanation();
-
-draw_vertical_symbol();
-
 function spin_around_mine_particle(animation_element) {
   spin_around(animation_element, mine_force_particle)
 }
