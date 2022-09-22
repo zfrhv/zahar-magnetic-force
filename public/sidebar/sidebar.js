@@ -1,0 +1,24 @@
+function openNav() {
+  document.getElementById("mySidenav").style.width = "350px";
+}
+
+window.addEventListener('click', function (e) {
+  if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
+    document.getElementById("mySidenav").style.width = "0px";
+  }
+})
+
+const sidebar = document.createElement("div");
+sidebar.innerHTML = `
+<span id="myMenu" onclick="openNav()">&#9776;</span>
+<div id="mySidenav" class="sidenav">
+  <link rel="stylesheet" type="text/css" href="sidebar/sidebar.css" />
+  <a href="physics.html">Main Page</a>
+  <a href="discovering_equation.html">Discovering Equation</a>
+  <a href="comparing_equations.html">Comparing Equations</a>
+  <a href="discussion.html">Discussion</a>
+</div>
+`
+document.getElementById("SideBar").replaceWith(sidebar)
+
+openNav()

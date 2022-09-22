@@ -13,40 +13,18 @@
   <link rel="icon" type="image/svg+xml" href="physics.svg">
 
   <script src="tools/canvas/shapes.js"></script>
-  <script src="tools/svg/shapes.js"></script>
   <script src="equations.js"></script>
   <link rel="stylesheet" type="text/css" href="physics.css" />
 </head>
 
 <body>
-  <span id="myMenu" onclick="openNav()">&#9776;</span>
-  <div id="mySidenav" class="sidenav">
-    <link rel="stylesheet" type="text/css" href="sidebar.css" />
-    <a href="physics.html">Main Page</a>
-    <a href="discovering_equation.html">Discovering Equation</a>
-    <a href="comparing_equations.html">Comparing Equations</a>
-    <a href="discussion.html">Discussion</a>
-    <script>
-      function openNav() {
-        document.getElementById("mySidenav").style.width = "300px";
-      }
-
-      window.addEventListener('click', function (e) {
-        if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
-          document.getElementById("mySidenav").style.width = "0px";
-        }
-      })
-
-      openNav()
-    </script>
-  </div>
-
+  <script id="SideBar" src="./sidebar/sidebar.js"></script>
   <div class="page">
     <article class="page-content">
 
       <div id="magnetic_force" class="markdown">
         # <center><u style="font-family: 'Times New Roman';">Magnetic Force</u></center>
-        <br />
+        <br/>
         I started this because I was sure that today's magnetic force equation that uses the right hand law is wrong.
 
         Lets take a look at the thing that triggered me the most:
@@ -61,15 +39,15 @@
 
         As you can see the <span style="color:rgb(253, 255, 136)">yellow</span> particle pushes <span style="color:rgb(136, 255, 136)">green</span> down,
         and the <span style="color:rgb(136, 255, 136)">green</span> particle doesnt creates any force at all on <span style="color:rgb(253, 255, 136)">yellow</span>.
-        <br />
-        <br />
-        <br />
-        <br />
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         Since then I started thinking and trying to find new equation that will make a lot more sense.
 
         If you are interested, check [my final equation discovery](equation_discovery.html).
-        <br />
-        <br />
+        <br/>
+        <br/>
       </div>
 
     </article>
@@ -124,9 +102,7 @@
       570
     )
 
-    draw_symbols_explanation();
-
-    draw_experiment();
+    draw_symbols_explanation()
   </script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
 </body>
