@@ -24,10 +24,7 @@
   <title>Physics</title>
   <link rel="icon" type="image/svg+xml" href="physics.svg">
 
-  <script src="forces_integral/calculation_box.js"></script>
   <script src="tools/canvas/shapes.js"></script>
-  <script src="tools/svg/shapes.js"></script>
-  <script src="tools/threejs/shapes.js"></script>
   <script src="equations.js"></script>
   <link rel="stylesheet" type="text/css" href="physics.css"/>
 </head>
@@ -37,11 +34,9 @@
   <div id="mySidenav" class="sidenav">
     <link rel="stylesheet" type="text/css" href="sidebar.css" />
     <a href="physics.html">Main Page</a>
-    <a href="equation_discovery.html">Equation Discovery</a>
+    <a href="discovering_equation.html">Discovering Equation</a>
     <a href="comparing_equations.html">Comparing Equations</a>
-    <a href="experiment.html">Experiment</a>
     <a href="discussion.html">Discussion</a>
-    <a href="calculate.html">Calculate</a>
     <script>
       function openNav() {
         document.getElementById("mySidenav").style.width = "300px";
@@ -61,16 +56,36 @@
     <article class="page-content">
 
       <div class="markdown">
+        # <center><u style="font-family: 'Times New Roman';">Magnetic Force Equation</u></center>
+
+        Diagram of symbols:
+        <br/>
+        <br/>
+      </div>
+      <div id="equation_anatomy" class="animation_box">
+        <canvas width="1000" height="1000"></canvas>
+      </div>
+      <div class="markdown">
+        \\({\color{Tomato}\vec A}\ \parallel\ {\color{MediumSeaGreen}\vec B}={\color{GoldenRod}\vec C}\\):
+
+        \\({\color{Tomato}\vec A}\ \bot\ {\color{MediumSeaGreen}\vec B}={\color{DodgerBlue}\vec D}\\):
+      </div>
+      <div id="vertical_symbol" class="animation_box">
+        <canvas width="1000" height="1000"></canvas>
+      </div>
+
+      <div class="markdown">
         # <center><u style="font-family: 'Times New Roman';">How I found the function</u></center>
         Lets start from the things i didnt like, and start making a new equation.
-        1. we will start with the eqaiest, when moving in 3d dimention is some direction, everything expands in 2d face,
+        1. i will choose the force to be in \\(\hat{r}\\) direction.
+        2. when moving in 3d dimention is some direction, everything expands in 2d face,
 
             its like measuring the surface of a ball \\ square at distance x, lets say its around \\(x^2\\). then looking on surface at the same degree with distance 2x, the surface extended to \\((2x)^2\\) which is \\(4x^2\\), so the area grew by 4.
 
             and thats why when we will move \\(a\\) times, the area will expand \\(a^2\\) times. and a particular spot will have less material by \\(\frac{1}{a^2}\\)
 
             so the quation will be \\(F = \frac{something}{r^2}\\)
-        2. When the equation tells that \\(\vec{F} = \vec{v}\ \times\ \vec{B}\\), relative to what the speed \\(\vec{v}\\) is ?
+        3. When the equation tells that \\(\vec{F} = \vec{v}\ \times\ \vec{B}\\), relative to what the speed \\(\vec{v}\\) is ?
 
             is it relative to the material where the electrons are in?
 
@@ -82,7 +97,7 @@
 
             so the equation sould look something like this: \\(\vec{v_1}-\vec{v_2}\\)
 
-        3. now if we check the equation units, we actually have speed\\(^2\\) and not jus speed.
+        4. now if we check the equation units, we actually have speed\\(^2\\) and not jus speed.
 
             so why not to make \\((\vec{v_1}-\vec{v_2})^2\\) ? its good for us, because now the equation is symetric, no matter from which perspective you look the result is the same
 
@@ -305,12 +320,8 @@
       fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
       elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
-
-    function resizeIframe(obj) {
-      // my videos resolution are 1920x1080
-      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
-    }
   </script>
+  <script src="drawings.js"></script>
   <script type="module">
     import * as THREE from 'three'
     
@@ -675,6 +686,9 @@
       // update voltage
       voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage).toFixed(2))
     }
+
+    draw_symbols_explanation();
+    draw_vertical_symbol();
   </script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
 </body>

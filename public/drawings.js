@@ -20,15 +20,8 @@ function draw_symbols_explanation() {
   ctx.font = "70px Comic Sans MS";
   ctx.fillText("r", 488, 710);
 
-  ctx.beginPath();
-  ctx.arc(250, 500, 100, -Math.PI*0.66, 0);
-  ctx.stroke();
-  ctx.fillText("α", 300, 400);
-
-  ctx.beginPath();
-  ctx.arc(750, 500, 100, -Math.PI*0.4, 0);
-  ctx.stroke();
-  ctx.fillText("β", 840, 400);
+  ctx.fillText("v1", 200, 300);
+  ctx.fillText("v2", 850, 300);
 
   draw_particles(
     ctx,
