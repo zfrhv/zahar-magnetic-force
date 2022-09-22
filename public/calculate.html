@@ -61,24 +61,74 @@
     <article class="page-content">
 
       <div class="markdown">
-        # <center><u style="font-family: 'Times New Roman';">Bla</u></center>
+        # <center><u style="font-family: 'Times New Roman';">How I found the function</u></center>
+        Lets start from the things i didnt like, and start making a new equation.
+        1. we will start with the eqaiest, when moving in 3d dimention is some direction, everything expands in 2d face,
 
-        TODO: make all the accurate constants in force + voltage so i could fully relay on the equations
+            its like measuring the surface of a ball \\ square at distance x, lets say its around \\(x^2\\). then looking on surface at the same degree with distance 2x, the surface extended to \\((2x)^2\\) which is \\(4x^2\\), so the area grew by 4.
+
+            and thats why when we will move \\(a\\) times, the area will expand \\(a^2\\) times. and a particular spot will have less material by \\(\frac{1}{a^2}\\)
+
+            so the quation will be \\(F = \frac{something}{r^2}\\)
+        2. When the equation tells that \\(\vec{F} = \vec{v}\ \times\ \vec{B}\\), relative to what the speed \\(\vec{v}\\) is ?
+
+            is it relative to the material where the electrons are in?
+
+            is it relative the some absolute speed that i decide?
+
+            is it relative to the material of the original wire which caused the magnetic field?
+
+            well in my opition if the force is between particle A and B, then the speed of A will be relative to B.
+
+            so the equation sould look something like this: \\(\vec{v_1}-\vec{v_2}\\)
+
+        3. now if we check the equation units, we actually have speed\\(^2\\) and not jus speed.
+
+            so why not to make \\((\vec{v_1}-\vec{v_2})^2\\) ? its good for us, because now the equation is symetric, no matter from which perspective you look the result is the same
+
+        5. dont forget to multiply by the charge q: \\((\vec{v_1}-\vec{v_2})^2 \cdot q_1 \cdot q_2\\) and now we will have something similar to units of \\(I_1 \cdot I_2\\)
+
+        6. but we have a new problem, the result is always positive, does it means that we will always end up with pulling force?
+
+            yes, thats why we need to find something else that will give us also negative result. and if we look at the static charges, there is +q and -q...
+
+            now why exactly are we ignoring the positive charge? the wire is nutral right? then why do we look only on the negative electrons, and ignore the positive charges?
+
+            thats racist! (not really), if we look at -q of moving electrons, then we also look at +q of the protons with 0 speed.
+
+            and now we end up with 2 parts from each wire, positive and negative:
+
+        $$F = \begin{aligned}
+            \frac{(\vec{v_1}_\+ - \vec{v_2}_\-)^2 \cdot {q_1}_\+ \cdot {q_2}_\-}{r^2} \\\\
+            \+ \frac{(\vec{v_1}_\- - \vec{v_2}_\+)^2 \cdot {q_1}_\- \cdot {q_2}_\+}{r^2} \\\\
+            \+ \frac{(\vec{v_1}_\- - \vec{v_2}_\-)^2 \cdot {q_1}_\- \cdot {q_2}_\-}{r^2} \\\\
+            \+ \frac{(\vec{v_1}_\+ - \vec{v_2}_\+)^2 \cdot {q_1}_\+ \cdot {q_2}_\+}{r^2} \end{aligned}$$
+
+        7. but lets focuse on seperating to 4 parts later. i was wondering, from perspective of particle 1 all he sees is particle 2 getting closer and further, what the ronning around speed doesnt matters, the only speed that matters if particle 2 gets closer or further:
+
+            \\((\vec{v_1} \cdot \hat{r}-\vec{v_2} \cdot \hat{r})^2\\) which is the same as \\(((\vec{v_1}-\vec{v_2}) \cdot \hat{r})^2\\)
+
+        8. now when doing the integral between 2 circle wires to check the total force result with my new equation, it was perfectly the same as the total force with the right hand law equation.
+
+            but the rotation force was different. each equation told that the circuit would want to rotate in a different way.
+
+            now i assume that people from all around the world did many experiments and had many practice with the right hand law, so their rotation must be correct.
+
+            thats why i also checked whats the rotation when using just simple \\((\vec{v_1}-\vec{v_2})^2\\). it also had rotation problem so i also checked when the speeds were vertical to the r direction, but the rotation was still wrong.
+
+            but i did noticed that i got close, and i saw that when doing \\((\vec{v_1}-\vec{v_2}) \parallel \hat{r})^2 -0.5 ((\vec{v_1}-\vec{v_2}) \bot \hat{r})^2\\) i get the perfect total force, and the perfect rotation.
+
+            TODO: you can see it in THAT diagram
 
         TODO:
-        - tell how i discovered the function
-          tell about my theory and rules, then how i did vertical speed value -0.5 in R direction
-          then show how i simplify it (the full way, even when material moves), and check if there is anything i can learn from the result, for example how the particle is built.
-        - show that the forces are the same (total force + rotation force)
         - explain that moving wire 1 can cause volate in wire2, and that it almost perfectly matches
           that it seems like i need to calculate (force on electron - force on proton), but actually the voltage is the amount of energy that takes to move the electron.
           so it will be force on the electron * distance to make = energy / voltage
           and we almost dont notince the force on the protons because the mass of the atom is huge relative to electron, so we dont see any movement.
+          maybe something like (force on electron / mass of electron - force on proton / mass of proton) ?
           (is it true?)
         - then explain that when current changes inside wire, in my opinion its just differente charges that cause volatage
         - then show that with this equation, when friction\\wire changes -> v\\q changes, the force is still the same !
-        - mention that  its possible that this is not the final perfect equation, because i was making this equation to fit perfectly the right hand law (cuz was assuming all experiments matched the results)
-          but its still possible that its something else, for example instead of 2 - 0.5*1 do pure 2 - 1.
 
         Symols:
         $$\color{#f7c860}I = q \cdot v$$
@@ -86,6 +136,8 @@
         $$\color{#f7c860}\vec{v}\ \bot\ \hat{r}\ :=\ \vec{v} - (\vec{v} \cdot \hat{r}) \cdot \hat{r}$$
 
         TODO: draw diagram of when vector in r direction and when vertical to r
+
+        TODO: dont forget to add more pictures / drawings / colors / shapes. cuz this is still looking pretty boring and i have no experiment.
 
         $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot Top\ Part}{\vec{r}\ ^2}$$
         <br/>
