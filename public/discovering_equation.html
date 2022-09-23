@@ -89,7 +89,7 @@
 
         6. but we have a new problem, the result is always positive, does it means that we will always end up with pulling force?
 
-            yes, thats why we need to find something else that will give us also negative result. and if we look at the static charges, there is +q and -q...
+            yes, thats why we need to find something else that will give us also negative result. and if we look at the Coulomb's law, there is +q and -q...
 
             now why exactly are we ignoring the positive charge? the wire is nutral right? then why do we look only on the negative electrons, and ignore the positive charges?
 
@@ -118,18 +118,6 @@
             but i did noticed that i got close, and i saw that when doing \\((\vec{v_1}-\vec{v_2}) \parallel \hat{r})^2 -0.5 ((\vec{v_1}-\vec{v_2}) \bot \hat{r})^2\\) i get the perfect total force, and the perfect rotation.
 
             TODO: you can see it in THAT diagram
-
-        TODO:
-        - explain that moving wire 1 can cause volate in wire2, and that it almost perfectly matches
-          that it seems like i need to calculate (force on electron - force on proton), but actually the voltage is the amount of energy that takes to move the electron.
-          so it will be force on the electron * distance to make = energy / voltage
-          and we almost dont notince the force on the protons because the mass of the atom is huge relative to electron, so we dont see any movement.
-          maybe something like (force on electron / mass of electron - force on proton / mass of proton) ?
-          (is it true?)
-        - then explain that when current changes inside wire, in my opinion its just differente charges that cause volatage
-        - then show that with this equation, when friction\\wire changes -> v\\q changes, the force is still the same !
-
-        TODO: dont forget to add more pictures / drawings / colors / shapes. cuz this is still looking pretty boring and i have no experiment.
 
         $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot Top\ Part}{\vec{r}\ ^2}$$
         <br/>
@@ -232,7 +220,9 @@
             <br/>
             $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot |v_1| \cdot |v_2| \cdot (2 \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(\hat{v_1}_\- \cdot \hat{r}) \cdot (\hat{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
             <br/>
+            <div id="lol">
             $$\vec{F} = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{2\vec{r}\ ^2}$$    
+            </div>
           </div>
         </div>
       </details>
@@ -248,7 +238,41 @@
 
         when wire is being moved its like giving extra speed to the particles.
 
+        # <center><u style="font-family: 'Times New Roman';">Changing magnetic field</u></center>
 
+        ## Changing current inside the wire
+
+        in my opinion, when a current changes, there is some charge difference as a result in the wire, which causes voltage in other wire.
+
+        when the battery is keep increasing the voltage, the current is keep increasing.
+
+        it takes time fo the current to get bigger from one end to the other end of the wire, so we end up with one side of the battery where there are a log of electrons, and the other side has a lot less electrons.
+
+        and then as we go over the wire from one end to the other, the amount of charge is changing.
+
+        so no matter at which spot inside the wire we will look at, from one side we will see more charge than from the other side.
+
+        and when we look on second wire spot, it will have some static force (Coulomb's law) thats pushed the electron to some side, which causes voltage
+
+        ## Moving wire
+
+        when wire moves its same as the protons + electrons get some speed,
+
+        so we can simply measure whats the force that is being made on the electrons in the other wire, and then do (force/q)*distance to get the voltage.
+
+        calculating that way gives almost exactly the same results as the Faraday's Law.
+
+        TODO: you can see it THERE
+
+        what about the force on protons? well i think it also should matter, but because the proton is so heavy relative to the electron, even if he will have some movement its basically nothing relative to the electron.
+
+        so i just ignore the force on the electron when calculating the voltage.
+
+        # <center><u style="font-family: 'Times New Roman';">Notes</u></center>
+
+        if you look at the [short equation](#lol), you can see that the value of I ilinear inside the equation.
+
+        so even if inside the wire the resistence changes, or the pressure changes, or the speed changes, it doesnt matters. because as long as q*v=I, the equation will still have the same result even if v changes (because I is stable).
 
         <center>(drag to rotate)</center>
         symbols:
