@@ -68,11 +68,6 @@
       fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
       elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
-
-    function resizeIframe(obj) {
-      // my videos resolution are 1920x1080
-      obj.style.height = obj.offsetWidth * 1080 / 1920 + "px";
-    }
   </script>
 </body>
 
