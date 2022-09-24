@@ -138,4 +138,5 @@ summary {
 
 mjx-container {
   overflow-x: auto;
+  overflow-y: hidden;
 }
