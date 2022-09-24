@@ -221,7 +221,7 @@ window.calc_force = function (toolbar, scene) {
   const F_2_T = new THREE.Vector3()
   const F_1_rotating_T = new THREE.Vector3()
   const F_2_rotating_T = new THREE.Vector3()
-  let parts = 100
+  let parts = 428
 
   // creating new axis on circles
   const new_x_1 = Math.round(wire1.rotation.x, 4) == 0 ? wire1.rotation.clone().cross(new THREE.Vector3(1,0,0)) : wire1.rotation.clone().cross(new THREE.Vector3(0,1,0))
