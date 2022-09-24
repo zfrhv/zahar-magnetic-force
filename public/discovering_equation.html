@@ -60,15 +60,13 @@
 
 
         # <center><u style="font-family: 'Times New Roman';">How I found the function</u></center>
-        Lets start from the things i didnt like, and start making a new equation.
-        1. i will choose the force to be in \\(\hat{r}\\) direction.
-        2. when moving in 3d dimention is some direction, everything expands in 2d face,
+        Lets start from the things that i didnt like, and start building a new equation.
+        1. \\(\vec{F}\\) in \\(\hat{r}\\) direction: it makes for me the most sense.
+        2. \\(F = \frac{something}{r^2}\\): when moving in 3d dimention in some direction, everything expands in 2d face,
 
             its like measuring the surface of a ball \\ square at distance x, lets say its around \\(x^2\\). then looking on surface at the same degree with distance 2x, the surface extended to \\((2x)^2\\) which is \\(4x^2\\), so the area grew by 4.
 
             and thats why when we will move \\(a\\) times, the area will expand \\(a^2\\) times. and a particular spot will have less material by \\(\frac{1}{a^2}\\)
-
-            so the quation will be \\(F = \frac{something}{r^2}\\)
         3. When the equation tells that \\(\vec{F} = \vec{v}\ \times\ \vec{B}\\), relative to what the speed \\(\vec{v}\\) is ?
 
             is it relative to the material where the electrons are in?
@@ -81,7 +79,7 @@
 
             so the equation sould look something like this: \\(\vec{v_1}-\vec{v_2}\\)
 
-        4. now if we check the equation units, we actually have speed\\(^2\\) and not jus speed.
+        4. if we check the equation units, we actually have speed\\(^2\\) and not just speed.
 
             so why not to make \\((\vec{v_1}-\vec{v_2})^2\\) ? its good for us, because now the equation is symetric, no matter from which perspective you look the result is the same
 
@@ -91,7 +89,7 @@
 
             yes, thats why we need to find something else that will give us also negative result. and if we look at the Coulomb's law, there is +q and -q...
 
-            now why exactly are we ignoring the positive charge? the wire is nutral right? then why do we look only on the negative electrons, and ignore the positive charges?
+            now why exactly are we ignoring the positive charges? the wire is nutral right? then why do we look only on the negative electrons, and ignore the positive charges?
 
             thats racist! (not really), if we look at -q of moving electrons, then we also look at +q of the protons with 0 speed.
 
@@ -103,7 +101,7 @@
             \+ \frac{(\vec{v_1}_\- - \vec{v_2}_\-)^2 \cdot {q_1}_\- \cdot {q_2}_\-}{r^2} \\\\
             \+ \frac{(\vec{v_1}_\+ - \vec{v_2}_\+)^2 \cdot {q_1}_\+ \cdot {q_2}_\+}{r^2} \end{aligned}$$
 
-        7. but lets focuse on seperating to 4 parts later. i was wondering, from perspective of particle 1 all he sees is particle 2 getting closer and further, what the ronning around speed doesnt matters, the only speed that matters if particle 2 gets closer or further:
+        7. but lets focuse on seperating to 4 parts later. i was wondering, from the perspective of particle 1 all he sees is particle 2 getting closer and further, and the rotating around speed doesnt matters, the only speed that matters if particle 2 gets closer or further:
 
             \\((\vec{v_1} \cdot \hat{r}-\vec{v_2} \cdot \hat{r})^2\\) which is the same as \\(((\vec{v_1}-\vec{v_2}) \cdot \hat{r})^2\\)
 
@@ -113,11 +111,13 @@
 
             now i assume that people from all around the world did many experiments and had many practice with the right hand law, so their rotation must be correct.
 
-            thats why i also checked whats the rotation when using just simple \\((\vec{v_1}-\vec{v_2})^2\\). it also had rotation problem so i also checked when the speeds were vertical to the r direction, but the rotation was still wrong.
+            thats why i also checked whats the rotation when using just simple \\((\vec{v_1}-\vec{v_2})^2\\). it also had rotation problem so i also checked when the speeds were vertical to the r direction: \\(((\vec{v_1}-\vec{v_2}) \bot \hat{r})^2\\), but the rotation was still wrong.
 
             but i did noticed that i got close, and i saw that when doing \\((\vec{v_1}-\vec{v_2}) \parallel \hat{r})^2 -0.5 ((\vec{v_1}-\vec{v_2}) \bot \hat{r})^2\\) i get the perfect total force, and the perfect rotation.
 
-            TODO: you can see it in THAT diagram
+            you can see the total force and that rotation force in it in [that](#calc_force) diagram if you press the calculate button
+
+        After finally finding a well fitting equation, lets simplify it:
 
         $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot Top\ Part}{\vec{r}\ ^2}$$
         <br/>
@@ -220,7 +220,7 @@
             <br/>
             $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot |v_1| \cdot |v_2| \cdot (2 \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(\hat{v_1}_\- \cdot \hat{r}) \cdot (\hat{v_2}_\- \cdot \hat{r}))}{2\vec{r}\ ^2}$$
             <br/>
-            <div id="lol">
+            <div id="final_equation">
             $$\vec{F} = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{2\vec{r}\ ^2}$$    
             </div>
           </div>
@@ -232,29 +232,23 @@
         when the constant is:
         $$\color{#f7c860} Constant = \frac{μ_0}{4\pi}$$
 
-        # Now about the "changing magnetic field"
-
-        when current changes its charges blah blah
-
-        when wire is being moved its like giving extra speed to the particles.
-
         # <center><u style="font-family: 'Times New Roman';">Changing magnetic field</u></center>
 
-        ## Changing current inside the wire
+        ### Changing current inside the wire
 
         in my opinion, when a current changes, there is some charge difference as a result in the wire, which causes voltage in other wire.
 
         when the battery is keep increasing the voltage, the current is keep increasing.
 
-        it takes time fo the current to get bigger from one end to the other end of the wire, so we end up with one side of the battery where there are a log of electrons, and the other side has a lot less electrons.
+        it takes some time for the current to get bigger from one end to the other end of the wire, so we end up with one side of the battery where there are a log of electrons, and the other side has a lot less electrons.
 
         and then as we go over the wire from one end to the other, the amount of charge is changing.
 
         so no matter at which spot inside the wire we will look at, from one side we will see more charge than from the other side.
 
-        and when we look on second wire spot, it will have some static force (Coulomb's law) thats pushed the electron to some side, which causes voltage
+        and when we look on second wire spot, it will have some Coulomb's law force that pushes the electron to some direction, which causes voltage
 
-        ## Moving wire
+        ### Moving wire
 
         when wire moves its same as the protons + electrons get some speed,
 
@@ -262,58 +256,50 @@
 
         calculating that way gives almost exactly the same results as the Faraday's Law.
 
-        TODO: you can see it THERE
+        shortly saying, when looking on the force on the electrons the equation looks like this:
 
-        what about the force on protons? well i think it also should matter, but because the proton is so heavy relative to the electron, even if he will have some movement its basically nothing relative to the electron.
+        $$2 \cdot Top\ Part = \begin{aligned}
+        {{q_1}_\+ + {q_2}_\- \rightarrow} + 2(\vec{v_1}_\+ - \vec{v_2}_\-)^2 - 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
+        {{q_1}_\- + {q_2}_\- \rightarrow} - 2(\vec{v_1}_\- - \vec{v_2}_\-)^2 + 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \end{aligned}$$
 
-        so i just ignore the force on the electron when calculating the voltage.
+        and then just checking the force in current direction: \\(\vec{F} \parallel \hat{I_2}\\) because the only movement that matters is in the current direction.
+
+        you can see it the voltage [there](#calc_force), when its unchecked its the Faraday's Law, when its checked then it uses my new equation to calculate the voltage.
+
+        what about the force on protons? why its not (force on electrons - force on protons) = voltage ? well i think it also should matter, but because the proton is so heavy relative to the electron, even if he will have some movement its basically nothing relative to the electron movement.
+
+        so i just ignore the force on the protons when calculating the voltage.
 
         # <center><u style="font-family: 'Times New Roman';">Notes</u></center>
 
-        if you look at the [short equation](#lol), you can see that the value of I ilinear inside the equation.
+        if you look at the [short equation](#final_equation), you can see that the value of I ilinear inside the equation.
 
         so even if inside the wire the resistence changes, or the pressure changes, or the speed changes, it doesnt matters. because as long as q*v=I, the equation will still have the same result even if v changes (because I is stable).
-
-        <center>(drag to rotate)</center>
-        symbols:
-        - rotating arrow...
-        - straight arrow...
-        usage:
-        - toggle switch is for force type
-        - inputs are for rotation (drag/tap to choose)
-        - you can also rotate the object just by dragging it
-        - you can also zoom in or zoom out with fingers \\ mouse scroll
-        - you can also move in space by gragging with 2 fingers in the same direction or with keyboard arrows
-        - refresh the page to reset
-
-        TODO show them many positions, includint when both wires are a bit skewec (R_2 and R_3) like wire 1 moved a bit, and also add speed to it and show that its almost the same voltage
       </div>
-
       <details style="text-align: center;">
-        <summary>Inscructions of how to use <a href="#calc_force">this</a> tool (click on this text)</summary>
+        <summary>Equations comparing (click here for instructions)</summary>
         <div style="text-align: left;">
           <div class="markdown">
-            - When the switch is off then the right hand law equation used, when its on then my new equation is used.
+            symbols:
+            - rotating arrow is the rotation force that the wires make on each other
+            - middle arrow is the total force that the circuits make on each other
+            - 4 small aroows on the top circuit are the speed of the loop
 
-            - The slider is to how many parts to split the wires, more slices -> more accuracy. but its also harder to calculate.
-
-            - Pressing the calculator will calculate the forces.
-
-            - The filled arrows are the force, green arrow = the force that the green wire creates. same with purple arrow.
-
-            - The round arrows are how much the object wants to rotate, the green round arrow = how much the green wire wants to rotate the purple wire. same with purple round arrow.
-
-            - If you understand a little in svg path and programming, feel free to change the path by pressing f12 -> searching for "path" with "class=wire1" or "class=wire2" (just select the wire you want to modify),
-              change the "d="" field to the desired path, and then just press the clculator button again.
-
-            - after pressing the calculate button, the force of the orange object is printed to the logs (you can see \\(F_x\\) and \\(F_y\\) in console logs)
+            usage:
+            - toggle switch is for the force type: off -> the right hand law + Faraday's Law, on: my new equation is used to calculate both forces and the voltage
+            - inputs are for rotation (drag/tap to choose)
+            - the caulculator button is for calculating
+            - you can also rotate the object just by dragging it
+            - you can also zoom in or zoom out with fingers \\ mouse scroll
+            - you can also move in space by grabbing with 2 fingers in the same direction or with keyboard arrows
+            - refresh the page to reset      
           </div>
         </div>
       </details>
       <br/>
       <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%; position: relative;"></canvas-video>
       <div class="markdown">
-        when the magnets are skewed:
+        when magnet 1 is passing by magnet 2 (pay attention to the voltage):
       </div>
       <canvas-video id="calc_force_skewed" name="calc_force_skewed" type="calculate" style="width: 70%; position: relative;"></canvas-video>
     </article>
@@ -333,11 +319,14 @@
       window.calc_force_init(toolbar, scene)
       const sliders = toolbar.children[1]
 
-      sliders.children[1].children[0].value = 10
+      sliders.children[1].children[0].value = 90
       sliders.children[1].children[0].dispatchEvent(new Event('change'))
 
-      sliders.children[2].children[0].value = 10
+      sliders.children[2].children[0].value = 90
       sliders.children[2].children[0].dispatchEvent(new Event('change'))
+
+      sliders.children[3].children[0].value = 100
+      sliders.children[3].children[0].dispatchEvent(new Event('change'))
     }
     window.calc_force_skewed = function(toolbar, scene) {
       window.calc_force(toolbar, scene)
