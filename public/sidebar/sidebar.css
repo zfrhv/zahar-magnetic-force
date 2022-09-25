@@ -36,7 +36,7 @@
 
 #myMenu {
   position: fixed;
-  top: 10px;
+  top: 0px;
   left: 10px;
   font-size: 300%;
   cursor:pointer;
