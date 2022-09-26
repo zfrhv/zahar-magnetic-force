@@ -65,7 +65,6 @@ body {
   margin: 0px;
   padding: 10px;
   font-family: Consolas;
-  overflow-x: hidden;
 }
 
 .page {
@@ -79,6 +78,7 @@ body {
   border-radius: 1vw;
 
   display: flex;
+  overflow-x: hidden;
 }
 
 .page-content {
