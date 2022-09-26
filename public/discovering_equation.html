@@ -231,56 +231,6 @@
         $$\color{#f7c860} Force\ between\ two\ wire\ parts = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (\hat{I_1} \cdot \hat{I_2} - 3/2(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
         when the constant is:
         $$\color{#f7c860} Constant = \frac{μ_0}{4\pi}$$
-
-        # <center><u style="font-family: 'Times New Roman';">Changing magnetic field</u></center>
-
-        ### Changing current inside the wire
-
-        in my opinion, when a current changes, there is some charge difference as a result in the wire, which causes voltage in other wire.
-
-        when the battery is keep increasing the voltage, the current is keep increasing.
-
-        it takes some time for the current to get bigger from one end to the other end of the wire, so we end up with one side of the battery where there are a log of electrons, and the other side has a lot less electrons.
-
-        and then as we go over the wire from one end to the other, the amount of charge is changing.
-
-        so no matter at which spot inside the wire we will look at, from one side we will see more charge than from the other side.
-
-        and when we look on second wire spot, it will have some Coulomb's law force that pushes the electron to some direction, which causes voltage
-
-        ### Moving wire
-
-        when wire moves its same as the protons + electrons get some speed,
-
-        so we can simply measure whats the force that is being made on the electrons in the other wire, and then do (force/q)*distance to get the voltage.
-
-        calculating that way gives almost exactly the same results as the Faraday's Law.
-
-        shortly saying, when looking on the force on the electrons the equation looks like this:
-
-        $$2 \cdot Top\ Part = \begin{aligned}
-        {{q_1}_\+ + {q_2}_\- \rightarrow} + 2(\vec{v_1}_\+ - \vec{v_2}_\-)^2 - 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
-        {{q_1}_\- + {q_2}_\- \rightarrow} - 2(\vec{v_1}_\- - \vec{v_2}_\-)^2 + 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \end{aligned}$$
-
-        and then just checking the force in current direction: \\(\vec{F} \parallel \hat{I_2}\\) because the only movement that matters is in the current direction.
-
-        you can see it the voltage [there](#calc_force), when its unchecked its the Faraday's Law, when its checked then it uses my new equation to calculate the voltage.
-
-        what about the force on protons? why its not (force on electrons - force on protons) = voltage ? well i think it also should matter, but because the proton is so heavy relative to the electron, even if he will have some movement its basically nothing relative to the electron movement.
-
-        so i just ignore the force on the protons when calculating the voltage.
-
-        # <center><u style="font-family: 'Times New Roman';">Notes</u></center>
-
-        1. if you look at the [short equation](#final_equation), you can see that the value of I is linear inside the equation.
-
-            so even if inside the wire the resistence changes, or the pressure changes, or the speed changes, it doesnt matters. because as long as q*v=I, the equation will still have the same result even if v changes (because I is stable).
-
-        2. My equation also tells that when electron rotates around the proton then its a pulling force, and when the electron falls into the proton then its a pushing force.
-
-            which makes the electron rotation around the atom pretty stable.
-
-            is it true? idk, but thats what the equation shows (if its even correct)
       </div>
       <details style="text-align: center;">
         <summary>Equations comparing (click here for instructions)</summary>
@@ -307,10 +257,6 @@
       <br/>
       <br/>
       <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%; position: relative;"></canvas-video>
-      <div class="markdown">
-        when magnet 1 is passing by magnet 2 (pay attention that the voltage is the same for both methods):
-      </div>
-      <canvas-video id="calc_force_skewed" name="calc_force_skewed" type="calculate" style="width: 70%; position: relative;"></canvas-video>
     </article>
   </div>
 
@@ -324,22 +270,6 @@
   <script src="drawings.js"></script>
   <script type="module" src="3d_forces.js"></script>
   <script type="module">
-    window.calc_force_skewed_init = function(toolbar, scene) {
-      window.calc_force_init(toolbar, scene)
-      const sliders = toolbar.children[1]
-
-      sliders.children[1].children[0].value = 90
-      sliders.children[1].children[0].dispatchEvent(new Event('change'))
-
-      sliders.children[2].children[0].value = 90
-      sliders.children[2].children[0].dispatchEvent(new Event('change'))
-
-      sliders.children[3].children[0].value = 100
-      sliders.children[3].children[0].dispatchEvent(new Event('change'))
-    }
-    window.calc_force_skewed = function(toolbar, scene) {
-      window.calc_force(toolbar, scene)
-    }
     draw_symbols_explanation()
     draw_vertical_symbol()
   </script>

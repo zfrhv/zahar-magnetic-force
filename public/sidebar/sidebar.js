@@ -1,5 +1,5 @@
 function openNav() {
-  document.getElementById("mySidenav").style.width = "350px";
+  document.getElementById("mySidenav").style.width = "320px";
 }
 
 window.addEventListener('click', function (e) {
@@ -17,6 +17,7 @@ sidebar.innerHTML = `
   <link rel="stylesheet" type="text/css" href="sidebar/sidebar.css" />
   <a href="physics.html">Main Page</a>
   <a href="discovering_equation.html">Discovering Equation</a>
+  <a href="different_situations.html">Different Situations</a>
   <a href="sensing_equation.html">Sensing Equation</a>
   <a href="discussion.html">Discussion</a>
 </div>
