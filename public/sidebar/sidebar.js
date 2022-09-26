@@ -15,6 +15,7 @@ sidebar.innerHTML = `
 <span id="myMenu" onclick="openNav()">&#9776;</span>
 <div id="mySidenav" class="sidenav">
   <link rel="stylesheet" type="text/css" href="sidebar/sidebar.css" />
+  <a id="close_sidebar" style="cursor: pointer;"><<</a>
   <a href="physics.html">Main Page</a>
   <a href="discovering_equation.html">Discovering Equation</a>
   <a href="different_situations.html">Different Situations</a>
@@ -31,6 +32,12 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
   openNav()
 }
 
+document.getElementById("close_sidebar").addEventListener('click', function () {
+  console.log("aaaaaaaaaaa")
+  document.getElementById("mySidenav").style.width = "0px";
+})
+
+// hightlight current page
 const selected = sidebar.querySelector('[href="'+window.location.pathname.match(/[^/]+$/g)[0]+'"]')
 selected.style.backgroundColor = "#383636"
 selected.style.color = "#d6d5d2"
