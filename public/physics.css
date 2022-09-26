@@ -65,6 +65,7 @@ body {
   margin: 0px;
   padding: 10px;
   font-family: Consolas;
+  overflow-x: hidden;
 }
 
 .page {
@@ -137,5 +138,4 @@ summary {
 mjx-container {
   overflow-x: auto;
   overflow-y: hidden;
-  font-size: 100% !important;
 }
