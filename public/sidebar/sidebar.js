@@ -20,6 +20,7 @@ sidebar.innerHTML = `
   <a href="discovering_equation.html">Discovering Equation</a>
   <a href="different_situations.html">Different Situations</a>
   <a href="sensing_equation.html">Sensing Equation</a>
+  <a href="comparing_equations.html">Comparing Equations</a>
   <a href="discussion.html">Discussion</a>
 </div>
 `
