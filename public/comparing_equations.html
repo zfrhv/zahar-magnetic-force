@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
+
+  <!-- Import maps polyfill -->
+	<!-- Remove this when import-maps will be widely supported -->
+	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+  <script id="ThreeJS" type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.144.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.144.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+
+  <title>Physics</title>
+  <link rel="icon" type="image/svg+xml" href="physics.svg">
+
+  <script src="tools/canvas/shapes.js"></script>
+  <script src="equations.js"></script>
+  <link rel="stylesheet" type="text/css" href="physics.css" />
+</head>
+
+<body>
+  <script id="SideBar" src="./sidebar/sidebar.js"></script>
+  <div class="page">
+    <article class="page-content">
+
+      <div id="magnetic_force" class="markdown">
+        # <center><u style="font-family: 'Times New Roman';">Comparing Equations</u></center>
+
+      </div>
+      <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%; position: relative;"></canvas-video>
+    </article>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
+    });
+  </script>
+  <script src="drawings.js"></script>
+  <script type="module" src="3d_forces.js"></script>
+  <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
+</body>
+</html>
