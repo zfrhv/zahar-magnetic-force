@@ -149,3 +149,7 @@ mjx-container {
   overflow-x: auto;
   overflow-y: hidden;
 }
+
+textarea {
+  width: 100%;
+}
