@@ -9,27 +9,30 @@ document.getElementsByTagName("head")[0].appendChild(animation_css_link);
 
 // Main
 window.addEventListener('load', () => {
-  document.querySelectorAll('canvas-video').forEach(looping_animation => {
-    const animation_main = document.createElement('div');
-    animation_main.id = looping_animation.id;
-    animation_main.setAttribute("name", looping_animation.getAttribute("name"));
-    animation_main.style.cssText += looping_animation.style.cssText;
-    animation_main.className += "animation_box";
-
-    const type = looping_animation.getAttribute("type");
-
-    // replace the element
-    looping_animation.parentNode.replaceChild(animation_main, looping_animation);
-
-    if (type === "calculate") {
-      calculate(looping_animation, animation_main);
-    } else if (type === "obj") {
-      insert_obj(looping_animation, animation_main);
-    } else {
-      create_2d_canvas(looping_animation, animation_main);
-    }
-  });
+  document.querySelectorAll('canvas-video').forEach(replace_animation);
 });
+
+function replace_animation(looping_animation) {
+  const animation_main = document.createElement('div');
+  animation_main.id = looping_animation.id;
+  animation_main.setAttribute("name", looping_animation.getAttribute("name"));
+  animation_main.style.cssText += looping_animation.style.cssText;
+  animation_main.className += "animation_box";
+  animation_main.replace_animation = replace_animation
+
+  const type = looping_animation.getAttribute("type");
+
+  // replace the element
+  looping_animation.parentNode.replaceChild(animation_main, looping_animation);
+
+  if (type === "calculate") {
+    calculate(looping_animation, animation_main);
+  } else if (type === "obj") {
+    insert_obj(looping_animation, animation_main);
+  } else {
+    create_2d_canvas(looping_animation, animation_main);
+  }
+}
 
 const calculator_svg = `
 <svg viewBox="0 0 512 512" style="width: 100%;">

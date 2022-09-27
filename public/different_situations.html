@@ -121,7 +121,7 @@
       <center>(the integral is manual, so ofc it wont be too accurate)</center>
       <br/>
       <br/>
-      <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%; position: relative;"></canvas-video>
+      <canvas-video id="calc_two_circles" name="calc_two_circles" type="calculate" style="width: 70%; position: relative;"></canvas-video>
       <div class="markdown">
         when magnet 1 is passing by magnet 2 (pay attention that the voltage is the same for both methods):
       </div>
@@ -140,7 +140,7 @@
   <script type="module" src="3d_forces.js"></script>
   <script type="module">
     window.calc_force_skewed_init = function(toolbar, scene) {
-      window.calc_force_init(toolbar, scene)
+      window.calc_two_circles_init(toolbar, scene)
       const sliders = toolbar.children[1]
 
       sliders.children[1].children[0].value = 90
@@ -153,7 +153,7 @@
       sliders.children[3].children[0].dispatchEvent(new Event('change'))
     }
     window.calc_force_skewed = function(toolbar, scene) {
-      window.calc_force(toolbar, scene)
+      window.calc_two_circles(toolbar, scene)
     }
   </script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
