@@ -37,8 +37,36 @@
       <div id="magnetic_force" class="markdown">
         # <center><u style="font-family: 'Times New Roman';">Comparing Equations</u></center>
 
+        ## Specifying custom path:
+
+        just put your points and the path will automatically update
+        
+        - diagram updates after 3 sec when not modfying
+
+        ### Circuit 1 Path:
       </div>
-      <canvas-video id="calc_force" name="calc_force" type="calculate" style="width: 70%; position: relative;"></canvas-video>
+      <textarea id="path1" cols="100" rows="10">
+ 150,  150, 0,
+ 150, -150, 0,
+-150, -150, 0,
+-150,  150, 0,
+ 150,  150, 0
+      </textarea>
+      <div id="magnetic_force" class="markdown">
+        ### Circuit 2 Path:
+      </div>
+      <textarea id="path2" cols="100" rows="10">
+ 150,  150, 0,
+ 150,   0,  0,
+ 150,   0,  150,
+-150,   0,  150,
+-150,   0,  0,
+-150,  150, 0,
+ 150,  150, 0
+      </textarea>
+      <br/>
+      <br/>
+      <canvas-video id="calc_custom_paths" name="calc_custom_paths" type="calculate" style="width: 70%; position: relative;"></canvas-video>
     </article>
   </div>
 
@@ -48,6 +76,51 @@
       fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
       elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
+  </script>
+  <script type="module">
+    import { Path3 } from './tools/threejs/path3.js'
+
+    const calc_custom_paths = document.getElementById("calc_custom_paths")
+
+    const modfying = []
+    const input1 = document.getElementById("path1")
+    const input2 = document.getElementById("path2")
+
+    let path1
+    let path2
+
+    function update_calc() {
+      modfying.push(true)
+      new Promise(r => setTimeout(r, 3000)).then(function() {
+        modfying.pop()
+        if (modfying.length == 0) {
+          const arr1 = JSON.parse("[" + input1.value + "]")
+          const arr2 = JSON.parse("[" + input2.value + "]")
+
+          if (arr1.length % 3 == 0 && arr2.length % 3 == 0 && arr1.length >= 6 && arr2.length >= 6 && arr1.every(num => typeof num === 'number') && arr2.every(num => typeof num === 'number')) {
+            path1.setPoints(arr1)
+            path2.setPoints(arr2)
+
+            const old_canvas = document.getElementById("calc_custom_paths")
+            old_canvas.parentNode.replaceChild(calc_custom_paths, old_canvas)
+            old_canvas.replace_animation(calc_custom_paths)
+          }
+        }
+      })
+    }
+
+    input1.addEventListener('input', update_calc)
+    input2.addEventListener('input', update_calc)
+
+    path1 = new Path3(JSON.parse("[" + input1.value + "]"))
+    path2 = new Path3(JSON.parse("[" + input2.value + "]"))
+    window.calc_custom_paths_init = function (toolbar, scene) {
+      window.calc_force_init(toolbar, scene, path1, path2)
+    }
+
+    window.calc_custom_paths = function (toolbar, scene) {
+      window.calc_force(toolbar, scene)
+    }
   </script>
   <script src="drawings.js"></script>
   <script type="module" src="3d_forces.js"></script>
