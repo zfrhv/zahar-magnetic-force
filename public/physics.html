@@ -74,9 +74,17 @@
       <div id="new_equation" class="markdown">
         # <center><u>New Equation</u></center>
 
+        taking wire \\(\vec{I_1}\\) and \\(\vec{I_2}\\) lenght super small relative to \\(\vec{r}\\) (basically \\(\vec{I_1} \to d\vec{I_1}\\) and \\(\vec{I_2} \to d\vec{I_2}\\))
+
+        The old equation is:
+
+        $$ Force\ \vec{I_1}\ makes\ on\ \vec{I_2} = \frac{\frac{μ_0}{4\pi} \cdot (\vec{I_1} \times \hat{r}) \times \vec{I_2} }{\vec{r}\ ^2}$$
+        $$\color{#f7c860} = \frac{\frac{μ_0}{4\pi} \cdot |I_1| \cdot |I_2| }{\vec{r}\ ^2} \cdot ((\hat{I_1} \times \hat{r}) \times \hat{I_2} )$$
+
         Shortly the new equation is:
 
-        $$\color{#f7c860} Force\ between\ two\ wire\ parts = \frac{\frac{μ_0}{4\pi} \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
+        $$ Force\ \vec{I_1}\ makes\ on\ \vec{I_2} = \frac{\frac{μ_0}{4\pi} \cdot (2 \cdot \vec{I_1} \cdot \vec{I_2} - 3(\vec{I_1} \cdot \hat{r}) \cdot (\vec{I_2} \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
+        $$\color{#f7c860} = \frac{\frac{μ_0}{4\pi} \cdot |I_1| \cdot |I_2| }{\vec{r}\ ^2} \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r})) \cdot \hat{r}$$
 
         After doing integral of the whole circuit, the results of the right hand law and the new equations are the same.
 
@@ -84,7 +92,7 @@
         
         (the toggle under the calculator is the force equation, untoggled\\gray is the right hand law, toggled\\green is my new equation)
       </div>
-      <canvas-video id="calc_two_circles" name="calc_two_circles" type="calculate" style="width: 70%; position: relative;"></canvas-video>
+      <canvas-video id="calc_two_circles" name="calc_two_circles" type="calculate" style="position: relative;"></canvas-video>
       <div id="new_equation" class="markdown">
 
         [Here](sensing_equation.html) you can get a litte more feeling about the difference between the equations.

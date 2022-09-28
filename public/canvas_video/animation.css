@@ -1,5 +1,5 @@
 .animation_box {
-  width: 60%;
+  width: 80%;
   height: auto;
   border: 0.2vw solid #d6d5d2;
   border-radius: 1vw;
@@ -60,6 +60,7 @@
   border-radius: 20000px;
   box-shadow: inset 1px 1px 5px 2px #585b64;
   outline: 0;
+  touch-action: none;
 }
 
 .video_slide::-webkit-slider-thumb {
@@ -75,11 +76,11 @@
 
 .measure_slide::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 0.9vh;
-  height: 2.5vh;
+  width: 10px;
+  height: 30px;
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
-  border-radius: 10vw;
+  border-radius: 100px;
 }
 
 .measure_slide {
@@ -90,9 +91,10 @@
 /* The switch - the box around the slider */
 .switch {
   position: relative;
-  display: inline-block;
+  display: flex;
   width: 20%;
   height: 100%;
+  margin: auto;
 }
 
 /* Hide default HTML checkbox */

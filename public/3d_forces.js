@@ -182,9 +182,8 @@ window.calc_force_init = function (toolbar, scene, path1, path2, is_circle) {
 
   // create force toggle
   const toggle_force = document.createElement('label');
-  toggle_force.style.height = "20%";
-  toggle_force.style.width = "60%";
-  toggle_force.style.margin = "20%";
+  toggle_force.style.height = "35px";
+  toggle_force.style.width = "70px";
   toggle_force.classList.add("switch");
   toolbar.children[0].append(toggle_force);
 
@@ -203,7 +202,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2, is_circle) {
 
 
   // create slidebars
-  toolbar.style.height = toolbar.offsetWidth/3+"px";
+  toolbar.style.height = toolbar.offsetWidth/2+"px";
 
   const slidebars = document.createElement('div');
   slidebars.style.width = "85%";
