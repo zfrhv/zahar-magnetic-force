@@ -295,6 +295,15 @@ window.calc_force = function (toolbar, scene) {
   const length_1 = wire1.path.getLength()
   const length_2 = wire2.path.getLength()
 
+  const points_vec_1 = []
+  for (let point_1 = 0; point_1 < points_1.length; point_1 += 3) {
+    points_vec_1.push(new THREE.Vector3(points_1[point_1], points_1[point_1+1], points_1[point_1+2]).applyEuler(wire1.rotation))
+  }
+  const points_vec_2 = []
+  for (let point_2 = 0; point_2 < points_2.length; point_2 += 3) {
+    points_vec_2.push(new THREE.Vector3(points_2[point_2], points_2[point_2+1], points_2[point_2+2]).applyEuler(wire2.rotation))
+  }
+
   let area_value = 0
   const areas = []
   if (!mine_force && wire2.radius) {
@@ -322,17 +331,17 @@ window.calc_force = function (toolbar, scene) {
     parts = areas.length
     area_value = step*step
   }
-  for (let point_1 = 0; point_1 < points_1.length-3; point_1 += 3) {
-    for (let point_2 = 0; point_2 < points_2.length-3; point_2 += 3) {
+  for (let point_1 = 0; point_1 < points_vec_1.length-1; point_1++) {
+    for (let point_2 = 0; point_2 < points_vec_2.length-1; point_2++) {
 
-      const relative_place_1 = new THREE.Vector3(points_1[point_1], points_1[point_1+1], points_1[point_1+2]).applyEuler(wire1.rotation)
-      const relative_place_2 = new THREE.Vector3(points_2[point_2], points_2[point_2+1], points_2[point_2+2]).applyEuler(wire2.rotation)
+      const relative_place_1 = points_vec_1[point_1]
+      const relative_place_2 = points_vec_2[point_2]
 
-      const next_place_1 = new THREE.Vector3(points_1[point_1+3], points_1[point_1+4], points_1[point_1+5]).applyEuler(wire1.rotation)
-      const next_place_2 = new THREE.Vector3(points_2[point_2+3], points_2[point_2+4], points_2[point_2+5]).applyEuler(wire2.rotation)
+      const next_place_1 = points_vec_1[point_1+1]
+      const next_place_2 = points_vec_2[point_2+1]
 
-      const v_1 = next_place_1.sub(relative_place_1).normalize()
-      const v_2 = next_place_2.sub(relative_place_2).normalize()
+      const v_1 = next_place_1.clone().sub(relative_place_1).normalize()
+      const v_2 = next_place_2.clone().sub(relative_place_2).normalize()
 
       const absolute_place_1 = wire1.position.clone().add(relative_place_1)
       const absolute_place_2 = wire2.position.clone().add(relative_place_2)
@@ -373,8 +382,7 @@ window.calc_force = function (toolbar, scene) {
 
         if (wire2.radius) {
           const dt = 0.00001
-          const index = Math.round(point_2/(points_2.length-3)*parts)
-          const area_place = areas[index]
+          const area_place = areas[point_2]
 
           const R_A_old = absolute_place_1.clone().sub(area_place)
           const R_A_hat_old = R_A_old.clone().normalize()
@@ -396,7 +404,7 @@ window.calc_force = function (toolbar, scene) {
     }
   }
 
-  // add dx (doing f/(parts*parts) is the same as doing f*q1*q2)
+  // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
   F_1_T.divideScalar(parts*parts)
   F_2_T.divideScalar(parts*parts)
   F_1_rotating_T.divideScalar(parts*parts)
