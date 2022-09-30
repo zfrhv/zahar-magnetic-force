@@ -14,7 +14,7 @@ function vec_to_euler(vector) {
 window.calc_two_circles_init = function (toolbar, scene) {
   const points = []
   const radius = 150
-  for ( let degree = 0; degree <= 2*Math.PI; degree += 2*Math.PI/parts ) {
+  for ( let degree = 0; degree < 2*Math.PI+0.00001; degree += 2*Math.PI/parts ) {
     points.push(Math.sin(degree)*radius, Math.cos(degree)*radius, 0)
   }
   const path = new Path3(points)
@@ -123,6 +123,10 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   // Check if 2d shape, to be able to use Faraday's law
   is_2d: if (path2.points.length >= 9) {
     const main_point = new THREE.Vector3(path2.points[0], path2.points[1], path2.points[2])
+    // make sure that the circiot is closed
+    if (new THREE.Vector3(path2.points[path2.points.length-3], path2.points[path2.points.length-2], path2.points[path2.points.length-1]).sub(main_point).length() > 0.00001) {
+      break is_2d
+    }
     const new_x = new THREE.Vector3(path2.points[3], path2.points[4], path2.points[5]).sub(main_point).normalize()
     const surface_vec = new THREE.Vector3(path2.points[6], path2.points[7], path2.points[8]).sub(main_point).cross(new_x).normalize()
     const new_y = new_x.clone().cross(surface_vec).normalize()
@@ -363,17 +367,25 @@ window.calc_force = function (toolbar, scene) {
 
   // TODO now i need to calculate the mass center for the absolute place + where to place the force arrows
 
+  const speeds_1 = []
+  for (let point_1 = 0; point_1 < wire1.points_vec.length-1; point_1++) {
+    speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1]).normalize())
+  }
+  const speeds_2 = []
+  for (let point_2 = 0; point_2 < wire2.points_vec.length-1; point_2++) {
+    speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2]).normalize())
+  }
   for (let point_1 = 0; point_1 < wire1.points_vec.length-1; point_1++) {
 
     // TODO maybe instead of each time calculating v1,v2... just make an array of speeds and use it
     const relative_place_1 = wire1.points_vec[point_1]
-    const v_1 = wire1.points_vec[point_1+1].clone().sub(relative_place_1).normalize()
+    const v_1 = speeds_1[point_1]
     const absolute_place_1 = wire1.position.clone().add(relative_place_1)
 
     for (let point_2 = 0; point_2 < wire2.points_vec.length-1; point_2++) {
 
       const relative_place_2 = wire2.points_vec[point_2]
-      const v_2 = wire2.points_vec[point_2+1].clone().sub(relative_place_2).normalize()
+      const v_2 = speeds_2[point_2]
       const absolute_place_2 = wire2.position.clone().add(relative_place_2)
 
       const R = absolute_place_1.clone().sub(absolute_place_2)
