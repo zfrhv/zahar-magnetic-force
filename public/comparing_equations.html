@@ -42,7 +42,7 @@
         just put your points and the path will automatically update
         
         - diagram updates after 3 sec when not modfying
-        - if it didnt updated, then the input values are not valid, maybe you are missing "," at the end of the line or something
+        - if it didnt updated, then the input values are not valid
 
         ### Circuit 1 Path:
       </div>
@@ -94,8 +94,8 @@
       new Promise(r => setTimeout(r, 3000)).then(function() {
         modfying.pop()
         if (modfying.length == 0) {
-          const arr1 = JSON.parse("[" + input1.value + "]")
-          const arr2 = JSON.parse("[" + input2.value + "]")
+          const arr1 = JSON.parse("[" + input1.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]")
+          const arr2 = JSON.parse("[" + input2.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]")
 
           if (arr1.length % 3 == 0 && arr2.length % 3 == 0 && arr1.length >= 6 && arr2.length >= 6 && arr1.every(num => typeof num === 'number') && arr2.every(num => typeof num === 'number')) {
             path1.setPoints(arr1)
@@ -112,8 +112,8 @@
     input1.addEventListener('input', update_calc)
     input2.addEventListener('input', update_calc)
 
-    path1 = new Path3(JSON.parse("[" + input1.value + "]"))
-    path2 = new Path3(JSON.parse("[" + input2.value + "]"))
+    path1 = new Path3(JSON.parse("[" + input1.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]"))
+    path2 = new Path3(JSON.parse("[" + input2.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]"))
     window.calc_custom_paths_init = function (toolbar, scene) {
       window.calc_force_init(toolbar, scene, path1, path2)
     }

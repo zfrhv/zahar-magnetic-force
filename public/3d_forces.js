@@ -5,7 +5,6 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Path3 } from './tools/threejs/path3.js'
     
 const pi = Math.PI
-const parts = 500
 
 function vec_to_euler(vector) {
   return new THREE.Euler(0,0,0,'XYZ').setFromRotationMatrix(new THREE.Matrix4().lookAt(vector, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)))
@@ -30,9 +29,15 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  // TODO change the paths ratio (probably sqrt(length1/length2) is the ration between parts)
-  const wire1_points = path1.getPoints(parts)
-  const wire2_points = path2.getPoints(parts)
+  const total_parts = 1000
+  const ration = Math.sqrt(wire1_length / wire2_length)
+  const parts_1 = Math.round(ration / (ration+1) * total_parts)
+  const parts_2 = total_parts - parts_1
+  console.log(parts_1)
+  console.log(parts_2)
+
+  const wire1_points = path1.getPoints(parts_1)
+  const wire2_points = path2.getPoints(parts_2)
 
   const wire1_points_vec = []
   const wire2_points_vec = []
@@ -64,14 +69,21 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const current_arrows = 4
   // draw current flow
   for (let arrow_counter = 1/current_arrows/2; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
-    const index = Math.floor(arrow_counter*(parts+1))
-    const position = wire1_points_vec[index].clone()
-    const direction = wire1_points_vec[index+1].clone().sub(position).normalize()
+    const index = Math.floor(arrow_counter*wire1.points_vec.length)
+    const position = wire1.points_vec[index].clone()
+    const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, wire1_material.color )
     speed.setLength(direction.length(), speed_length*0.2, speed_length*0.2)
     wire1.add(speed)
   }
+
+  // calculate the mass center
+  wire1.mass_center = new THREE.Vector3(0,0,0)
+  for (let i=0; i < wire1.points_vec.length; i++) {
+    wire1.mass_center.add(wire1.points_vec[i])
+  }
+  wire1.mass_center.divideScalar(wire1.points_vec.length)
 
   // transform the whole shape
   wire1.rotation.x = pi/2
@@ -96,14 +108,21 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // draw current flow
   for (let arrow_counter = 1/current_arrows/2; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
-    const index = Math.floor(arrow_counter*(parts+1))
-    const position = wire2_points_vec[index].clone()
-    const direction = wire2_points_vec[index+1].clone().sub(position).normalize()
+    const index = Math.floor(arrow_counter*wire2.points_vec.length)
+    const position = wire2.points_vec[index].clone()
+    const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, wire2_material.color )
     speed.setLength(direction.length(), speed_length*0.2, speed_length*0.2)
     wire2.add(speed)
   }
+
+  // calculate the mass center
+  wire2.mass_center = new THREE.Vector3(0,0,0)
+  for (let i=0; i < wire2.points_vec.length; i++) {
+    wire2.mass_center.add(wire2.points_vec[i])
+  }
+  wire2.mass_center.divideScalar(wire2.points_vec.length)
 
   // transform the whole shape
   wire2.rotation.x = pi/2
@@ -171,7 +190,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
     // check which dots are inside the surface
     wire2.areas = []
-    const step = Math.sqrt((max.x-min.x) * (max.y-min.y) / parts)
+    const step = Math.sqrt((max.x-min.x) * (max.y-min.y) / parts_2)
     let width = min.x
     let height = min.y
 
@@ -340,6 +359,7 @@ window.calc_force = function (toolbar, scene) {
 
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
+  wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
   const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_stable.rotation.x, wire1_mesh.rotation.z + wire1_stable.rotation.z, wire1_mesh.rotation.y + wire1_stable.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
@@ -347,6 +367,7 @@ window.calc_force = function (toolbar, scene) {
 
   wire2.position = wire2_mesh.position
   wire2.rotation = wire2_mesh.rotation
+  wire2.mass_center = wire2_mesh.mass_center.clone().applyEuler(wire2.rotation)
   wire2.voltage = 0
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
   wire2.length = wire2_mesh.length
@@ -365,24 +386,24 @@ window.calc_force = function (toolbar, scene) {
   const F_1_rotating_T = new THREE.Vector3()
   const F_2_rotating_T = new THREE.Vector3()
 
-  // TODO now i need to calculate the mass center for the absolute place + where to place the force arrows
+  const parts_1 = wire1.points_vec.length-1
+  const parts_2 = wire2.points_vec.length-1
 
   const speeds_1 = []
-  for (let point_1 = 0; point_1 < wire1.points_vec.length-1; point_1++) {
+  for (let point_1 = 0; point_1 < parts_1; point_1++) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1]).normalize())
   }
   const speeds_2 = []
-  for (let point_2 = 0; point_2 < wire2.points_vec.length-1; point_2++) {
+  for (let point_2 = 0; point_2 < parts_2; point_2++) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2]).normalize())
   }
-  for (let point_1 = 0; point_1 < wire1.points_vec.length-1; point_1++) {
+  for (let point_1 = 0; point_1 < parts_1; point_1++) {
 
-    // TODO maybe instead of each time calculating v1,v2... just make an array of speeds and use it
     const relative_place_1 = wire1.points_vec[point_1]
     const v_1 = speeds_1[point_1]
     const absolute_place_1 = wire1.position.clone().add(relative_place_1)
 
-    for (let point_2 = 0; point_2 < wire2.points_vec.length-1; point_2++) {
+    for (let point_2 = 0; point_2 < parts_2; point_2++) {
 
       const relative_place_2 = wire2.points_vec[point_2]
       const v_2 = speeds_2[point_2]
@@ -414,7 +435,7 @@ window.calc_force = function (toolbar, scene) {
         const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
-        const distance = wire2.length / (parts)
+        const distance = wire2.length / parts_2
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance
       } else {
@@ -426,8 +447,8 @@ window.calc_force = function (toolbar, scene) {
       F_1_T.add(f_1)
       F_2_T.add(f_2)
 
-      F_1_rotating_T.add(relative_place_1.clone().cross(f_1))
-      F_2_rotating_T.add(relative_place_2.clone().cross(f_2))
+      F_1_rotating_T.add(relative_place_1.clone().sub(wire1.mass_center).cross(f_1))
+      F_2_rotating_T.add(relative_place_2.clone().sub(wire2.mass_center).cross(f_2))
     }
 
     if (!mine_force && wire2.areas) {
@@ -449,11 +470,11 @@ window.calc_force = function (toolbar, scene) {
   }
 
   // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
-  F_1_T.divideScalar(parts*parts)
-  F_2_T.divideScalar(parts*parts)
-  F_1_rotating_T.divideScalar(parts*parts)
-  F_2_rotating_T.divideScalar(parts*parts)
-  wire2.voltage /= parts
+  F_1_T.divideScalar(parts_1 * parts_2)
+  F_2_T.divideScalar(parts_1 * parts_2)
+  F_1_rotating_T.divideScalar(parts_1 * parts_2)
+  F_2_rotating_T.divideScalar(parts_1 * parts_2)
+  wire2.voltage /= parts_2
 
   // scale for better display
   wire2.voltage   *= 2_670.7946485
@@ -465,13 +486,17 @@ window.calc_force = function (toolbar, scene) {
 
   // update total force arrows
   force_on_1.setDirection(F_1_T.clone().normalize())
-  force_on_1.setLength(F_1_T.length(), F_1_T.length()*0.2, F_1_T.length()*0.2)
   force_on_2.setDirection(F_2_T.clone().normalize())
+  force_on_1.setLength(F_1_T.length(), F_1_T.length()*0.2, F_1_T.length()*0.2)
   force_on_2.setLength(F_2_T.length(), F_2_T.length()*0.2, F_2_T.length()*0.2)
+  force_on_1.position.set(wire1.position.x + wire1.mass_center.x, wire1.position.y + wire1.mass_center.y, wire1.position.z + wire1.mass_center.z)
+  force_on_2.position.set(wire2.position.x + wire2.mass_center.x, wire2.position.y + wire2.mass_center.y, wire2.position.z + wire2.mass_center.z)
 
   // update rotation force arrows
   curve_1.scale.setScalar(F_1_rotating_T.length() / 20500)
   curve_2.scale.setScalar(F_2_rotating_T.length() / 20500)
+  curve_1.position.set(wire1.position.x + wire1.mass_center.x, wire1.position.y + wire1.mass_center.y, wire1.position.z + wire1.mass_center.z)
+  curve_2.position.set(wire2.position.x + wire2.mass_center.x, wire2.position.y + wire2.mass_center.y, wire2.position.z + wire2.mass_center.z)
   curve_1.rotation.setFromVector3(vec_to_euler(F_1_rotating_T))
   curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
