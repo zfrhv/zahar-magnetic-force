@@ -235,8 +235,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
     const index = Math.floor(arrow_counter*wire1.points_vec.length)
     const position = wire1.points_vec[index].clone()
-    const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
-    position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( new THREE.Vector3(1,0,0), position, 0, wire1_material.color )
     wire1_speeds.add(speed)
   }
@@ -514,8 +512,10 @@ window.calc_force = function (toolbar, scene) {
     })
   } else {
     voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
+    // keep the arrow with easy to see size
+    const size = Math.sqrt(Math.abs(wire2.voltage))*Math.sign(wire2.voltage)
     voltage_arrows.children.forEach(arrow => {
-      arrow.setLength(1, 60*wire2.voltage, 60*wire2.voltage)
+      arrow.setLength(1, 60*size, 60*size)
     })
   }
 }
