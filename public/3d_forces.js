@@ -498,6 +498,8 @@ window.calc_force = function (toolbar, scene) {
   curve_1.rotation.setFromVector3(vec_to_euler(F_1_rotating_T))
   curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
+  // TODO draw the voltage direction same as you draw the current, because just throwing a number is hard to understand
+  
   // update voltage
   if (!mine_force && !wire2.areas) {
     voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": can't calc this shape")
