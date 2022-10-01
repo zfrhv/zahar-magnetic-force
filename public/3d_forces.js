@@ -513,7 +513,7 @@ window.calc_force = function (toolbar, scene) {
       arrow.setLength(1, 0, 0)
     })
   } else {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(2))
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
     voltage_arrows.children.forEach(arrow => {
       arrow.setLength(1, 60*wire2.voltage, 60*wire2.voltage)
     })
