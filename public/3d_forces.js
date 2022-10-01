@@ -13,7 +13,7 @@ function vec_to_euler(vector) {
 window.calc_two_circles_init = function (toolbar, scene) {
   const points = []
   const radius = 150
-  for ( let degree = 0; degree < 2*Math.PI+0.00001; degree += 2*Math.PI/parts ) {
+  for ( let degree = 0; degree < 2*Math.PI+0.00001; degree += 2*Math.PI/30 ) {
     points.push(Math.sin(degree)*radius, Math.cos(degree)*radius, 0)
   }
   const path = new Path3(points)
@@ -33,8 +33,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
-  console.log(parts_1)
-  console.log(parts_2)
 
   const wire1_points = path1.getPoints(parts_1)
   const wire2_points = path2.getPoints(parts_2)
