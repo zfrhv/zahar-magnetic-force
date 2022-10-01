@@ -63,7 +63,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire1_shape.name = "wire1_shape"
   wire1.add(wire1_shape)
 
-  const speed_length = 300
   const current_arrows = 4
   // draw current flow
   for (let arrow_counter = 1/current_arrows/2; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
@@ -72,7 +71,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, wire1_material.color )
-    speed.setLength(direction.length(), speed_length*0.2, speed_length*0.2)
+    speed.setLength(1, 60, 60)
     wire1.add(speed)
   }
 
@@ -111,7 +110,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, wire2_material.color )
-    speed.setLength(direction.length(), speed_length*0.2, speed_length*0.2)
+    speed.setLength(1, 60, 60)
     wire2.add(speed)
   }
 
@@ -136,6 +135,21 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   voltage.style.left = '5%';
   voltage.style.pointerEvents = 'none';
   wire2.voltage = voltage
+
+  // draw voltage flow
+  const voltages = new THREE.Group()
+  voltages.name = "voltages"
+  wire2.add(voltages)
+  for (let arrow_counter = 1/(current_arrows-1)/2; arrow_counter < 1; arrow_counter+= 1/(current_arrows-1)) {
+    const index = Math.floor(arrow_counter*wire2.points_vec.length)
+    const position = wire2.points_vec[index].clone()
+    const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
+    position.add(direction.clone().multiplyScalar(20))
+    const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
+    speed.setLength(1, 0, 0)
+    voltages.add(speed)
+  }
+  
 
   // Check if 2d shape, to be able to use Faraday's law
   is_2d: if (path2.points.length >= 9) {
@@ -347,13 +361,14 @@ window.calc_force = function (toolbar, scene) {
   const wire1 = {}
   const wire2 = {}
 
-  const wire1_mesh   = scene.getObjectByName("wire1")
-  const wire2_mesh   = scene.getObjectByName("wire2")
-  const force_on_1   = scene.getObjectByName("force_on_1")
-  const force_on_2   = scene.getObjectByName("force_on_2")
-  const curve_1      = scene.getObjectByName("curve_1")
-  const curve_2      = scene.getObjectByName("curve_2")
-  const wire1_stable = scene.getObjectByName("wire1_stable")
+  const wire1_mesh     = scene.getObjectByName("wire1")
+  const wire2_mesh     = scene.getObjectByName("wire2")
+  const force_on_1     = scene.getObjectByName("force_on_1")
+  const force_on_2     = scene.getObjectByName("force_on_2")
+  const curve_1        = scene.getObjectByName("curve_1")
+  const curve_2        = scene.getObjectByName("curve_2")
+  const wire1_stable   = scene.getObjectByName("wire1_stable")
+  const voltage_arrows = scene.getObjectByName("voltages")
 
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
@@ -475,7 +490,7 @@ window.calc_force = function (toolbar, scene) {
   wire2.voltage /= parts_2
 
   // scale for better display
-  wire2.voltage   *= 2_670.7946485
+  wire2.voltage   *= 267.079_464_85
   const foce_const = 267_079_464.85
   F_1_T.multiplyScalar(foce_const)
   F_2_T.multiplyScalar(foce_const)
@@ -503,7 +518,13 @@ window.calc_force = function (toolbar, scene) {
   // update voltage
   if (!mine_force && !wire2.areas) {
     voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": can't calc this shape")
+    voltage_arrows.children.forEach(arrow => {
+      arrow.setLength(1, 0, 0)
+    })
   } else {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + (wire2.voltage).toFixed(2))
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(2))
+    voltage_arrows.children.forEach(arrow => {
+      arrow.setLength(1, 60*wire2.voltage, 60*wire2.voltage)
+    })
   }
 }
