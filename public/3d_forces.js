@@ -146,7 +146,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
-    speed.setLength(1, 0, 0)
     voltages.add(speed)
   }
   
@@ -229,22 +228,18 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   }
 
   // speed arrows
-  const wire1_stable = new THREE.Group()
-  wire1_stable.name = "wire1_stable"
-  wire1_stable.rotation.copy(wire1.rotation.clone().set(-wire1.rotation.x, -wire1.rotation.y, -wire1.rotation.z))
-  wire1.add(wire1_stable)
+  const wire1_speeds = new THREE.Group()
+  wire1_speeds.name = "wire1_speeds"
+  wire1.add(wire1_speeds)
 
-  const speed_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,150), 0, wire1_material.color)
-  wire1_stable.add(speed_1)
-
-  const speed_2 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,-150), 0, wire1_material.color)
-  wire1_stable.add(speed_2)
-
-  const speed_3 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(150,0,0), 0, wire1_material.color)
-  wire1_stable.add(speed_3)
-
-  const speed_4 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(-150,0,0), 0, wire1_material.color)
-  wire1_stable.add(speed_4)
+  for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
+    const index = Math.floor(arrow_counter*wire1.points_vec.length)
+    const position = wire1.points_vec[index].clone()
+    const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
+    position.add(direction.clone().multiplyScalar(20))
+    const speed = new THREE.ArrowHelper( new THREE.Vector3(1,0,0), position, 0, wire1_material.color )
+    wire1_speeds.add(speed)
+  }
 
   // total force arrows
   const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color)
@@ -314,17 +309,13 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   slidebars.style.textAlign = "center";
   toolbar.append(slidebars);
 
-  wire1.speed = new THREE.Vector3( );
+  wire1.speed = new THREE.Vector3(0,0,0);
   function update_speeds() {
     const length = wire1.speed.length()*25
-    speed_1.setLength(length, length*0.2, length*0.2)
-    speed_2.setLength(length, length*0.2, length*0.2)
-    speed_3.setLength(length, length*0.2, length*0.2)
-    speed_4.setLength(length, length*0.2, length*0.2)
-    speed_1.setDirection(wire1.speed.clone().normalize())
-    speed_2.setDirection(wire1.speed.clone().normalize())
-    speed_3.setDirection(wire1.speed.clone().normalize())
-    speed_4.setDirection(wire1.speed.clone().normalize())
+    wire1_speeds.children.forEach(speed => {
+      speed.setLength(length, length*0.2, length*0.2)
+      speed.setDirection(wire1.speed.clone().normalize())
+    })
   }
 
   const inputs = {
@@ -367,13 +358,13 @@ window.calc_force = function (toolbar, scene) {
   const force_on_2     = scene.getObjectByName("force_on_2")
   const curve_1        = scene.getObjectByName("curve_1")
   const curve_2        = scene.getObjectByName("curve_2")
-  const wire1_stable   = scene.getObjectByName("wire1_stable")
+  const wire1_speeds   = scene.getObjectByName("wire1_speeds")
   const voltage_arrows = scene.getObjectByName("voltages")
 
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
   wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
-  const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_stable.rotation.x, wire1_mesh.rotation.z + wire1_stable.rotation.z, wire1_mesh.rotation.y + wire1_stable.rotation.y, "XYZ")
+  const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
@@ -394,10 +385,10 @@ window.calc_force = function (toolbar, scene) {
   const mine_force = toolbar.children[0].children[1].children[0].checked
   const voltage = wire2_mesh.voltage
 
-  const F_1_T = new THREE.Vector3()
-  const F_2_T = new THREE.Vector3()
-  const F_1_rotating_T = new THREE.Vector3()
-  const F_2_rotating_T = new THREE.Vector3()
+  const F_1_T = new THREE.Vector3(0,0,0)
+  const F_2_T = new THREE.Vector3(0,0,0)
+  const F_1_rotating_T = new THREE.Vector3(0,0,0)
+  const F_2_rotating_T = new THREE.Vector3(0,0,0)
 
   const parts_1 = wire1.points_vec.length-1
   const parts_2 = wire2.points_vec.length-1
@@ -433,7 +424,7 @@ window.calc_force = function (toolbar, scene) {
         const v_1_n = v_1.clone().add(wire1.speed)
         const v_2_n = v_2
         const v_1_p = wire1.speed.clone()
-        const v_2_p = new THREE.Vector3()
+        const v_2_p = new THREE.Vector3(0,0,0)
 
         const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
