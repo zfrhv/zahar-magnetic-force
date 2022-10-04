@@ -10,7 +10,7 @@ function vec_to_euler(vector) {
   return new THREE.Euler(0,0,0,'XYZ').setFromRotationMatrix(new THREE.Matrix4().lookAt(vector, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)))
 }
 
-window.calc_two_circles_init = function (toolbar, scene) {
+window.changing_current_circles_init = function (toolbar, scene) {
   const points = []
   const radius = 150
   for ( let degree = 0; degree < 2*Math.PI+0.00001; degree += 2*Math.PI/30 ) {
@@ -18,14 +18,14 @@ window.calc_two_circles_init = function (toolbar, scene) {
   }
   const path = new Path3(points)
 
-  window.calc_force_init(toolbar, scene, path, path)
+  window.changing_current_init(toolbar, scene, path, path)
 }
 
-window.calc_two_circles = function (toolbar, scene) {
-  window.calc_force(toolbar, scene)
+window.changing_current_circles = function (toolbar, scene) {
+  window.changing_current(toolbar, scene)
 }
 
-window.calc_force_init = function (toolbar, scene, path1, path2) {
+window.changing_current_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
@@ -227,55 +227,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     wire2.surface_vec = surface_vec
   }
 
-  // speed arrows
-  const wire1_speeds = new THREE.Group()
-  wire1_speeds.name = "wire1_speeds"
-  wire1.add(wire1_speeds)
-
-  for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
-    const index = Math.floor(arrow_counter*wire1.points_vec.length)
-    const position = wire1.points_vec[index].clone()
-    const speed = new THREE.ArrowHelper( new THREE.Vector3(1,0,0), position, 0, wire1_material.color )
-    wire1_speeds.add(speed)
-  }
-
-  // total force arrows
-  const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color)
-  force_on_1.name = "force_on_1"
-  scene.add(force_on_1)
-
-  const force_on_2 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire2.position, 0, wire1_material.color)
-  force_on_2.name = "force_on_2"
-  scene.add(force_on_2)
-
-  // rotation force arrows
-  const circle = new THREE.EllipseCurve(0, 0, 80, 80, 0, 3/2 * pi, false)
-  const curve_1_body = new THREE.Line(new THREE.BufferGeometry().setFromPoints( circle.getSpacedPoints(10) ))
-  const curve_1_head = new THREE.Mesh(new THREE.ConeGeometry( 15, 40, 32 ))
-  curve_1_head.position.y = -80
-  curve_1_head.rotation.z = -pi / 2
-
-  const curve_1 = new THREE.Group()
-  curve_1.add(curve_1_body)
-  curve_1.add(curve_1_head)
-  const curve_2 = curve_1.clone()
-  curve_2.traverse((node) => { if (node.isMesh) { node.material = node.material.clone() } })
-
-  curve_1.name = "curve_1"
-  curve_2.name = "curve_2"
-
-  curve_1.position.set(wire1.position.x, wire1.position.y, wire1.position.z)
-  curve_2.position.set(wire2.position.x, wire2.position.y, wire2.position.z)
-
-  curve_1.children.forEach(child => { child.material.color.set(wire2_material.color) })
-  curve_2.children.forEach(child => { child.material.color.set(wire1_material.color) })
-
-  curve_1.scale.setScalar(0)
-  curve_2.scale.setScalar(0)
-
-  scene.add(curve_1)
-  scene.add(curve_2)
-
   // create force toggle
   const toggle_force = document.createElement('label');
   toggle_force.style.width = "60%";
@@ -320,12 +271,10 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     "R_1": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
     "R_2": function () { wire1.rotation.y = this.value/100*pi*2 },
     "R_3": function () { wire2.rotation.y = this.value/100*pi*2 },
-    "V_x": function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
-    "V_y": function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
-    "V_z": function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
+    "V": function () { wire1.voltage = (this.value-50)/10 },
   }
   const height = slidebars.offsetHeight / (Object.keys(inputs).length);
-  slidebars.style.fontSize = height*0.8 + "px";
+  slidebars.style.fontSize = height*0.7 + "px";
   for(const name in inputs) {
     const part = document.createElement('div');
     part.innerText = name + ": ";
@@ -333,7 +282,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
     const slidebar = document.createElement('input');
     slidebar.type = 'range';
-    slidebar.value = /^V_.$/.test(name) ? 50 : 0;
+    slidebar.value = /^V$/.test(name) ? 50 : 0;
     slidebar.min = 0;
     slidebar.max = 100;
     slidebar.style.width = "60%";
@@ -346,24 +295,17 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   }
 }
 
-window.calc_force = function (toolbar, scene) {
+window.changing_current = function (toolbar, scene) {
   const wire1 = {}
   const wire2 = {}
 
   const wire1_mesh     = scene.getObjectByName("wire1")
   const wire2_mesh     = scene.getObjectByName("wire2")
-  const force_on_1     = scene.getObjectByName("force_on_1")
-  const force_on_2     = scene.getObjectByName("force_on_2")
-  const curve_1        = scene.getObjectByName("curve_1")
-  const curve_2        = scene.getObjectByName("curve_2")
-  const wire1_speeds   = scene.getObjectByName("wire1_speeds")
   const voltage_arrows = scene.getObjectByName("voltages")
 
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
   wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
-  const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
-  wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
 
@@ -382,11 +324,6 @@ window.calc_force = function (toolbar, scene) {
 
   const mine_force = toolbar.children[0].children[1].children[0].checked
   const voltage = wire2_mesh.voltage
-
-  const F_1_T = new THREE.Vector3(0,0,0)
-  const F_2_T = new THREE.Vector3(0,0,0)
-  const F_1_rotating_T = new THREE.Vector3(0,0,0)
-  const F_2_rotating_T = new THREE.Vector3(0,0,0)
 
   const parts_1 = wire1.points_vec.length-1
   const parts_2 = wire2.points_vec.length-1
@@ -414,23 +351,17 @@ window.calc_force = function (toolbar, scene) {
       const R = absolute_place_1.clone().sub(absolute_place_2)
       const R_hat = R.clone().normalize()
 
-      let f_1 = null
-      let f_2 = null
-
       if (mine_force) {
         // full "mine" force calculation
-        const v_1_n = v_1.clone().add(wire1.speed)
+        const v_1_n = v_1
         const v_2_n = v_2
-        const v_1_p = wire1.speed.clone()
+        const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
 
         const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
         const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-
-        f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (Math.pow(R.length(), 2)) )
-        f_1 = f_2.clone().negate()
 
         // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
         // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
@@ -440,17 +371,7 @@ window.calc_force = function (toolbar, scene) {
         const distance = wire2.length / parts_2
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance
-      } else {
-        // "their" force calculation
-        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
-        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2))
       }
-
-      F_1_T.add(f_1)
-      F_2_T.add(f_2)
-
-      F_1_rotating_T.add(relative_place_1.clone().sub(wire1.mass_center).cross(f_1))
-      F_2_rotating_T.add(relative_place_2.clone().sub(wire2.mass_center).cross(f_2))
     }
 
     if (!mine_force && wire2.areas) {
@@ -472,38 +393,11 @@ window.calc_force = function (toolbar, scene) {
   }
 
   // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
-  F_1_T.divideScalar(parts_1 * parts_2)
-  F_2_T.divideScalar(parts_1 * parts_2)
-  F_1_rotating_T.divideScalar(parts_1 * parts_2)
-  F_2_rotating_T.divideScalar(parts_1 * parts_2)
   wire2.voltage /= parts_2
 
   // scale for better display
   wire2.voltage   *= 267.079_464_85
-  const foce_const = 267_079_464.85
-  F_1_T.multiplyScalar(foce_const)
-  F_2_T.multiplyScalar(foce_const)
-  F_1_rotating_T.multiplyScalar(foce_const*2/3)
-  F_2_rotating_T.multiplyScalar(foce_const*2/3)
 
-  // update total force arrows
-  force_on_1.setDirection(F_1_T.clone().normalize())
-  force_on_2.setDirection(F_2_T.clone().normalize())
-  force_on_1.setLength(F_1_T.length(), F_1_T.length()*0.2, F_1_T.length()*0.2)
-  force_on_2.setLength(F_2_T.length(), F_2_T.length()*0.2, F_2_T.length()*0.2)
-  force_on_1.position.set(wire1.position.x + wire1.mass_center.x, wire1.position.y + wire1.mass_center.y, wire1.position.z + wire1.mass_center.z)
-  force_on_2.position.set(wire2.position.x + wire2.mass_center.x, wire2.position.y + wire2.mass_center.y, wire2.position.z + wire2.mass_center.z)
-
-  // update rotation force arrows
-  curve_1.scale.setScalar(F_1_rotating_T.length() / 20500)
-  curve_2.scale.setScalar(F_2_rotating_T.length() / 20500)
-  curve_1.position.set(wire1.position.x + wire1.mass_center.x, wire1.position.y + wire1.mass_center.y, wire1.position.z + wire1.mass_center.z)
-  curve_2.position.set(wire2.position.x + wire2.mass_center.x, wire2.position.y + wire2.mass_center.y, wire2.position.z + wire2.mass_center.z)
-  curve_1.rotation.setFromVector3(vec_to_euler(F_1_rotating_T))
-  curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
-
-  // TODO draw the voltage direction same as you draw the current, because just throwing a number is hard to understand
-  
   // update voltage
   if (!mine_force && !wire2.areas) {
     voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": can't calc this shape")
