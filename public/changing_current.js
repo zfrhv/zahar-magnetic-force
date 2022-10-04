@@ -137,16 +137,30 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
   wire2.voltage = voltage
 
   // draw voltage flow
-  const voltages = new THREE.Group()
-  voltages.name = "voltages"
-  wire2.add(voltages)
+  const current_change = new THREE.Group()
+  current_change.name = "current_change"
+  wire1.add(current_change)
+  for (let arrow_counter = 1/(current_arrows-1)/2; arrow_counter < 1; arrow_counter+= 1/(current_arrows-1)) {
+    const index = Math.floor(arrow_counter*wire1.points_vec.length)
+    const position = wire1.points_vec[index].clone()
+    const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
+    position.add(direction.clone().multiplyScalar(20))
+    const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
+    current_change.add(speed)
+  }
+  wire1.current_change = 0
+
+  // draw voltage flow
+  const voltages_2 = new THREE.Group()
+  voltages_2.name = "voltages"
+  wire2.add(voltages_2)
   for (let arrow_counter = 1/(current_arrows-1)/2; arrow_counter < 1; arrow_counter+= 1/(current_arrows-1)) {
     const index = Math.floor(arrow_counter*wire2.points_vec.length)
     const position = wire2.points_vec[index].clone()
     const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
-    voltages.add(speed)
+    voltages_2.add(speed)
   }
   
 
@@ -271,7 +285,14 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
     "R_1": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
     "R_2": function () { wire1.rotation.y = this.value/100*pi*2 },
     "R_3": function () { wire2.rotation.y = this.value/100*pi*2 },
-    "V": function () { wire1.voltage = (this.value-50)/10 },
+    "V": function () {
+      wire1.current_change = (this.value-50)/50
+      // keep the arrow with easy to see size
+      const size = Math.sqrt(Math.abs(wire1.current_change))*Math.sign(wire1.current_change)
+      current_change.children.forEach(arrow => {
+      arrow.setLength(1, 60*size, 60*size)
+    })
+    },
   }
   const height = slidebars.offsetHeight / (Object.keys(inputs).length);
   slidebars.style.fontSize = height*0.7 + "px";
@@ -306,6 +327,7 @@ window.changing_current = function (toolbar, scene) {
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
   wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
+  wire1.current_change = wire1_mesh.current_change
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
 
@@ -352,20 +374,8 @@ window.changing_current = function (toolbar, scene) {
       const R_hat = R.clone().normalize()
 
       if (mine_force) {
-        // full "mine" force calculation
-        const v_1_n = v_1
-        const v_2_n = v_2
-        const v_1_p = new THREE.Vector3(0,0,0)
-        const v_2_p = new THREE.Vector3(0,0,0)
-
-        const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-        const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-
-        // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
-        // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
-        const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
+        // f = k q q /r^2
+        const field_difference = R_hat.clone().multiplyScalar( ((point_1/parts_1-0.5)*2 * wire1.current_change) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / parts_2
@@ -376,27 +386,28 @@ window.changing_current = function (toolbar, scene) {
 
     if (!mine_force && wire2.areas) {
       for (let i = 0; i < wire2.areas.length; i++) {
-        const dt = 0.00001
         const area_place = wire2.areas[i]
   
         const R_A_old = absolute_place_1.clone().sub(area_place)
         const R_A_hat_old = R_A_old.clone().normalize()
-        const old_flux = v_1.clone().cross(R_A_hat_old).dot(wire2.surface_vec) / Math.pow(R_A_old.length(), 2) * wire2.area_value
+        const flux = v_1.clone().cross(R_A_hat_old).dot(wire2.surface_vec) / Math.pow(R_A_old.length(), 2) * wire2.area_value
   
-        const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
-        const R_A_hat_new = R_A_new.clone().normalize()
-        const new_flux = v_1.clone().cross(R_A_hat_new).dot(wire2.surface_vec) / Math.pow(R_A_new.length(), 2) * wire2.area_value
-  
-        wire2.voltage += -(new_flux - old_flux) / dt
+        wire2.voltage += flux * wire1.current_change
       }
     }
   }
+
+  // TODO there is some calculations problem because the situation is symetric an dmine theory still tells there is voltage
 
   // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
   wire2.voltage /= parts_2
 
   // scale for better display
-  wire2.voltage   *= 267.079_464_85
+  if (mine_force) {
+    wire2.voltage *=-18_464_778.5854 * 3
+  } else {
+    wire2.voltage *= 2.67_079_464_85 * 3
+  }
 
   // update voltage
   if (!mine_force && !wire2.areas) {
