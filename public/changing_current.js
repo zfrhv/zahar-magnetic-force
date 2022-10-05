@@ -3,8 +3,9 @@ import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Path3 } from './tools/threejs/path3.js'
-// TODO calculate when current changes
+
 const pi = Math.PI
+const err_num = 0.00001
 
 function vec_to_euler(vector) {
   return new THREE.Euler(0,0,0,'XYZ').setFromRotationMatrix(new THREE.Matrix4().lookAt(vector, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)))
@@ -13,7 +14,7 @@ function vec_to_euler(vector) {
 window.changing_current_circles_init = function (toolbar, scene) {
   const points = []
   const radius = 150
-  for ( let degree = 0; degree < 2*Math.PI+0.00001; degree += 2*Math.PI/30 ) {
+  for ( let degree = 0; degree < 2*Math.PI+err_num; degree += 2*Math.PI/30 ) {
     points.push(Math.sin(degree)*radius, Math.cos(degree)*radius, 0)
   }
   const path = new Path3(points)
@@ -29,7 +30,7 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  const total_parts = 1000
+  const total_parts = 2000
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
@@ -147,7 +148,7 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
   is_2d: if (path2.points.length >= 9) {
     const main_point = new THREE.Vector3(path2.points[0], path2.points[1], path2.points[2])
     // make sure that the circiot is closed
-    if (new THREE.Vector3(path2.points[path2.points.length-3], path2.points[path2.points.length-2], path2.points[path2.points.length-1]).sub(main_point).length() > 0.00001) {
+    if (new THREE.Vector3(path2.points[path2.points.length-3], path2.points[path2.points.length-2], path2.points[path2.points.length-1]).sub(main_point).length() > err_num) {
       break is_2d
     }
     const new_x = new THREE.Vector3(path2.points[3], path2.points[4], path2.points[5]).sub(main_point).normalize()
@@ -320,21 +321,21 @@ window.changing_current = function (toolbar, scene) {
   const parts_1 = wire1.points_vec.length-1
   const parts_2 = wire2.points_vec.length-1
 
-  const speeds_1 = []
-  for (let point_1 = 0; point_1 < parts_1; point_1++) {
-    speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1]).normalize())
+  const speeds_1 = [null]
+  for (let point_1 = 1; point_1 < parts_1; point_1++) {
+    speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
-  const speeds_2 = []
-  for (let point_2 = 0; point_2 < parts_2; point_2++) {
-    speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2]).normalize())
+  const speeds_2 = [null]
+  for (let point_2 = 1; point_2 < parts_2; point_2++) {
+    speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
-  for (let point_1 = 0; point_1 < parts_1; point_1++) {
+  for (let point_1 = 1; point_1 < parts_1; point_1++) {
 
     const relative_place_1 = wire1.points_vec[point_1]
     const v_1 = speeds_1[point_1]
     const absolute_place_1 = wire1.position.clone().add(relative_place_1)
 
-    for (let point_2 = 0; point_2 < parts_2; point_2++) {
+    for (let point_2 = 1; point_2 < parts_2; point_2++) {
 
       const relative_place_2 = wire2.points_vec[point_2]
       const v_2 = speeds_2[point_2]
@@ -346,12 +347,10 @@ window.changing_current = function (toolbar, scene) {
       if (mine_force) {
         // f = k q q /r^2
         // voltage = f*L
-        // const field_difference = R_hat.clone().multiplyScalar( ((point_1/parts_1-0.5)*2 * wire1.current_change) / (Math.pow(R.length(), 2)) )
-        const field_difference = R_hat.clone().multiplyScalar( 1 / Math.pow(R.length(), 2) )
+        const field_difference = R_hat.clone().multiplyScalar( ((point_1/parts_1-0.5)*2 * wire1.current_change) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
-        // const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
-        const field_difference_in_wire_direction = R_hat.clone().dot(v_2.clone().normalize())
-        const distance = wire2.length / parts_2
+        const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
+        const distance = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance
       }
@@ -370,14 +369,14 @@ window.changing_current = function (toolbar, scene) {
     }
   }
 
-  // TODO there is some calculations problem because the situation is symetric an dmine theory still tells there is voltage
-
   // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
-  wire2.voltage /= parts_1
+  wire2.voltage /= (parts_1-1)
 
+  // TODO it seems like the total voltage with this method is 0, because i increate the result by big amount, and then changing "parts" jumps the result. so its just the error.
+  // TODO new a new theory
   // scale for better display
   if (mine_force) {
-    wire2.voltage *=-18.464_778_5854 * 3
+    wire2.voltage *= 284_164.548 * 3
   } else {
     wire2.voltage *= 2.67_079_464_85 * 3
   }

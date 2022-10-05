@@ -5,6 +5,7 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Path3 } from './tools/threejs/path3.js'
 
 const pi = Math.PI
+const err_num = 0.00001
 
 function vec_to_euler(vector) {
   return new THREE.Euler(0,0,0,'XYZ').setFromRotationMatrix(new THREE.Matrix4().lookAt(vector, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)))
@@ -13,7 +14,7 @@ function vec_to_euler(vector) {
 window.calc_two_circles_init = function (toolbar, scene) {
   const points = []
   const radius = 150
-  for ( let degree = 0; degree < 2*Math.PI+0.00001; degree += 2*Math.PI/30 ) {
+  for ( let degree = 0; degree < 2*Math.PI+err_num; degree += 2*Math.PI/30 ) {
     points.push(Math.sin(degree)*radius, Math.cos(degree)*radius, 0)
   }
   const path = new Path3(points)
@@ -154,7 +155,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   is_2d: if (path2.points.length >= 9) {
     const main_point = new THREE.Vector3(path2.points[0], path2.points[1], path2.points[2])
     // make sure that the circiot is closed
-    if (new THREE.Vector3(path2.points[path2.points.length-3], path2.points[path2.points.length-2], path2.points[path2.points.length-1]).sub(main_point).length() > 0.00001) {
+    if (new THREE.Vector3(path2.points[path2.points.length-3], path2.points[path2.points.length-2], path2.points[path2.points.length-1]).sub(main_point).length() > err_num) {
       break is_2d
     }
     const new_x = new THREE.Vector3(path2.points[3], path2.points[4], path2.points[5]).sub(main_point).normalize()
@@ -391,21 +392,21 @@ window.calc_force = function (toolbar, scene) {
   const parts_1 = wire1.points_vec.length-1
   const parts_2 = wire2.points_vec.length-1
 
-  const speeds_1 = []
-  for (let point_1 = 0; point_1 < parts_1; point_1++) {
+  const speeds_1 = [null]
+  for (let point_1 = 1; point_1 < parts_1; point_1++) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1]).normalize())
   }
-  const speeds_2 = []
-  for (let point_2 = 0; point_2 < parts_2; point_2++) {
+  const speeds_2 = [null]
+  for (let point_2 = 1; point_2 < parts_2; point_2++) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2]).normalize())
   }
-  for (let point_1 = 0; point_1 < parts_1; point_1++) {
+  for (let point_1 = 1; point_1 < parts_1; point_1++) {
 
     const relative_place_1 = wire1.points_vec[point_1]
     const v_1 = speeds_1[point_1]
     const absolute_place_1 = wire1.position.clone().add(relative_place_1)
 
-    for (let point_2 = 0; point_2 < parts_2; point_2++) {
+    for (let point_2 = 1; point_2 < parts_2; point_2++) {
 
       const relative_place_2 = wire2.points_vec[point_2]
       const v_2 = speeds_2[point_2]
@@ -437,7 +438,7 @@ window.calc_force = function (toolbar, scene) {
         const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
-        const distance = wire2.length / parts_2
+        const distance = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance
       } else {
@@ -455,7 +456,7 @@ window.calc_force = function (toolbar, scene) {
 
     if (!mine_force && wire2.areas) {
       for (let i = 0; i < wire2.areas.length; i++) {
-        const dt = 0.00001
+        const dt = err_num
         const area_place = wire2.areas[i]
   
         const R_A_old = absolute_place_1.clone().sub(area_place)
@@ -472,11 +473,11 @@ window.calc_force = function (toolbar, scene) {
   }
 
   // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
-  F_1_T.divideScalar(parts_1 * parts_2)
-  F_2_T.divideScalar(parts_1 * parts_2)
-  F_1_rotating_T.divideScalar(parts_1 * parts_2)
-  F_2_rotating_T.divideScalar(parts_1 * parts_2)
-  wire2.voltage /= parts_1
+  F_1_T.divideScalar((parts_1-1) * (parts_2-1))
+  F_2_T.divideScalar((parts_1-1) * (parts_2-1))
+  F_1_rotating_T.divideScalar((parts_1-1) * (parts_2-1))
+  F_2_rotating_T.divideScalar((parts_1-1) * (parts_2-1))
+  wire2.voltage /= (parts_1-1)
 
   // scale for better display
   wire2.voltage   *= 267.079_464_85

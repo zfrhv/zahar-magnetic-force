@@ -1,3 +1,5 @@
+const err_num = 0.00001
+
 export class Path3 {
   constructor(points) { // points: Array of floats: [x,y,z, x,y,z, x,y,z...]
     this.type = 'Path3'
@@ -26,8 +28,8 @@ export class Path3 {
     const results = [this.points[0], this.points[1], this.points[2]]
     const stops_distance = 1/total_results * this.total_length
 
-    for(let next_stop = stops_distance; next_stop <= this.total_length; next_stop += stops_distance) {
-      while(length < next_stop) {
+    for(let next_stop = stops_distance; next_stop <= this.total_length + err_num; next_stop += stops_distance) {
+      while(length + err_num < next_stop) {
         length += this.distanceBetween(point_index, point_index+3)
         point_index += 3
       }
