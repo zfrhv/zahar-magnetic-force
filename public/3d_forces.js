@@ -394,11 +394,11 @@ window.calc_force = function (toolbar, scene) {
 
   const speeds_1 = [null]
   for (let point_1 = 1; point_1 < parts_1; point_1++) {
-    speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1]).normalize())
+    speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
   const speeds_2 = [null]
   for (let point_2 = 1; point_2 < parts_2; point_2++) {
-    speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2]).normalize())
+    speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
   for (let point_1 = 1; point_1 < parts_1; point_1++) {
 
