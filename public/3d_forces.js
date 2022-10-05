@@ -476,7 +476,7 @@ window.calc_force = function (toolbar, scene) {
   F_2_T.divideScalar(parts_1 * parts_2)
   F_1_rotating_T.divideScalar(parts_1 * parts_2)
   F_2_rotating_T.divideScalar(parts_1 * parts_2)
-  wire2.voltage /= parts_2
+  wire2.voltage /= parts_1
 
   // scale for better display
   wire2.voltage   *= 267.079_464_85
