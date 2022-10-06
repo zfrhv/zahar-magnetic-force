@@ -345,14 +345,25 @@ window.changing_current = function (toolbar, scene) {
       const R_hat = R.clone().normalize()
 
       if (mine_force) {
-        // f = k q q /r^2
-        // voltage = f*L
-        const field_difference = R_hat.clone().multiplyScalar( ((point_1/parts_1-0.5)*2 * wire1.current_change) / (Math.pow(R.length(), 2)) )
+        // full "mine" force calculation
+        const v_1_n = v_1
+        const v_2_n = v_2
+        const v_1_p = new THREE.Vector3(0,0,0)
+        const v_2_p = new THREE.Vector3(0,0,0)
+
+        const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
+        const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+        const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
+        const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+
+        // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
+        // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
+        const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
-        wire2.voltage += field_difference_in_wire_direction * distance
+        wire2.voltage += field_difference_in_wire_direction * distance * (point_1 / (parts_1-1) - 0.5) * 2 * wire1.current_change
       }
     }
 
@@ -375,11 +386,7 @@ window.changing_current = function (toolbar, scene) {
   // TODO it seems like the total voltage with this method is 0, because i increate the result by big amount, and then changing "parts" jumps the result. so its just the error.
   // TODO new a new theory
   // scale for better display
-  if (mine_force) {
-    wire2.voltage *= 284_164.548 * 3
-  } else {
-    wire2.voltage *= 2.67_079_464_85 * 3
-  }
+  wire2.voltage *= 2.67_079_464_85 * 3
 
   // update voltage
   if (!mine_force && !wire2.areas) {
