@@ -346,10 +346,14 @@ window.changing_current = function (toolbar, scene) {
 
       if (mine_force) {
         // full "mine" force calculation
-        const v_1_n = v_1
+        const ratio = point_1 / (parts_1-1)
+        const v_1_n = v_1.multiplyScalar(Math.abs(ratio-0.5)*2 * wire1.current_change)
         const v_2_n = v_2
         const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
+
+        // TODO maybe change only the v? and not the q?
+        // i know it should matter, but maybe i miss something
 
         const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
@@ -363,7 +367,7 @@ window.changing_current = function (toolbar, scene) {
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
-        wire2.voltage += field_difference_in_wire_direction * distance * (point_1 / (parts_1-1) - 0.5) * 2 * wire1.current_change
+        wire2.voltage += field_difference_in_wire_direction * distance
       }
     }
 
