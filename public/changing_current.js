@@ -348,19 +348,26 @@ window.changing_current = function (toolbar, scene) {
         // full "mine" force calculation
         const ratio_1 = point_1 / (parts_1-1)
         const ratio_2 = point_2 / (parts_2-1)
-        // const v_1_n = v_1.multiplyScalar(Math.cos(ratio_1*10) * wire1.current_change)
-        const v_1_n = v_1
-        const v_2_n = v_2
-        const v_1_p = v_1*wire1.current_change
+        const v_1_n = v_1.clone().multiplyScalar(Math.cos(ratio_1*pi*2) * wire1.current_change)
+        const v_2_n = v_2.clone().multiplyScalar(Math.cos(ratio_2*pi*2+pi/2))
+        const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
+
+        const a_1_n = v_1.clone().multiplyScalar(wire1.current_change)
+        const a_2_n = new THREE.Vector3(0,0,0)
+        const a_1_p = new THREE.Vector3(0,0,0)
+        const a_2_p = new THREE.Vector3(0,0,0)
 
         // TODO maybe change only the v? and not the q?
         // i know it should matter, but maybe i miss something
 
-        const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-        const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+        // const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
+        // const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+        // const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
+        // const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+
+        const top_p_n = 0
+        const top_n_n = a_1_n.clone().dot(R_hat)
 
         // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
         // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
@@ -392,7 +399,7 @@ window.changing_current = function (toolbar, scene) {
   // TODO it seems like the total voltage with this method is 0, because i increate the result by big amount, and then changing "parts" jumps the result. so its just the error.
   // TODO new a new theory
   // scale for better display
-  wire2.voltage *= 2.67_079_464_85 * 3
+  wire2.voltage *= 2.67_079_464_85 * 3 * 100
 
   // update voltage
   if (!mine_force && !wire2.areas) {
