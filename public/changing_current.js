@@ -346,10 +346,12 @@ window.changing_current = function (toolbar, scene) {
 
       if (mine_force) {
         // full "mine" force calculation
-        const ratio = point_1 / (parts_1-1)
-        const v_1_n = v_1.multiplyScalar(Math.abs(ratio-0.5)*2 * wire1.current_change)
+        const ratio_1 = point_1 / (parts_1-1)
+        const ratio_2 = point_2 / (parts_2-1)
+        // const v_1_n = v_1.multiplyScalar(Math.cos(ratio_1*10) * wire1.current_change)
+        const v_1_n = v_1
         const v_2_n = v_2
-        const v_1_p = new THREE.Vector3(0,0,0)
+        const v_1_p = v_1*wire1.current_change
         const v_2_p = new THREE.Vector3(0,0,0)
 
         // TODO maybe change only the v? and not the q?
