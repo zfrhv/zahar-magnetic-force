@@ -396,10 +396,12 @@ window.changing_current = function (toolbar, scene) {
   // add dl (doing f/(parts*parts) is the same as doing f*Q1*dl*Q2*dl)
   wire2.voltage /= (parts_1-1)
 
-  // TODO it seems like the total voltage with this method is 0, because i increate the result by big amount, and then changing "parts" jumps the result. so its just the error.
-  // TODO new a new theory
   // scale for better display
-  wire2.voltage *= 2.67_079_464_85 * 3 * 100
+  if (mine_force) {
+    wire2.voltage *= 2.67_079_464_85 * 3 * 1000 /2 / 1.127
+  } else {
+    wire2.voltage *= 2.67_079_464_85 * 3
+  }
 
   // update voltage
   if (!mine_force && !wire2.areas) {
