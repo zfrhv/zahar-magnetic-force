@@ -143,6 +143,7 @@ body > * {
 
 summary {
   color: #fc9a88;
+  cursor: pointer;
 }
 
 mjx-container {
