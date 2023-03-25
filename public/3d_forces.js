@@ -7,15 +7,17 @@ import { Path3 } from './tools/threejs/path3.js'
 const pi = Math.PI
 const err_num = 0.00001
 
+const wires_distance_from_center = 200;
+const wires_radius = 150
+
 function vec_to_euler(vector) {
   return new THREE.Euler(0,0,0,'XYZ').setFromRotationMatrix(new THREE.Matrix4().lookAt(vector, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)))
 }
 
 window.calc_two_circles_init = function (toolbar, scene) {
   const points = []
-  const radius = 150
   for ( let degree = 0; degree < 2*Math.PI+err_num; degree += 2*Math.PI/30 ) {
-    points.push(Math.sin(degree)*radius, Math.cos(degree)*radius, 0)
+    points.push(Math.sin(degree)*wires_radius, Math.cos(degree)*wires_radius, 0)
   }
   const path = new Path3(points)
 
@@ -85,7 +87,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // transform the whole shape
   wire1.rotation.x = pi/2
-  wire1.position.y = 200
+  wire1.position.y = wires_distance_from_center
   scene.add(wire1)
 
   // draw shapes WIRE2
@@ -124,7 +126,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // transform the whole shape
   wire2.rotation.x = pi/2
-  wire2.position.y = -200
+  wire2.position.y = -wires_distance_from_center
   scene.add(wire2)
 
   // voltage text
@@ -479,6 +481,12 @@ window.calc_force = function (toolbar, scene) {
   F_2_rotating_T.divideScalar((parts_1-1) * (parts_2-1))
   wire2.voltage /= (parts_1-1)
 
+  // the actual force
+  // const equation_constant = Math.pow(10, -7)
+  // const actual_F2_force = F_2_T.clone().multiplyScalar(equation_constant)
+  // const actual_F1_rotation_force = F_1_T.clone().multiplyScalar(equation_constant)
+  // console.log(actual_F1_rotation_force)
+  
   // scale for better display
   wire2.voltage   *= 267.079_464_85
   const foce_const = 267_079_464.85
