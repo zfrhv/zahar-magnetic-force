@@ -30,7 +30,7 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  const total_parts = 2000
+  const total_parts = 1000
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
@@ -346,28 +346,25 @@ window.changing_current = function (toolbar, scene) {
 
       if (mine_force) {
         // full "mine" force calculation
-        const ratio_1 = point_1 / (parts_1-1)
-        const ratio_2 = point_2 / (parts_2-1)
-        const v_1_n = v_1.clone().multiplyScalar(Math.cos(ratio_1*pi*2) * wire1.current_change)
-        const v_2_n = v_2.clone().multiplyScalar(Math.cos(ratio_2*pi*2+pi/2))
+        // const ratio_1 = point_1 / (parts_1-1)
+        // const ratio_2 = point_2 / (parts_2-1)
+        // const v_1_n = v_1.clone().multiplyScalar(Math.cos(ratio_1*pi*2) * wire1.current_change)
+        // const v_2_n = v_2.clone().multiplyScalar(Math.cos(ratio_2*pi*2+pi/2))
+        // const v_1_p = new THREE.Vector3(0,0,0)
+        // const v_2_p = new THREE.Vector3(0,0,0)
+
+        const v_1_n = v_1.clone().multiplyScalar(((point_1-(parts_1-1)/2) / ((parts_1-1)/2)) * wire1.current_change)
+        const v_2_n = new THREE.Vector3(0,0,0)
         const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
+        // NOTE: as the current changes (at the start of the wire current is bigger than next part cuz its growing), the speed changes and also the charge changes.
+        // so i cant simply do "wire2.voltage /= (parts_1-1)" later.
 
-        const a_1_n = v_1.clone().multiplyScalar(wire1.current_change)
-        const a_2_n = new THREE.Vector3(0,0,0)
-        const a_1_p = new THREE.Vector3(0,0,0)
-        const a_2_p = new THREE.Vector3(0,0,0)
 
-        // TODO maybe change only the v? and not the q?
-        // i know it should matter, but maybe i miss something
-
-        // const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        // const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-        // const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        // const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-
-        const top_p_n = 0
-        const top_n_n = a_1_n.clone().dot(R_hat)
+        const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
+        const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+        const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
+        const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
 
         // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
         // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
@@ -398,7 +395,8 @@ window.changing_current = function (toolbar, scene) {
 
   // scale for better display
   if (mine_force) {
-    wire2.voltage *= 2.67_079_464_85 * 3 * 1000 /2 / 1.127
+    // wire2.voltage *= 2.67_079_464_85 * 3 * 1000 /2 / 1.127
+    wire2.voltage *= 2.67_079_464_85 * 3
   } else {
     wire2.voltage *= 2.67_079_464_85 * 3
   }
