@@ -30,7 +30,7 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  const total_parts = 1000
+  const total_parts = 200
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
@@ -353,9 +353,13 @@ window.changing_current = function (toolbar, scene) {
         // const v_1_p = new THREE.Vector3(0,0,0)
         // const v_2_p = new THREE.Vector3(0,0,0)
 
-        const speed_near_edge = 1.5
+        // mine 1
+        // const v_1_n = v_1
 
-        const v_1_n = v_1.clone().multiplyScalar(Math.pow((point_1 / (parts_1-1)-0.5)*2,2)*speed_near_edge)
+        // mine 2
+        const v_1_n = v_1
+
+
         const v_2_n = new THREE.Vector3(0,0,0)
         const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
@@ -375,12 +379,12 @@ window.changing_current = function (toolbar, scene) {
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / (parts_2-1)
 
-        const charge_on_left = 1.5
-        const charge_on_right = 2-charge_on_left
-        const current_charge_influence = point_1 / (parts_1-1) * (charge_on_left-charge_on_right) + charge_on_right
-
+        // mine 1
         // voltage = how much energy it takes to move a 1 charge from point A to point B
-        wire2.voltage += field_difference_in_wire_direction * distance * current_charge_influence
+        // wire2.voltage += field_difference_in_wire_direction * distance
+
+        // mine 2
+        wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1)
       }
     }
 
@@ -415,10 +419,7 @@ window.changing_current = function (toolbar, scene) {
       arrow.setLength(1, 0, 0)
     })
   } else {
-    console.log("degree1 = " + wire1.rotation.x)
-    console.log("degree2 = " + wire1.rotation.y)
-    console.log("degree3 = " + wire2.rotation.y)
-    console.log("voltage = " + wire2.voltage)
+    console.log("degree3 = " + wire1.rotation.x + "\ndegree1 = " + wire1.rotation.y + "\ndegree2 = " + wire2.rotation.y + "\nvoltage = " + wire2.voltage)
     voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
     // keep the arrow with easy to see size
     const size = Math.sqrt(Math.abs(wire2.voltage))*Math.sign(wire2.voltage)
