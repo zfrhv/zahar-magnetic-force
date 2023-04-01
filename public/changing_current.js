@@ -415,6 +415,10 @@ window.changing_current = function (toolbar, scene) {
       arrow.setLength(1, 0, 0)
     })
   } else {
+    console.log("degree1 = " + wire1.rotation.x)
+    console.log("degree2 = " + wire1.rotation.y)
+    console.log("degree3 = " + wire2.rotation.y)
+    console.log("voltage = " + wire2.voltage)
     voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
     // keep the arrow with easy to see size
     const size = Math.sqrt(Math.abs(wire2.voltage))*Math.sign(wire2.voltage)
