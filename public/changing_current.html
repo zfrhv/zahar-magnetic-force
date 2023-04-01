@@ -51,5 +51,27 @@
   </script>
   <script type="module" src="changing_current.js"></script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
+  <!-- <script>
+    window.addEventListener("load", async () => {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const toolbar = document.getElementById("changing_current_circles").children[1]
+      toolbar.children[1].children[3].children[0].value = 100
+      toolbar.children[1].children[3].children[0].onchange()
+      for (let a = 0; a < 25; a++) {
+        for (let b = 0; b < 25; b++) {
+          for (let c = 0; c < 25; c++) {
+            toolbar.children[1].children[0].children[0].value = a
+            toolbar.children[1].children[0].children[0].onchange()
+            toolbar.children[1].children[1].children[0].value = b
+            toolbar.children[1].children[1].children[0].onchange()
+            toolbar.children[1].children[2].children[0].value = c
+            toolbar.children[1].children[2].children[0].onchange()
+            toolbar.children[0].children[0].click()
+          }
+        }
+      }
+
+    });
+  </script> -->
 </body>
 </html>
