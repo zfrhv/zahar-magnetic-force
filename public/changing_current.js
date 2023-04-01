@@ -353,7 +353,9 @@ window.changing_current = function (toolbar, scene) {
         // const v_1_p = new THREE.Vector3(0,0,0)
         // const v_2_p = new THREE.Vector3(0,0,0)
 
-        const v_1_n = v_1.clone().multiplyScalar(((point_1-(parts_1-1)/2) / ((parts_1-1)/2)) * wire1.current_change)
+        const speed_near_edge = 1.5
+
+        const v_1_n = v_1.clone().multiplyScalar(Math.pow((point_1 / (parts_1-1)-0.5)*2,2)*speed_near_edge)
         const v_2_n = new THREE.Vector3(0,0,0)
         const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
@@ -372,8 +374,13 @@ window.changing_current = function (toolbar, scene) {
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / (parts_2-1)
+
+        const charge_on_left = 1.5
+        const charge_on_right = 2-charge_on_left
+        const current_charge_influence = point_1 / (parts_1-1) * (charge_on_left-charge_on_right) + charge_on_right
+
         // voltage = how much energy it takes to move a 1 charge from point A to point B
-        wire2.voltage += field_difference_in_wire_direction * distance
+        wire2.voltage += field_difference_in_wire_direction * distance * current_charge_influence
       }
     }
 
