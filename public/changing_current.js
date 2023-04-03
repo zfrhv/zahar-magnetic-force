@@ -30,7 +30,7 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  const total_parts = 300
+  const total_parts = 200
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
@@ -354,11 +354,7 @@ window.changing_current = function (toolbar, scene) {
         // const v_2_p = new THREE.Vector3(0,0,0)
 
         // mine 1
-        // const v_1_n = v_1
-
-        // mine 2
         const v_1_n = v_1
-
 
         const v_2_n = new THREE.Vector3(0,0,0)
         const v_1_p = new THREE.Vector3(0,0,0)
@@ -384,7 +380,16 @@ window.changing_current = function (toolbar, scene) {
         // wire2.voltage += field_difference_in_wire_direction * distance
 
         // mine 2 - totally no. it seems like even on method 1 i get max 0.01, and it should be 1. so it looks like the results that im looking at are just not even the value, its the error.
-        wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1)
+        // wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1)
+
+        // mine 3
+        // wire2.voltage += field_difference_in_wire_direction * distance * Math.cos(point_1 / (parts_1-1)*2*pi)
+
+        // mine 4
+        // wire2.voltage += field_difference_in_wire_direction * distance * Math.sin(point_1 / (parts_1-1)*2*pi)
+
+        // mine 5 - still the max points are way too low. so the changing current field should somehow really amplify things up.
+        wire2.voltage += field_difference_in_wire_direction * distance * ((point_1 / (parts_1-1)) > 0.5 ? 0 : 1)
       }
     }
 

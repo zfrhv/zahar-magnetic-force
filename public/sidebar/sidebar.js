@@ -39,5 +39,7 @@ document.getElementById("close_sidebar").addEventListener('click', function () {
 
 // hightlight current page
 const selected = sidebar.querySelector('[href="'+window.location.pathname.match(/[^/]+$/g)[0]+'"]')
-selected.style.backgroundColor = "#383636"
-selected.style.color = "#d6d5d2"
+if (selected) {
+  selected.style.backgroundColor = "#383636"
+  selected.style.color = "#d6d5d2"
+}
