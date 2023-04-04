@@ -354,6 +354,18 @@ window.changing_current = function (toolbar, scene) {
         // const v_2_p = new THREE.Vector3(0,0,0)
 
         // mine 1
+        // const v_1_n = v_1
+        
+        // mine 6
+        // const v_1_n = v_1.clone().multiplyScalar(point_1 / (parts_1-1))
+
+        // mine 7
+        // const v_1_n = v_1.clone().multiplyScalar(Math.cos(point_1 / (parts_1-1)*2*pi))
+
+        // mine 8
+        // const v_1_n = v_1.clone().multiplyScalar(((point_1 / (parts_1-1)) > 0.5 ? 0 : 1))
+
+        // mine 9
         const v_1_n = v_1
 
         const v_2_n = new THREE.Vector3(0,0,0)
@@ -389,7 +401,13 @@ window.changing_current = function (toolbar, scene) {
         // wire2.voltage += field_difference_in_wire_direction * distance * Math.sin(point_1 / (parts_1-1)*2*pi)
 
         // mine 5 - still the max points are way too low. so the changing current field should somehow really amplify things up.
-        wire2.voltage += field_difference_in_wire_direction * distance * ((point_1 / (parts_1-1)) > 0.5 ? 0 : 1)
+        // wire2.voltage += field_difference_in_wire_direction * distance * ((point_1 / (parts_1-1)) > 0.5 ? 0 : 1)
+
+        // mine 6
+        // wire2.voltage += field_difference_in_wire_direction * distance
+
+        // mine 9
+        wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1) * wire1.current_change
       }
     }
 
