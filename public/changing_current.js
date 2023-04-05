@@ -353,6 +353,12 @@ window.changing_current = function (toolbar, scene) {
         // const v_1_p = new THREE.Vector3(0,0,0)
         // const v_2_p = new THREE.Vector3(0,0,0)
 
+        // wire_length / speed_it_takes_for_voltage_to_travel = time it takes to travel from one wire end to other = wire_travel_time
+        const speed_voltage_travels = 1
+        const voltage_travel_time = wire1.length / speed_voltage_travels
+        // wire_travel_time • changing_current = voltage difference from one wire end to other
+        const current_difference = voltage_travel_time * wire1.current_change
+
         // mine 1
         // const v_1_n = v_1
         
@@ -366,6 +372,12 @@ window.changing_current = function (toolbar, scene) {
         // const v_1_n = v_1.clone().multiplyScalar(((point_1 / (parts_1-1)) > 0.5 ? 0 : 1))
 
         // mine 9
+        // const v_1_n = v_1
+
+        // mine 10
+        // const v_1_n = v_1.clone().multiplyScalar(point_1 / (parts_1-1) * current_difference)
+
+        // mine 11
         const v_1_n = v_1
 
         const v_2_n = new THREE.Vector3(0,0,0)
@@ -407,7 +419,13 @@ window.changing_current = function (toolbar, scene) {
         // wire2.voltage += field_difference_in_wire_direction * distance
 
         // mine 9
-        wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1) * wire1.current_change
+        // wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1) * wire1.current_change
+
+        // mine 10
+        // wire2.voltage += field_difference_in_wire_direction * distance
+
+        // mine 11
+        wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1) * current_difference
       }
     }
 
