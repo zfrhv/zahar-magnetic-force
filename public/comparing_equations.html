@@ -67,77 +67,73 @@
       <br/>
       <br/>
       <canvas-video id="calc_custom_paths" name="calc_custom_paths" type="calculate" style="position: relative;"></canvas-video>
-      <div class="markdown" id="examples">
+      <div class="markdown" id="faradays_paradox">
         for faradays law paradox  
         try putting:
-        ```
-        0.00, 150.00,0.00
-        46.10, 141.88,0.00
-        88.17, 121.35,0.00
-        120.69, 87.68,0.00
-        142.66, 46.35,0.00
-        149.18, -0.00,0.00
-        142.66, -46.35,0.00
-        120.69, -87.68,0.00
-        88.17, -121.35,0.00
-        46.10, -141.88,0.00
-        -0.00, -150.00,0.00
-        -46.10, -141.88,0.00
-        -88.17, -121.35,0.00
-        -120.69, -87.68,0.00
-        -142.66, -46.35,0.00
-        -149.18, 0.00,0.00
-        -142.66, 46.35,0.00
-        -120.69, 87.68,0.00
-        -88.17, 121.35,0.00
-        -46.10, 141.88,0.00
-        0.00, 150.00,0.00
-        ```
-        and
-        ```
-        -10 0 -400
-        10 0 -400
-        ```
+      </div>
+      <textarea class="faradays_paradox" rows="3">
+0.00, 150.00,0.00
+46.10, 141.88,0.00
+88.17, 121.35,0.00
+120.69, 87.68,0.00
+142.66, 46.35,0.00
+149.18, -0.00,0.00
+142.66, -46.35,0.00
+120.69, -87.68,0.00
+88.17, -121.35,0.00
+46.10, -141.88,0.00
+-0.00, -150.00,0.00
+-46.10, -141.88,0.00
+-88.17, -121.35,0.00
+-120.69, -87.68,0.00
+-142.66, -46.35,0.00
+-149.18, 0.00,0.00
+-142.66, 46.35,0.00
+-120.69, 87.68,0.00
+-88.17, 121.35,0.00
+-46.10, 141.88,0.00
+0.00, 150.00,0.00
+      </textarea>
+      <textarea class="faradays_paradox" rows="3">
+-10 0 -400
+10 0 -400
+      </textarea>
+      <div class="markdown" id="examples">
         on the wires paths
 
-        toggle to my equation, and change V_y (you can try both positive and negative).
-
-        <button onclick="document.getElementById('path1').innerHTML = '0.00, 150.00,0.00\n46.10, 141.88,0.00\n88.17, 121.35,0.00\n120.69, 87.68,0.00\n142.66, 46.35,0.00\n149.18, -0.00,0.00\n142.66, -46.35,0.00\n120.69, -87.68,0.00\n88.17, -121.35,0.00\n46.10, -141.88,0.00\n-0.00, -150.00,0.00\n-46.10, -141.88,0.00\n-88.17, -121.35,0.00\n-120.69, -87.68,0.00\n-142.66, -46.35,0.00\n-149.18, 0.00,0.00\n-142.66, 46.35,0.00\n-120.69, 87.68,0.00\n-88.17, 121.35,0.00\n-46.10, 141.88,0.00\n0.00, 150.00,0.00'; document.getElementById('path2').innerHTML = '-10 0 -400\n10 0 -400'; document.getElementById('path1').dispatchEvent(new Event('input'))">Check</button>
-
-        <!-- TODO instead of harcoded inserting text, make general function that reads and inserts
-        also add this:
-        toolbar.children[1].children[0].children[0].value = a
-        toolbar.children[1].children[0].children[0].onchange()
-        -->
-
-        you sould also try putting:
-        ```
-        0 0 0
-        0 0 1
-        ```
-        and
-        ```
-        0 0 0
-        1 0 0
-        ```
-
-        <button onclick="document.getElementById('path1').innerHTML = '0 0 0\n0 0 1'; document.getElementById('path2').innerHTML = '0 0 0\n1 0 0'; document.getElementById('path1').dispatchEvent(new Event('input'))">Check</button>
-
-        also check out the volate when the wires are:
-        ```
-        500 0 0
-        -500 0 0
-        ```
-        and
-        ```
-        500 0 0
-        -500 0 0
-        ```
-        and V_z has some speed
-
-        <button onclick="document.getElementById('path1').innerHTML = '500 0 0\n-500 0 0'; document.getElementById('path2').innerHTML = '500 0 0\n-500 0 0'; document.getElementById('path1').dispatchEvent(new Event('input'))">Check</button>
-
+        toggle on for my equation, and change V_y (you can try both positive and negative).
       </div>
+      <button onclick="window.apply_paths(...document.getElementsByClassName('faradays_paradox')); new Promise(r => setTimeout(r, 100)).then(() => {const toolbar = document.getElementById('calc_custom_paths').children[1]; toolbar.getElementsByClassName('force_type')[0].checked = true; const speed = toolbar.children[1].children[4].children[0]; speed.value = 100; speed.onchange(); document.getElementById('calc_custom_paths').scrollIntoView(); toolbar.children[0].children[0].click()})">Check</button>
+
+      <div class="markdown" id="example1">
+        you sould also try putting:
+      </div>
+      <textarea class="example1" rows="3">
+0 0 0
+0 0 1
+      </textarea>
+      <textarea class="example1" rows="3">
+0 0 0
+1 0 0
+      </textarea>
+      <button onclick="window.apply_paths(...document.getElementsByClassName('example1')); new Promise(r => setTimeout(r, 100)).then(() => {const toolbar = document.getElementById('calc_custom_paths').children[1]; toolbar.getElementsByClassName('force_type')[0].checked = true; document.getElementById('calc_custom_paths').scrollIntoView(); toolbar.children[0].children[0].click()})">Check</button>
+
+
+      <div class="markdown" id="example2">
+        also check out the volate when the wires are:
+      </div>
+      <textarea class="example2" rows="3">
+0 0 0
+0 0 1
+      </textarea>
+      <textarea class="example2" rows="3">
+0 0 0
+1 0 0
+      </textarea>
+      <div class="markdown">
+        and V_z has some speed
+      </div>
+      <button onclick="window.apply_paths(...document.getElementsByClassName('example2')); new Promise(r => setTimeout(r, 100)).then(() => {const toolbar = document.getElementById('calc_custom_paths').children[1]; toolbar.getElementsByClassName('force_type')[0].checked = true; const speed = toolbar.children[1].children[5].children[0]; speed.value = 100; speed.onchange(); document.getElementById('calc_custom_paths').scrollIntoView(); toolbar.children[0].children[0].click()})">Check</button>
     </article>
   </div>
 
@@ -165,19 +161,23 @@
       new Promise(r => setTimeout(r, 3000)).then(function() {
         modfying.pop()
         if (modfying.length == 0) {
-          const arr1 = JSON.parse("[" + input1.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]")
-          const arr2 = JSON.parse("[" + input2.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]")
-
-          if (arr1.length % 3 == 0 && arr2.length % 3 == 0 && arr1.length >= 6 && arr2.length >= 6 && arr1.every(num => typeof num === 'number') && arr2.every(num => typeof num === 'number')) {
-            path1.setPoints(arr1)
-            path2.setPoints(arr2)
-
-            const old_canvas = document.getElementById("calc_custom_paths")
-            old_canvas.parentNode.replaceChild(calc_custom_paths, old_canvas)
-            old_canvas.replace_animation(calc_custom_paths)
-          }
+          apply_paths(input1, input2)
         }
       })
+    }
+
+    window.apply_paths = function apply_paths(input1, input2) {
+      const arr1 = JSON.parse("[" + input1.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]")
+      const arr2 = JSON.parse("[" + input2.value.replace(/\n| /g, ",").replace(/[,]+/g, ",").replace(/^,|,$/g, "") + "]")
+
+      if (arr1.length % 3 == 0 && arr2.length % 3 == 0 && arr1.length >= 6 && arr2.length >= 6 && arr1.every(num => typeof num === 'number') && arr2.every(num => typeof num === 'number')) {
+        path1.setPoints(arr1)
+        path2.setPoints(arr2)
+
+        const old_canvas = document.getElementById("calc_custom_paths")
+        old_canvas.parentNode.replaceChild(calc_custom_paths, old_canvas)
+        old_canvas.replace_animation(calc_custom_paths)
+      }
     }
 
     input1.addEventListener('input', update_calc)
