@@ -102,11 +102,13 @@
 
         toggle to my equation, and change V_y (you can try both positive and negative).
 
-        <button onclick="document.getElementById('path1').innerHTML = '0.00, 150.00,0.00\n46.10, 141.88,0.00\n88.17, 121.35,0.00\n120.69, 87.68,0.00\n142.66, 46.35,0.00\n149.18, -0.00,0.00\n142.66, -46.35,0.00\n120.69, -87.68,0.00\n88.17, -121.35,0.00\n46.10, -141.88,0.00\n-0.00, -150.00,0.00\n-46.10, -141.88,0.00\n-88.17, -121.35,0.00\n-120.69, -87.68,0.00\n-142.66, -46.35,0.00\n-149.18, 0.00,0.00\n-142.66, 46.35,0.00\n-120.69, 87.68,0.00\n-88.17, 121.35,0.00\n-46.10, 141.88,0.00\n0.00, 150.00,0.00'; document.getElementById('path2').innerHTML = '-10 0 -400\n10 0 -400'; document.getElementById('path1').onchange()">Check</button>
+        <button onclick="document.getElementById('path1').innerHTML = '0.00, 150.00,0.00\n46.10, 141.88,0.00\n88.17, 121.35,0.00\n120.69, 87.68,0.00\n142.66, 46.35,0.00\n149.18, -0.00,0.00\n142.66, -46.35,0.00\n120.69, -87.68,0.00\n88.17, -121.35,0.00\n46.10, -141.88,0.00\n-0.00, -150.00,0.00\n-46.10, -141.88,0.00\n-88.17, -121.35,0.00\n-120.69, -87.68,0.00\n-142.66, -46.35,0.00\n-149.18, 0.00,0.00\n-142.66, 46.35,0.00\n-120.69, 87.68,0.00\n-88.17, 121.35,0.00\n-46.10, 141.88,0.00\n0.00, 150.00,0.00'; document.getElementById('path2').innerHTML = '-10 0 -400\n10 0 -400'; document.getElementById('path1').dispatchEvent(new Event('input'))">Check</button>
 
-
+        <-- TODO instead of harcoded inserting text, make general function that reads and inserts
+        also add this:
         toolbar.children[1].children[0].children[0].value = a
         toolbar.children[1].children[0].children[0].onchange()
+        -->
 
         you sould also try putting:
         ```
