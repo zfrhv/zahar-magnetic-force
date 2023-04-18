@@ -287,9 +287,17 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   toggle_force.classList.add("switch");
   toolbar.children[0].append(toggle_force);
 
+  const toggle_force_text = document.createElement('div');
+  toggle_force_text.innerHTML = "New method";
+  toggle_force_text.style.textAlign = "center";
+  toggle_force_text.style.fontWeight = "bold";
+  toggle_force_text.style.fontSize = "120%"
+  toolbar.children[0].append(toggle_force_text);
+
   const input = document.createElement('input');
   input.classList.add("force_type");
   input.type = "checkbox";
+  input.checked = true;
   toggle_force.append(input);
 
   const span = document.createElement('span');
@@ -320,15 +328,15 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   }
 
   const inputs = {
-    "R_1": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
-    "R_2": function () { wire1.rotation.y = this.value/100*pi*2 },
-    "R_3": function () { wire2.rotation.y = this.value/100*pi*2 },
-    "V_x": function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
-    "V_y": function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
-    "V_z": function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
+    "G_R_X": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
+    "G_R_Y": function () { wire1.rotation.y = this.value/100*pi*2 },
+    "B_R_Y": function () { wire2.rotation.y = this.value/100*pi*2 },
+    "G_V_X": function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
+    "G_V_Y": function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
+    "G_V_Z": function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
   }
   const height = slidebars.offsetHeight / (Object.keys(inputs).length);
-  slidebars.style.fontSize = height*0.8 + "px";
+  slidebars.style.fontSize = height*0.6 + "px";
   for(const name in inputs) {
     const part = document.createElement('div');
     part.innerText = name + ": ";
@@ -336,7 +344,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
     const slidebar = document.createElement('input');
     slidebar.type = 'range';
-    slidebar.value = /^V_.$/.test(name) ? 50 : 0;
+    slidebar.value = /^G_V_.$/.test(name) ? 50 : 0;
     slidebar.min = 0;
     slidebar.max = 100;
     slidebar.style.width = "60%";
