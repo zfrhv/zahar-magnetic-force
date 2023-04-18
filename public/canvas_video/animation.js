@@ -92,7 +92,7 @@ async function calculate(looping_animation, animation_main) {
 
   const calculate_button = document.createElement('button');
   calculate_button.innerHTML = calculator_svg;
-  calculate_button.style.height = "60%";
+  calculate_button.style.height = "50%";
   calculate_button.style.width = "100%";
   calculate_button.onclick = function () {
     window[looping_animation.getAttribute("function") ? looping_animation.getAttribute("function") : looping_animation.getAttribute("name")](toolbar, scene);
