@@ -291,7 +291,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   toggle_force_text.innerHTML = "New method";
   toggle_force_text.style.textAlign = "center";
   toggle_force_text.style.fontWeight = "bold";
-  toggle_force_text.style.fontSize = toggle_force.offsetWidth/4 + "px";
+  toggle_force_text.style.fontSize = toggle_force.offsetWidth/3 + "px";
   toolbar.children[0].append(toggle_force_text);
 
   const input = document.createElement('input');
