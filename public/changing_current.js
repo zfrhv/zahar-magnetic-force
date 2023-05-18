@@ -359,73 +359,27 @@ window.changing_current = function (toolbar, scene) {
         // wire_travel_time • changing_current = voltage difference from one wire end to other
         const current_difference = voltage_travel_time * wire1.current_change
 
-        // mine 1
-        // const v_1_n = v_1
-        
-        // mine 6
-        // const v_1_n = v_1.clone().multiplyScalar(point_1 / (parts_1-1))
+        const a_1_n = v_1.clone().normalize().multiplyScalar(current_difference)
 
-        // mine 7
-        // const v_1_n = v_1.clone().multiplyScalar(Math.cos(point_1 / (parts_1-1)*2*pi))
+        const a_2_n = new THREE.Vector3(0,0,0)
+        const a_1_p = new THREE.Vector3(0,0,0)
+        const a_2_p = new THREE.Vector3(0,0,0)
 
-        // mine 8
-        // const v_1_n = v_1.clone().multiplyScalar(((point_1 / (parts_1-1)) > 0.5 ? 0 : 1))
-
-        // mine 9
-        // const v_1_n = v_1
-
-        // mine 10
-        // const v_1_n = v_1.clone().multiplyScalar(point_1 / (parts_1-1) * current_difference)
-
-        // mine 11
-        const v_1_n = v_1
-
-        const v_2_n = new THREE.Vector3(0,0,0)
-        const v_1_p = new THREE.Vector3(0,0,0)
-        const v_2_p = new THREE.Vector3(0,0,0)
         // NOTE: as the current changes (at the start of the wire current is bigger than next part cuz its growing), the speed changes and also the charge changes.
         // so i cant simply do "wire2.voltage /= (parts_1-1)" later.
 
-
-        const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-        const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+        // const top_n_n = a_1_n.clone().dot(R_hat)
+        const top_n_n = a_1_n.clone().cross(R_hat).length()
 
         // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
         // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
-        const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
+        const field_difference = R_hat.clone().multiplyScalar( top_n_n / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / (parts_2-1)
 
-        // mine 1
         // voltage = how much energy it takes to move a 1 charge from point A to point B
-        // wire2.voltage += field_difference_in_wire_direction * distance
-
-        // mine 2 - totally no. it seems like even on method 1 i get max 0.01, and it should be 1. so it looks like the results that im looking at are just not even the value, its the error.
-        // wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1)
-
-        // mine 3
-        // wire2.voltage += field_difference_in_wire_direction * distance * Math.cos(point_1 / (parts_1-1)*2*pi)
-
-        // mine 4
-        // wire2.voltage += field_difference_in_wire_direction * distance * Math.sin(point_1 / (parts_1-1)*2*pi)
-
-        // mine 5 - still the max points are way too low. so the changing current field should somehow really amplify things up.
-        // wire2.voltage += field_difference_in_wire_direction * distance * ((point_1 / (parts_1-1)) > 0.5 ? 0 : 1)
-
-        // mine 6
-        // wire2.voltage += field_difference_in_wire_direction * distance
-
-        // mine 9
-        // wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1) * wire1.current_change
-
-        // mine 10
-        // wire2.voltage += field_difference_in_wire_direction * distance
-
-        // mine 11
-        wire2.voltage += field_difference_in_wire_direction * distance * point_1 / (parts_1-1) * current_difference
+        wire2.voltage += field_difference_in_wire_direction * distance
       }
     }
 
