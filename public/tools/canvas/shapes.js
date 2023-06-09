@@ -77,6 +77,8 @@ function bracket(ctx, x_i, y_i, x_c, y_c, x_f, y_f) {
 function draw_particles(ctx, particle_1, particle_2, force_equation, force_coefficient = 1300, draw_radius = true) {
   const line_color = '#2a2a2c';
   const particle_radius = 35;
+  const particle1_color = "#3e8207"; // green
+  const particle2_color = "#6898cc"; // blue
 
   ctx.save();
   ctx.lineCap = 'round';
@@ -106,8 +108,8 @@ function draw_particles(ctx, particle_1, particle_2, force_equation, force_coeff
 
   // on particle_1 force direction
   ctx.save();
-  ctx.strokeStyle = 'pink';
-  ctx.fillStyle = 'pink';
+  ctx.strokeStyle = particle2_color;
+  ctx.fillStyle = particle2_color;
   draw_arrow_filled(ctx, 0, 0, forces.total_force.wire1.x * force_coefficient, forces.total_force.wire1.y * force_coefficient);
   ctx.restore();
 
@@ -116,7 +118,7 @@ function draw_particles(ctx, particle_1, particle_2, force_equation, force_coeff
 
 
   // particle_1 itself
-  ctx.fillStyle = 'green';
+  ctx.fillStyle = particle1_color;
   ctx.beginPath();
   ctx.arc(0, 0, particle_radius, 0, Math.PI * 2);
   ctx.fill();
@@ -128,8 +130,8 @@ function draw_particles(ctx, particle_1, particle_2, force_equation, force_coeff
 
   // on particle_2 force direction
   ctx.save();
-  ctx.strokeStyle = 'pink';
-  ctx.fillStyle = 'pink';
+  ctx.strokeStyle = particle1_color;
+  ctx.fillStyle = particle1_color;
   draw_arrow_filled(ctx, 0, 0, forces.total_force.wire2.x * force_coefficient, forces.total_force.wire2.y * force_coefficient);
   ctx.restore();
 
@@ -139,7 +141,7 @@ function draw_particles(ctx, particle_1, particle_2, force_equation, force_coeff
 
 
   // particle_2 itself
-  ctx.fillStyle = 'yellow';
+  ctx.fillStyle = particle2_color;
   ctx.beginPath();
   ctx.arc(0, 0, particle_radius, 0, Math.PI * 2);
   ctx.fill();
