@@ -90,6 +90,19 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire1.position.y = wires_distance_from_center
   scene.add(wire1)
 
+  // draw voltage flow
+  const voltages1 = new THREE.Group()
+  voltages1.name = "voltages1"
+  wire1.add(voltages1)
+  for (let arrow_counter = 1/(current_arrows-1)/2; arrow_counter < 1; arrow_counter+= 1/(current_arrows-1)) {
+    const index = Math.floor(arrow_counter*wire1.points_vec.length)
+    const position = wire1.points_vec[index].clone()
+    const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
+    position.add(direction.clone().multiplyScalar(20))
+    const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
+    voltages1.add(speed)
+  }
+
   // draw shapes WIRE2
   const wire2 = new THREE.Group()
   const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc })
@@ -133,23 +146,24 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const voltage = document.createElement('div');
   toolbar.parentElement.appendChild(voltage);
   voltage.style.position = 'absolute';
-  voltage.innerHTML = "(blue wire) Voltage: 0";
+  voltage.innerHTML = "Green wire voltage: 0\nBlue wire voltage: 0";
   voltage.style.top = (toolbar.parentElement.children[0].offsetHeight - voltage.offsetHeight)+'px';
   voltage.style.left = '5%';
   voltage.style.pointerEvents = 'none';
+  voltage.style.whiteSpace = 'pre-wrap';
   wire2.voltage = voltage
 
   // draw voltage flow
-  const voltages = new THREE.Group()
-  voltages.name = "voltages"
-  wire2.add(voltages)
+  const voltages2 = new THREE.Group()
+  voltages2.name = "voltages2"
+  wire2.add(voltages2)
   for (let arrow_counter = 1/(current_arrows-1)/2; arrow_counter < 1; arrow_counter+= 1/(current_arrows-1)) {
     const index = Math.floor(arrow_counter*wire2.points_vec.length)
     const position = wire2.points_vec[index].clone()
     const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
-    voltages.add(speed)
+    voltages2.add(speed)
   }
   
 
@@ -368,11 +382,13 @@ window.calc_force = function (toolbar, scene) {
   const curve_1        = scene.getObjectByName("curve_1")
   const curve_2        = scene.getObjectByName("curve_2")
   const wire1_speeds   = scene.getObjectByName("wire1_speeds")
-  const voltage_arrows = scene.getObjectByName("voltages")
+  const voltage1_arrows = scene.getObjectByName("voltages1")
+  const voltage2_arrows = scene.getObjectByName("voltages2")
 
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
   wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
+  wire1.voltage = 0
   const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
@@ -443,14 +459,19 @@ window.calc_force = function (toolbar, scene) {
         f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (Math.pow(R.length(), 2)) )
         f_1 = f_2.clone().negate()
 
-        // check whats f_positive_2 - f_positive_1 to know the forces difference for the voltage
-        // const field_difference = R_hat.clone().multiplyScalar( ((top_p_n + top_n_n) - (top_n_p + top_p_p)) / (Math.pow(R.length(), 2)) )
+        // calculating "field" on electrons in wire2 to measure the voltage
         const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
         const distance = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance
+
+        // calculate voltage for wire 1 as well
+        const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n) / (Math.pow(R.length(), 2)) )
+        const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
+        const distance_1 = wire1.length / (parts_1-1)
+        wire1.voltage += field_difference_in_wire_direction_1 * distance_1
       } else {
         // "their" force calculation
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
@@ -488,6 +509,7 @@ window.calc_force = function (toolbar, scene) {
   F_1_rotating_T.divideScalar((parts_1-1) * (parts_2-1))
   F_2_rotating_T.divideScalar((parts_1-1) * (parts_2-1))
   wire2.voltage /= (parts_1-1)
+  wire1.voltage /= (parts_2-1)
 
   // the actual force
   // const equation_constant = Math.pow(10, -7)
@@ -497,6 +519,7 @@ window.calc_force = function (toolbar, scene) {
   
   // scale for better display
   wire2.voltage   *= 267.079_464_85
+  wire1.voltage   *= 267.079_464_85
   const foce_const = 267_079_464.85
   F_1_T.multiplyScalar(foce_const)
   F_2_T.multiplyScalar(foce_const)
@@ -519,17 +542,32 @@ window.calc_force = function (toolbar, scene) {
   curve_1.rotation.setFromVector3(vec_to_euler(F_1_rotating_T))
   curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
-  // update voltage
+  // update voltage2
   if (!mine_force && !wire2.areas) {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": can't calc this shape")
-    voltage_arrows.children.forEach(arrow => {
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Blue wire voltage: .*$","gm"),"Blue wire voltage: can't calc this shape")
+    voltage2_arrows.children.forEach(arrow => {
       arrow.setLength(1, 0, 0)
     })
   } else {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(": .*$","gm"),": " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Blue wire voltage: .*$","gm"),"Blue wire voltage: " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
     // keep the arrow with easy to see size
     const size = Math.sqrt(Math.abs(wire2.voltage))*Math.sign(wire2.voltage)
-    voltage_arrows.children.forEach(arrow => {
+    voltage2_arrows.children.forEach(arrow => {
+      arrow.setLength(1, 60*size, 60*size)
+    })
+  }
+
+  // update voltage1
+  if (!mine_force) {
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Green wire voltage: .*$","gm"),"Green wire voltage: can't calc with this method")
+    voltage1_arrows.children.forEach(arrow => {
+      arrow.setLength(1, 0, 0)
+    })
+  } else {
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Green wire voltage: .*$","gm"),"Green wire voltage: " + Math.abs(wire1.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
+    // keep the arrow with easy to see size
+    const size = Math.sqrt(Math.abs(wire1.voltage))*Math.sign(wire1.voltage)
+    voltage1_arrows.children.forEach(arrow => {
       arrow.setLength(1, 60*size, 60*size)
     })
   }
