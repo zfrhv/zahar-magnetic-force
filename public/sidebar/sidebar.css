@@ -40,4 +40,5 @@
   left: 10px;
   font-size: 300%;
   cursor:pointer;
+  z-index: 1;
 }
