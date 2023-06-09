@@ -41,4 +41,6 @@
   font-size: 300%;
   cursor:pointer;
   z-index: 1;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
