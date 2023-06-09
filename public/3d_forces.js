@@ -151,6 +151,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   voltage.style.left = '5%';
   voltage.style.pointerEvents = 'none';
   voltage.style.whiteSpace = 'pre-wrap';
+  voltage.style.transform = 'translateY(-50%)';
   wire2.voltage = voltage
 
   // draw voltage flow
