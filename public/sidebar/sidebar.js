@@ -1,10 +1,15 @@
 function openNav() {
-  document.getElementById("mySidenav").style.width = "320px";
+  const sidebar = document.getElementById("mySidenav")
+  sidebar.style.width = "320px";
+  sidebar.style.borderRight = "4px solid #363643";
+  // sidebar.style.borderRight = "4px solid #3a3a3d";
 }
 
 window.addEventListener('click', function (e) {
   if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
-    document.getElementById("mySidenav").style.width = "0px";
+    const sidebar = document.getElementById("mySidenav")
+    sidebar.style.width = "0px";
+    sidebar.style.border = "";
   }
 })
 
@@ -34,12 +39,14 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
 }
 
 document.getElementById("close_sidebar").addEventListener('click', function () {
-  document.getElementById("mySidenav").style.width = "0px";
+  const sidebar = document.getElementById("mySidenav")
+  sidebar.style.width = "0px";
+  sidebar.style.border = "";
 })
 
 // hightlight current page
 const selected = sidebar.querySelector('[href="'+window.location.pathname.match(/[^/]+$/g)[0]+'"]')
 if (selected) {
-  selected.style.backgroundColor = "#383636"
+  selected.style.backgroundColor = "#688c24"
   selected.style.color = "#d6d5d2"
 }
