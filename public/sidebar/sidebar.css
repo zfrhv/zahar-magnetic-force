@@ -42,4 +42,10 @@
   z-index: 1;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+
+  width: min(70px, 12%);
+  height: auto;
+  left: min(20px, 5%);
+  top: min(20px, 5%);
+  transition: 0.3s;
 }
