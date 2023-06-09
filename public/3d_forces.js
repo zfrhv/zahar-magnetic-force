@@ -147,6 +147,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   toolbar.parentElement.appendChild(voltage);
   voltage.style.position = 'absolute';
   voltage.innerHTML = "Green wire voltage: 0\nBlue wire voltage: 0";
+  voltage.style.height = 'auto';
   voltage.style.top = toolbar.parentElement.children[0].offsetHeight + 'px';
   voltage.style.transform = 'translateY(-100%)';
   voltage.style.left = '5%';
