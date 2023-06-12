@@ -49,3 +49,13 @@
   top: min(20px, 5%);
   transition: 0.3s;
 }
+
+.sidebar-closed {
+  width: 0px;
+  border-right: "";
+}
+
+.sidebar-open {
+  width: 320px;
+  border-right: 4px solid #363643;
+}
