@@ -78,7 +78,7 @@ body {
   margin: 0px;
   padding: 10px;
   font-family: Consolas;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .page {
