@@ -326,7 +326,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
 
   // create slidebars
-  toolbar.style.height = toolbar.offsetWidth/2+"px";
+  toolbar.style.height = "auto";
+  toolbar.style.width = "auto";
+  toolbar.style.padding = "3%";
 
   const slidebars = document.createElement('div');
   slidebars.style.width = "85%";
@@ -359,9 +361,12 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       B: function () { wire2.spin = (this.value-50)/10; update_speeds() }
     }
   }
-  const height = slidebars.offsetHeight / (Object.keys(inputs).length);
-  slidebars.style.fontSize = height*0.38 + "px";
   for(const subj in inputs) {
+    // window.addEventListener('click', function (e) {
+    //   if (!document.getElementById('mySidenav').contains(e.target)) {
+    //     document.getElementById("mySidenav").classList.replace("sidebar-open", "sidebar-closed")
+    //   }
+    // })
     const subj_part = document.createElement('div');
     subj_part.innerText = subj;
     slidebars.append(subj_part);
