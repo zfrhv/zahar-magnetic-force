@@ -344,32 +344,49 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   }
 
   const inputs = {
-    "G_R_X": function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
-    "G_R_Y": function () { wire1.rotation.y = this.value/100*pi*2 },
-    "B_R_Y": function () { wire2.rotation.y = this.value/100*pi*2 },
-    "G_V_X": function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
-    "G_V_Y": function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
-    "G_V_Z": function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
+    Orientation: {
+      G_X: function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
+      G_Y: function () { wire1.rotation.y = this.value/100*pi*2 },
+      B_Y: function () { wire2.rotation.y = this.value/100*pi*2 }
+    },
+    Speed: {
+      G_X: function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
+      G_Y: function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
+      G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
+    },
+    Spin: {
+      G: function () { wire1.spin = (this.value-50)/10; update_speeds() },
+      B: function () { wire2.spin = (this.value-50)/10; update_speeds() }
+    }
   }
   const height = slidebars.offsetHeight / (Object.keys(inputs).length);
-  slidebars.style.fontSize = height*0.6 + "px";
-  for(const name in inputs) {
-    const part = document.createElement('div');
-    part.innerText = name + ": ";
-    slidebars.append(part);
-
-    const slidebar = document.createElement('input');
-    slidebar.type = 'range';
-    slidebar.value = /^G_V_.$/.test(name) ? 50 : 0;
-    slidebar.min = 0;
-    slidebar.max = 100;
-    slidebar.style.width = "60%";
-    slidebar.style.verticalAlign = "middle";
-    slidebar.classList.add("measure_slide");
-    part.append(slidebar);
-
-    slidebar.onchange = inputs[name];
-    slidebar.oninput = inputs[name];
+  slidebars.style.fontSize = height*0.38 + "px";
+  for(const subj in inputs) {
+    const subj_part = document.createElement('div');
+    subj_part.innerText = subj;
+    slidebars.append(subj_part);
+    for(const name in inputs[subj]) {
+      const part = document.createElement('div');
+      const text = document.createElement('span');
+      text.innerText = name + ":";
+      text.style.float = "left";
+      text.style.width = "20%";
+      part.append(text);
+      subj_part.append(part);
+  
+      const slidebar = document.createElement('input');
+      slidebar.type = 'range';
+      slidebar.value = subj != "Orientation" ? 50 : 0;
+      slidebar.min = 0;
+      slidebar.max = 100;
+      slidebar.style.width = "70%";
+      slidebar.style.verticalAlign = "middle";
+      slidebar.classList.add("measure_slide");
+      part.append(slidebar);
+  
+      slidebar.onchange = inputs[subj][name];
+      slidebar.oninput = inputs[subj][name];
+    }
   }
 }
 
