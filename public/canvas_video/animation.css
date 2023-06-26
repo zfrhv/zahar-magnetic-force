@@ -47,6 +47,7 @@
 }
 
 .animation_box input {
+  -webkit-user-drag: none;
   width: 70%;
 
   margin-left: 3%;
@@ -55,7 +56,7 @@
   margin-bottom: auto;
   cursor: pointer;
 
-  -webkit-appearance: none;
+  appearance: none;
   background-color: #72757c;
   border-radius: 20000px;
   box-shadow: inset 1px 1px 5px 2px #585b64;
@@ -64,7 +65,7 @@
 }
 
 .video_slide::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  appearance: none;
   width: 0;
   box-shadow: -500px 0 0 500px #c24f4f;
 }
@@ -75,10 +76,10 @@
 }
 
 .measure_slide::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  appearance: none;
   width: 4%;
-  height: 0;
-  padding-bottom: 11%;
+  /* the actual height */
+  padding-bottom: min(11%, 15px);
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
   border-radius: 100px;

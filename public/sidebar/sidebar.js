@@ -1,10 +1,13 @@
 function openNav() {
   document.getElementById("mySidenav").classList.replace("sidebar-closed", "sidebar-open")
 }
+function closeNav() {
+  document.getElementById("mySidenav").classList.replace("sidebar-open", "sidebar-closed")
+}
 
 window.addEventListener('click', function (e) {
   if (!document.getElementById('mySidenav').contains(e.target) && !document.getElementById('myMenu').contains(e.target)) {
-    document.getElementById("mySidenav").classList.replace("sidebar-open", "sidebar-closed")
+    closeNav()
   }
 })
 
@@ -29,15 +32,12 @@ sidebar.innerHTML = `
 `
 document.getElementById("SideBar").replaceWith(sidebar)
 
-if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-  // true for mobile device
-}else{
-  // false for not mobile device
+if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))){
   openNav()
 }
 
 document.getElementById("close_sidebar").addEventListener('click', function () {
-  document.getElementById("mySidenav").classList.replace("sidebar-open", "sidebar-closed")
+  closeNav()
 })
 
 // hightlight current page
