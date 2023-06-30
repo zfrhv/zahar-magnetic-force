@@ -369,20 +369,20 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     })
   }
 
-  // wire1.spin = new THREE.Vector3(0,0,0);
+  // wire1.spin = 0;
   // function update_wire1_spins() {
   //   // keep the arrow with easy to see size
-  //   const spin = wire1.spin.z / 5
+  //   const spin = wire1.spin / 5
   //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
   //   wire1_spin.children.forEach(arrow => {
   //     arrow.setLength(1, 60*size, 60*size)
   //   })
   // }
 
-  // wire2.spin = new THREE.Vector3(0,0,0);
+  // wire2.spin = 0;
   // function update_wire2_spins() {
   //   // keep the arrow with easy to see size
-  //   const spin = wire2.spin.z / 5
+  //   const spin = wire2.spin / 5
   //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
   //   wire2_spin.children.forEach(arrow => {
   //     arrow.setLength(1, 60*size, 60*size)
@@ -401,8 +401,8 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
     },
     // Spin: {
-    //   G: function () { wire1.spin.z = (this.value-50)/10; update_wire1_spins() },
-    //   B: function () { wire2.spin.z = (this.value-50)/10; update_wire2_spins() }
+    //   G: function () { wire1.spin = (this.value-50)/10; update_wire1_spins() },
+    //   B: function () { wire2.spin = (this.value-50)/10; update_wire2_spins() }
     // }
   }
   for(const subj in inputs) {
@@ -457,7 +457,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage = 0
   const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
-  // wire1.spin = wire1_mesh.spin.z*100
+  // wire1.spin = wire1_mesh.spin
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
 
@@ -465,7 +465,7 @@ window.calc_force = function (toolbar, scene) {
   wire2.rotation = wire2_mesh.rotation
   wire2.mass_center = wire2_mesh.mass_center.clone().applyEuler(wire2.rotation)
   wire2.voltage = 0
-  // wire2.spin = wire2_mesh.spin.z*100
+  // wire2.spin = wire2_mesh.spin
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
   wire2.length = wire2_mesh.length
 
@@ -523,11 +523,6 @@ window.calc_force = function (toolbar, scene) {
         // const v_1_p = wire1.speed.clone().add(v_1_spin)
         // const v_2_p = new THREE.Vector3(0,0,0).add(v_2_spin)
 
-        // if (point_1 == 1 && point_2 == 1) {
-        //   console.log(v_1_spin)
-        //   console.log(v_2_n.clone().multiplyScalar(0.5))
-        // }
-
         const v_1_n = v_1.clone().add(wire1.speed)
         const v_2_n = v_2
         const v_1_p = wire1.speed.clone()
@@ -542,12 +537,12 @@ window.calc_force = function (toolbar, scene) {
         f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
-        const field_difference = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
+        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
-        const field_difference_in_wire_direction = field_difference.clone().dot(v_2.clone().normalize())
-        const distance = wire2.length / (parts_2-1)
+        const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
+        const distance_2 = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
-        wire2.voltage += field_difference_in_wire_direction * distance
+        wire2.voltage += field_difference_in_wire_direction * distance_2
 
         // calculate voltage for wire 1 as well
         const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n) / (Math.pow(R.length(), 2)) )
