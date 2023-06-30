@@ -79,7 +79,7 @@
   appearance: none;
   width: 4%;
   /* the actual height */
-  padding-bottom: min(11%, 15px);
+  padding-bottom: min(11%, 13px);
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
   border-radius: 100px;

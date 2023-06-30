@@ -254,9 +254,33 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
     const index = Math.floor(arrow_counter*wire1.points_vec.length)
     const position = wire1.points_vec[index].clone()
-    const speed = new THREE.ArrowHelper( new THREE.Vector3(1,0,0), position, 0, wire1_material.color )
+    const speed = new THREE.ArrowHelper( new THREE.Vector3(1,0,0), position, 0, 0xcd75d1 )
     wire1_speeds.add(speed)
   }
+
+  // const wire1_spin = new THREE.Group()
+  // wire1_spin.name = "wire1_spin"
+  // wire1.add(wire1_spin)
+  // for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
+  //   const index = Math.floor(arrow_counter*wire1.points_vec.length)
+  //   const position = wire1.points_vec[index].clone()
+  //   const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
+  //   position.add(direction.clone().multiplyScalar(20))
+  //   const spin_arrow = new THREE.ArrowHelper( direction, position, 0, 0xcd75d1 )
+  //   wire1_spin.add(spin_arrow)
+  // }
+
+  // const wire2_spin = new THREE.Group()
+  // wire2_spin.name = "wire2_spin"
+  // wire2.add(wire2_spin)
+  // for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
+  //   const index = Math.floor(arrow_counter*wire2.points_vec.length)
+  //   const position = wire2.points_vec[index].clone()
+  //   const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
+  //   position.add(direction.clone().multiplyScalar(20))
+  //   const spin_arrow = new THREE.ArrowHelper( direction, position, 0, 0xcd75d1 )
+  //   wire2_spin.add(spin_arrow)
+  // }
 
   // total force arrows
   const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color)
@@ -345,6 +369,26 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     })
   }
 
+  // wire1.spin = new THREE.Vector3(0,0,0);
+  // function update_wire1_spins() {
+  //   // keep the arrow with easy to see size
+  //   const spin = wire1.spin.z / 5
+  //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
+  //   wire1_spin.children.forEach(arrow => {
+  //     arrow.setLength(1, 60*size, 60*size)
+  //   })
+  // }
+
+  // wire2.spin = new THREE.Vector3(0,0,0);
+  // function update_wire2_spins() {
+  //   // keep the arrow with easy to see size
+  //   const spin = wire2.spin.z / 5
+  //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
+  //   wire2_spin.children.forEach(arrow => {
+  //     arrow.setLength(1, 60*size, 60*size)
+  //   })
+  // }
+
   const inputs = {
     Orientation: {
       G_X: function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
@@ -356,10 +400,10 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       G_Y: function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
       G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
     },
-    Spin: {// TODO instead of update speeds do as appropriate
-      G: function () { wire1.spin = (this.value-50)/10; update_speeds() },
-      B: function () { wire2.spin = (this.value-50)/10; update_speeds() }
-    }
+    // Spin: {
+    //   G: function () { wire1.spin.z = (this.value-50)/10; update_wire1_spins() },
+    //   B: function () { wire2.spin.z = (this.value-50)/10; update_wire2_spins() }
+    // }
   }
   for(const subj in inputs) {
     const subj_part = document.createElement('details');
@@ -413,6 +457,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage = 0
   const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
+  // wire1.spin = wire1_mesh.spin.z*100
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
 
@@ -420,6 +465,7 @@ window.calc_force = function (toolbar, scene) {
   wire2.rotation = wire2_mesh.rotation
   wire2.mass_center = wire2_mesh.mass_center.clone().applyEuler(wire2.rotation)
   wire2.voltage = 0
+  // wire2.spin = wire2_mesh.spin.z*100
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
   wire2.length = wire2_mesh.length
 
@@ -468,6 +514,20 @@ window.calc_force = function (toolbar, scene) {
 
       if (mine_force) {
         // full "mine" force calculation
+
+        // const v_1_spin = v_1.clone().normalize().multiplyScalar(wire1.spin)
+        // const v_2_spin = v_2.clone().normalize().multiplyScalar(wire2.spin)
+
+        // const v_1_n = v_1.clone().add(wire1.speed).add(v_1_spin)
+        // const v_2_n = v_2.clone().add(v_2_spin)
+        // const v_1_p = wire1.speed.clone().add(v_1_spin)
+        // const v_2_p = new THREE.Vector3(0,0,0).add(v_2_spin)
+
+        // if (point_1 == 1 && point_2 == 1) {
+        //   console.log(v_1_spin)
+        //   console.log(v_2_n.clone().multiplyScalar(0.5))
+        // }
+
         const v_1_n = v_1.clone().add(wire1.speed)
         const v_2_n = v_2
         const v_1_p = wire1.speed.clone()
