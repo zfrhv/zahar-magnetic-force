@@ -147,8 +147,17 @@ body > * {
 }
 
 summary {
-  color: #fc9a88;
   cursor: pointer;
+}
+
+.collapse > summary {
+  color: #fc9a88;
+}
+
+.collapse {
+  border-left: 4px solid #8aafff;
+  padding-left: 10px;
+  text-align: center;
 }
 
 mjx-container {

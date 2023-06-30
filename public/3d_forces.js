@@ -356,19 +356,17 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       G_Y: function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
       G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
     },
-    Spin: {
+    Spin: {// TODO instead of update speeds do as appropriate
       G: function () { wire1.spin = (this.value-50)/10; update_speeds() },
       B: function () { wire2.spin = (this.value-50)/10; update_speeds() }
     }
   }
   for(const subj in inputs) {
-    // window.addEventListener('click', function (e) {
-    //   if (!document.getElementById('mySidenav').contains(e.target)) {
-    //     document.getElementById("mySidenav").classList.replace("sidebar-open", "sidebar-closed")
-    //   }
-    // })
-    const subj_part = document.createElement('div');
-    subj_part.innerText = subj;
+    const subj_part = document.createElement('details');
+    subj_part.style.textAlign = 'left';
+    const subj_title = document.createElement('summary');
+    subj_title.innerText = subj;
+    subj_part.append(subj_title);
     slidebars.append(subj_part);
     for(const name in inputs[subj]) {
       const part = document.createElement('div');
