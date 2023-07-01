@@ -437,7 +437,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     for(const name in inputs[subj]) {
       const part = document.createElement('div');
       part.style.marginLeft = '5%';
-      part.style.marginBottom = '1%';
+      part.style.marginBottom = '2%';
       const text = document.createElement('span');
       text.innerText = name + ":";
       text.style.float = "left";
