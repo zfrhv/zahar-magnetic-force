@@ -170,16 +170,15 @@
   <script type="module">
     window.calc_force_skewed_init = function(toolbar, scene) {
       window.calc_two_circles_init(toolbar, scene)
-      const sliders = toolbar.children[1]
 
-      sliders.children[1].children[0].value = 90
-      sliders.children[1].children[0].dispatchEvent(new Event('change'))
+      toolbar.querySelectorAll('.orientation.g.y')[0].value = 90
+      toolbar.querySelectorAll('.orientation.g.y')[0].dispatchEvent(new Event('change'))
 
-      sliders.children[2].children[0].value = 90
-      sliders.children[2].children[0].dispatchEvent(new Event('change'))
+      toolbar.querySelectorAll('.orientation.b.y')[0].value = 90
+      toolbar.querySelectorAll('.orientation.b.y')[0].dispatchEvent(new Event('change'))
 
-      sliders.children[3].children[0].value = 100
-      sliders.children[3].children[0].dispatchEvent(new Event('change'))
+      toolbar.querySelectorAll('.speed.g.x')[0].value = 100
+      toolbar.querySelectorAll('.speed.g.x')[0].dispatchEvent(new Event('change'))
     }
     window.calc_force_skewed = function(toolbar, scene) {
       window.calc_two_circles(toolbar, scene)

@@ -76,7 +76,7 @@
       <br/>
       <canvas-video id="calc_custom_paths" name="calc_custom_paths" type="calculate" style="position: relative;"></canvas-video>
       <div class="markdown" id="faradays_paradox">
-        for faradays law paradox  
+        also works when for faradays law paradox fails  
         try putting:
       </div>
       <textarea class="faradays_paradox" rows="3">
@@ -111,37 +111,34 @@
 
         toggle on for my equation, and change V_y (you can try both positive and negative).
       </div>
-      <button onclick="window.apply_paths(...document.getElementsByClassName('faradays_paradox')); new Promise(r => setTimeout(r, 100)).then(() => {const toolbar = document.getElementById('calc_custom_paths').children[1]; toolbar.getElementsByClassName('force_type')[0].checked = true; const speed = toolbar.children[1].children[4].children[0]; speed.value = 100; speed.onchange(); document.getElementById('calc_custom_paths').scrollIntoView(); toolbar.children[0].children[0].click()})">Check</button>
+      <button onclick="window.apply_paths(...document.getElementsByClassName('faradays_paradox')); new Promise(r => setTimeout(r, 100)).then(() => {
+        const toolbar = document.getElementById('calc_custom_paths').children[1];
+        toolbar.getElementsByClassName('force_type')[0].checked = true;
+        const speed = toolbar.querySelectorAll('.speed.g.y')[0];
+        speed.value = 100;
+        speed.onchange();
+        document.getElementById('calc_custom_paths').scrollIntoView();
+        toolbar.children[0].children[0].click()
+        })">Check</button>
 
-      <div class="markdown" id="example1">
-        you sould also try putting:
+      <div class="markdown" id="original_problem">
+        and to solve our original problem (toggle the calculation method, and zoom out from the particles):
       </div>
-      <textarea class="example1" rows="3">
+      <textarea class="original_problem" rows="3">
 0 0 0
 0 0 1
       </textarea>
-      <textarea class="example1" rows="3">
+      <textarea class="original_problem" rows="3">
 0 0 0
 1 0 0
       </textarea>
-      <button onclick="window.apply_paths(...document.getElementsByClassName('example1')); new Promise(r => setTimeout(r, 100)).then(() => {const toolbar = document.getElementById('calc_custom_paths').children[1]; toolbar.getElementsByClassName('force_type')[0].checked = true; document.getElementById('calc_custom_paths').scrollIntoView(); toolbar.children[0].children[0].click()})">Check</button>
+      <button onclick="window.apply_paths(...document.getElementsByClassName('original_problem')); new Promise(r => setTimeout(r, 100)).then(() => {
+        const toolbar = document.getElementById('calc_custom_paths').children[1];
+        toolbar.getElementsByClassName('force_type')[0].checked = true;
+        document.getElementById('calc_custom_paths').scrollIntoView();
+        toolbar.children[0].children[0].click()
+        })">Check</button>
 
-
-      <div class="markdown" id="example2">
-        also check out the volate when the wires are:
-      </div>
-      <textarea class="example2" rows="3">
-0 0 0
-0 0 1
-      </textarea>
-      <textarea class="example2" rows="3">
-0 0 0
-1 0 0
-      </textarea>
-      <div class="markdown">
-        and V_z has some speed
-      </div>
-      <button onclick="window.apply_paths(...document.getElementsByClassName('example2')); new Promise(r => setTimeout(r, 100)).then(() => {const toolbar = document.getElementById('calc_custom_paths').children[1]; toolbar.getElementsByClassName('force_type')[0].checked = true; const speed = toolbar.children[1].children[5].children[0]; speed.value = 100; speed.onchange(); document.getElementById('calc_custom_paths').scrollIntoView(); toolbar.children[0].children[0].click()})">Check</button>
     </article>
     <svg id="bottom-leaves" style="position: absolute; width: 100%; right: 0; bottom: 0; transform: scaleY(-1) translateY(-41%) translateX(2%); height: auto; pointer-events: none;" width="449.17" height="41.386" version="1.1" viewBox="0 0 118.84 10.95" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
       <g transform="matrix(1.1245 0 0 1.1245 .14779 -36.866)">
