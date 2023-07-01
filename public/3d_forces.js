@@ -56,6 +56,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire1.name = "wire1"
   wire1.points_vec = wire1_points_vec
   wire1.length = wire1_length
+  wire1.path = path1
 
   // draw circle wire
   const wire1_path = new LineGeometry()
@@ -112,6 +113,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire2.name = "wire2"
   wire2.points_vec = wire2_points_vec
   wire2.length = wire2_length
+  wire2.path = path2
 
   // draw circle wire
   const wire2_path = new LineGeometry()
@@ -176,81 +178,85 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   
 
   // Check if 2d shape, to be able to use Faraday's law
-  is_2d: if (path2.points.length >= 9) {
-    const main_point = new THREE.Vector3(path2.points[0], path2.points[1], path2.points[2])
-    // make sure that the circiot is closed
-    if (new THREE.Vector3(path2.points[path2.points.length-3], path2.points[path2.points.length-2], path2.points[path2.points.length-1]).sub(main_point).length() > err_num) {
-      break is_2d
-    }
-    const new_x = new THREE.Vector3(path2.points[3], path2.points[4], path2.points[5]).sub(main_point).normalize()
-    const surface_vec = new THREE.Vector3(path2.points[6], path2.points[7], path2.points[8]).sub(main_point).cross(new_x).normalize()
-    const new_y = new_x.clone().cross(surface_vec).normalize()
-
-    // yea i can probably use here 4D matrix instead of doing "sub(main_point)" and then "add(main_point)". but idk how to use matrixes so maybe in the future
-    const to_original_axis = new THREE.Matrix3()
-    // to_original_axis.set(new_x.x, new_x.y, new_x.z, new_y.x, new_y.y, new_y.z, surface_vec.x, surface_vec.y, surface_vec.z)
-    to_original_axis.set(new_x.x, new_y.x, surface_vec.x, new_x.y, new_y.y, surface_vec.y, new_x.z, new_y.z, surface_vec.z)
-    const to_new_axis = to_original_axis.clone().invert()
-    // check if each dot is on the surface + get the max and min points of the surface
-    const relative_locations = []
-    for (let i=0; i < path2.points.length; i+=3) {
-      relative_locations.push(new THREE.Vector3(path2.points[i], path2.points[i+1], path2.points[i+2]).sub(main_point).applyMatrix3(to_new_axis))
-      const tmp = new THREE.Vector3(path2.points[i], path2.points[i+1], path2.points[i+2])
-    }
-    
-    const min = new THREE.Vector2()
-    const max = new THREE.Vector2()
-    for (let i=1; i < relative_locations.length; i++) {
-      if ( relative_locations[i].z != 0 ) {
+  function areas_for_faradays_law(wire) {
+    is_2d: if (wire.path.points.length >= 9) {
+      const main_point = new THREE.Vector3(wire.path.points[0], wire.path.points[1], wire.path.points[2])
+      // make sure that the circiot is closed
+      if (new THREE.Vector3(wire.path.points[wire.path.points.length-3], wire.path.points[wire.path.points.length-2], wire.path.points[wire.path.points.length-1]).sub(main_point).length() > err_num) {
         break is_2d
       }
-      if (relative_locations[i].x > max.x) { max.x = relative_locations[i].x }
-      if (relative_locations[i].x < min.x) { min.x = relative_locations[i].x }
-      if (relative_locations[i].y > max.y) { max.y = relative_locations[i].y }
-      if (relative_locations[i].y < min.y) { min.y = relative_locations[i].y }
-    }
-
-    function is_intersecting(a, b, c, d)
-    {
-        const denominator = ((b.x - a.x) * (d.y - c.y)) - ((b.y - a.y) * (d.x - c.x));
-        const numerator1 = ((a.y - c.y) * (d.x - c.x)) - ((a.x - c.x) * (d.y - c.y));
-        const numerator2 = ((a.y - c.y) * (b.x - a.x)) - ((a.x - c.x) * (b.y - a.y));
-
-        if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
-        
-        const r = numerator1 / denominator;
-        const s = numerator2 / denominator;
-
-        return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
-    }
-
-    // check which dots are inside the surface
-    wire2.areas = []
-    const step = Math.sqrt((max.x-min.x) * (max.y-min.y) / parts_2)
-    let width = min.x
-    let height = min.y
-
-    while (height < max.y) {
-      let crosses = 0
-      for (let i=0; i < relative_locations.length-1; i++) {
-        if ( is_intersecting({x: min.x-1, y: min.y-1}, {x: width, y: height}, relative_locations[i], relative_locations[i+1]) ) {
-          crosses++
+      const new_x = new THREE.Vector3(wire.path.points[3], wire.path.points[4], wire.path.points[5]).sub(main_point).normalize()
+      const surface_vec = new THREE.Vector3(wire.path.points[6], wire.path.points[7], wire.path.points[8]).sub(main_point).cross(new_x).normalize()
+      const new_y = new_x.clone().cross(surface_vec).normalize()
+  
+      // yea i can probably use here 4D matrix instead of doing "sub(main_point)" and then "add(main_point)". but idk how to use matrixes so maybe in the future
+      const to_original_axis = new THREE.Matrix3()
+      // to_original_axis.set(new_x.x, new_x.y, new_x.z, new_y.x, new_y.y, new_y.z, surface_vec.x, surface_vec.y, surface_vec.z)
+      to_original_axis.set(new_x.x, new_y.x, surface_vec.x, new_x.y, new_y.y, surface_vec.y, new_x.z, new_y.z, surface_vec.z)
+      const to_new_axis = to_original_axis.clone().invert()
+      // check if each dot is on the surface + get the max and min points of the surface
+      const relative_locations = []
+      for (let i=0; i < wire.path.points.length; i+=3) {
+        relative_locations.push(new THREE.Vector3(wire.path.points[i], wire.path.points[i+1], wire.path.points[i+2]).sub(main_point).applyMatrix3(to_new_axis))
+        const tmp = new THREE.Vector3(wire.path.points[i], wire.path.points[i+1], wire.path.points[i+2])
+      }
+      
+      const min = new THREE.Vector2()
+      const max = new THREE.Vector2()
+      for (let i=1; i < relative_locations.length; i++) {
+        if ( relative_locations[i].z != 0 ) {
+          break is_2d
+        }
+        if (relative_locations[i].x > max.x) { max.x = relative_locations[i].x }
+        if (relative_locations[i].x < min.x) { min.x = relative_locations[i].x }
+        if (relative_locations[i].y > max.y) { max.y = relative_locations[i].y }
+        if (relative_locations[i].y < min.y) { min.y = relative_locations[i].y }
+      }
+  
+      function is_intersecting(a, b, c, d)
+      {
+          const denominator = ((b.x - a.x) * (d.y - c.y)) - ((b.y - a.y) * (d.x - c.x));
+          const numerator1 = ((a.y - c.y) * (d.x - c.x)) - ((a.x - c.x) * (d.y - c.y));
+          const numerator2 = ((a.y - c.y) * (b.x - a.x)) - ((a.x - c.x) * (b.y - a.y));
+  
+          if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
+          
+          const r = numerator1 / denominator;
+          const s = numerator2 / denominator;
+  
+          return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
+      }
+  
+      // check which dots are inside the surface
+      wire.areas = []
+      const step = Math.sqrt((max.x-min.x) * (max.y-min.y) / parts_2)
+      let width = min.x
+      let height = min.y
+  
+      while (height < max.y) {
+        let crosses = 0
+        for (let i=0; i < relative_locations.length-1; i++) {
+          if ( is_intersecting({x: min.x-1, y: min.y-1}, {x: width, y: height}, relative_locations[i], relative_locations[i+1]) ) {
+            crosses++
+          }
+        }
+  
+        if (crosses % 2 == 1) {
+          wire.areas.push(new THREE.Vector3(width, height, 0).applyMatrix3(to_original_axis).add(main_point))
+        }
+  
+        width += step
+        if (width > max.x) {
+          width = min.x
+          height += step
         }
       }
-
-      if (crosses % 2 == 1) {
-        wire2.areas.push(new THREE.Vector3(width, height, 0).applyMatrix3(to_original_axis).add(main_point))
-      }
-
-      width += step
-      if (width > max.x) {
-        width = min.x
-        height += step
-      }
+      wire.area_value = step*step // no need to convert back to original axis because the bases axis are normolized
+      wire.surface_vec = surface_vec
     }
-    wire2.area_value = step*step // no need to convert back to original axis because the bases axis are normolized
-    wire2.surface_vec = surface_vec
   }
+  areas_for_faradays_law(wire1)
+  areas_for_faradays_law(wire2)
 
   // speed arrows
   const wire1_speeds = new THREE.Group()
@@ -364,59 +370,46 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   slidebars.style.width = "85%";
   slidebars.style.height = "100%";
   slidebars.style.textAlign = "center";
+  slidebars.style.marginLeft = '2%';
   toolbar.append(slidebars);
 
+  // update speeds
   wire1.speed = new THREE.Vector3(0,0,0);
-  function update_speeds() {
-    const length = wire1.speed.length()*25
-    wire1_speeds.children.forEach(speed => {
+  function update_speeds(wire) {
+    const length = wire.speed.length()*25
+    wire.getObjectByName(`${wire.name}_speeds`).children.forEach(speed => {
       speed.setLength(length, length*0.2, length*0.2)
-      speed.setDirection(wire1.speed.clone().normalize())
+      speed.setDirection(wire.speed.clone().normalize())
     })
   }
 
+  // update cuurents
   wire1.current = 0;
-  function update_wire1_current() {
-    // keep the arrow with easy to see size
-    const size = Math.sqrt(Math.abs(wire2.current))*Math.sign(wire2.current)
-    wire1_current.children.forEach(arrow => {
-      arrow.setLength(1, 60*size, 60*size)
-    })
-  }
-
   wire2.current = 0;
-  function update_wire2_current() {
+  function update_wire_current(wire) {
     // keep the arrow with easy to see size
-    const size = Math.sqrt(Math.abs(wire2.current))*Math.sign(wire2.current)
-    wire2_current.children.forEach(arrow => {
+    const size = Math.sqrt(Math.abs(wire.current))*Math.sign(wire.current)
+    wire.getObjectByName(`${wire.name}_current`).children.forEach(arrow => {
       arrow.setLength(1, 60*size, 60*size)
     })
   }
 
+  // // update spins
   // wire1.spin = 0;
-  // function update_wire1_spins() {
-  //   // keep the arrow with easy to see size
-  //   const spin = wire1.spin / 5
-  //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
-  //   wire1_spin.children.forEach(arrow => {
-  //     arrow.setLength(1, 60*size, 60*size)
-  //   })
-  // }
-
   // wire2.spin = 0;
-  // function update_wire2_spins() {
+  // function update_wire_spins(wire) {
   //   // keep the arrow with easy to see size
-  //   const spin = wire2.spin / 5
+  //   const spin = wire.spin / 5
   //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
-  //   wire2_spin.children.forEach(arrow => {
+  //   wire.getObjectByName(`${wire.name}_spin`).children.forEach(arrow => {
   //     arrow.setLength(1, 60*size, 60*size)
   //   })
   // }
 
   const inputs = {
     Current: {
-      G: function () { wire1.current = (this.value-50)/50; update_wire1_current() },
-      B: function () { wire2.current = (this.value-50)/50; update_wire2_current() },
+      G: function () { wire1.current = (this.value-50)/50; update_wire_current(wire1) },
+      B: function () { wire2.current = (this.value-50)/50; update_wire_current(wire2) },
     },
     Orientation: {
       G_X: function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
@@ -424,28 +417,31 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       B_Y: function () { wire2.rotation.y = this.value/100*pi*2 }
     },
     Speed: {
-      G_X: function () { wire1.speed.x = (this.value-50)/10; update_speeds() },
-      G_Y: function () { wire1.speed.y = (this.value-50)/10; update_speeds() },
-      G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds() }
+      G_X: function () { wire1.speed.x = (this.value-50)/10; update_speeds(wire1) },
+      G_Y: function () { wire1.speed.y = (this.value-50)/10; update_speeds(wire1) },
+      G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds(wire1) }
     },
     // Spin: {
-    //   G: function () { wire1.spin = (this.value-50)/10; update_wire1_spins() },
-    //   B: function () { wire2.spin = (this.value-50)/10; update_wire2_spins() }
+    //   G: function () { wire1.spin = (this.value-50)/10; update_wire_spins(wire1) },
+    //   B: function () { wire2.spin = (this.value-50)/10; update_wire_spins(wire2) }
     // }
   }
   for(const subj in inputs) {
     const subj_part = document.createElement('details');
     subj_part.style.textAlign = 'left';
+    subj_part.style.marginBottom = '3%';
     const subj_title = document.createElement('summary');
     subj_title.innerText = subj;
     subj_part.append(subj_title);
     slidebars.append(subj_part);
     for(const name in inputs[subj]) {
       const part = document.createElement('div');
+      part.style.marginLeft = '5%';
+      part.style.marginBottom = '1%';
       const text = document.createElement('span');
       text.innerText = name + ":";
       text.style.float = "left";
-      text.style.width = "20%";
+      text.style.width = "23%";
       part.append(text);
       subj_part.append(part);
   
@@ -467,7 +463,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       slidebar.min = 0;
       slidebar.max = 100;
       // add style
-      slidebar.style.width = "70%";
+      slidebar.style.width = "65%";
       slidebar.style.verticalAlign = "middle";
       slidebar.classList.add("measure_slide");
 
@@ -475,6 +471,17 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       slidebar.classList.add(subj.toLowerCase());
       name.split("_").forEach(symbol => slidebar.classList.add(symbol.toLowerCase()))
       part.append(slidebar);
+
+      const datalist = document.createElement('datalist');
+      datalist.id = `${name}_datalist`
+      slidebar.setAttribute('list', datalist.id);
+      const options_numbers = [25,50,75]
+      options_numbers.forEach(options_number => {
+        const option = document.createElement('option');
+        option.innerText = options_number
+        datalist.append(option);
+      })
+      part.append(datalist);
   
       slidebar.onchange = inputs[subj][name];
       slidebar.oninput = inputs[subj][name];
@@ -522,6 +529,11 @@ window.calc_force = function (toolbar, scene) {
   wire2.length = wire2_mesh.length
   wire2.voltage_arrows = voltage2_arrows
 
+  if (wire1_mesh.areas) {
+    wire1.areas = wire1_mesh.areas.map(vec => vec.clone().applyEuler(wire1.rotation).add(wire1.position))
+    wire1.area_value = wire1_mesh.area_value
+    wire1.surface_vec = wire1_mesh.surface_vec.clone().applyEuler(wire1.rotation)
+  }
   if (wire2_mesh.areas) {
     wire2.areas = wire2_mesh.areas.map(vec => vec.clone().applyEuler(wire2.rotation).add(wire2.position))
     wire2.area_value = wire2_mesh.area_value
@@ -580,9 +592,6 @@ window.calc_force = function (toolbar, scene) {
         const v_2_n = v_2.clone().multiplyScalar(wire2.current)
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
-        if (point_1 ==1 && point_2==1) {
-          console.log(wire1_mesh.current)
-        }
 
         const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
@@ -609,6 +618,39 @@ window.calc_force = function (toolbar, scene) {
         // "their" force calculation
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
         f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
+
+        if (wire1.areas && point_1 === 1) {
+          for (let i = 0; i < wire1.areas.length; i++) {
+            const dt = err_num
+            const area_place = wire1.areas[i]
+      
+            const R_A_old = absolute_place_2.clone().sub(area_place)
+            const R_A_hat_old = R_A_old.clone().normalize()
+            const old_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_old).dot(wire1.surface_vec) / Math.pow(R_A_old.length(), 2) * wire1.area_value
+      
+            const R_A_new = absolute_place_2.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
+            const R_A_hat_new = R_A_new.clone().normalize()
+            const new_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_new).dot(wire1.surface_vec) / Math.pow(R_A_new.length(), 2) * wire1.area_value
+      
+            wire1.voltage += -(new_flux - old_flux) / dt
+          }
+        }
+        if (wire2.areas && point_2 === 1) {
+          for (let i = 0; i < wire2.areas.length; i++) {
+            const dt = err_num
+            const area_place = wire2.areas[i]
+      
+            const R_A_old = absolute_place_1.clone().sub(area_place)
+            const R_A_hat_old = R_A_old.clone().normalize()
+            const old_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_old).dot(wire2.surface_vec) / Math.pow(R_A_old.length(), 2) * wire2.area_value
+      
+            const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
+            const R_A_hat_new = R_A_new.clone().normalize()
+            const new_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_new).dot(wire2.surface_vec) / Math.pow(R_A_new.length(), 2) * wire2.area_value
+      
+            wire2.voltage += -(new_flux - old_flux) / dt
+          } 
+        }
       }
 
       F_1_T.add(f_1)
@@ -616,23 +658,6 @@ window.calc_force = function (toolbar, scene) {
 
       F_1_rotating_T.add(relative_place_1.clone().sub(wire1.mass_center).cross(f_1))
       F_2_rotating_T.add(relative_place_2.clone().sub(wire2.mass_center).cross(f_2))
-    }
-
-    if (!mine_force && wire2.areas) {
-      for (let i = 0; i < wire2.areas.length; i++) {
-        const dt = err_num
-        const area_place = wire2.areas[i]
-  
-        const R_A_old = absolute_place_1.clone().sub(area_place)
-        const R_A_hat_old = R_A_old.clone().normalize()
-        const old_flux = v_1.clone().cross(R_A_hat_old).dot(wire2.surface_vec) / Math.pow(R_A_old.length(), 2) * wire2.area_value
-  
-        const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
-        const R_A_hat_new = R_A_new.clone().normalize()
-        const new_flux = v_1.clone().cross(R_A_hat_new).dot(wire2.surface_vec) / Math.pow(R_A_new.length(), 2) * wire2.area_value
-  
-        wire2.voltage += -(new_flux - old_flux) / dt
-      }
     }
   }
 
@@ -694,15 +719,11 @@ window.calc_force = function (toolbar, scene) {
   }
 
   // update voltages
-  if (mine_force) { // mine force
-    update_voltage(wire1)
-    update_voltage(wire2)
-  } else { // their force
-    update_voltage(wire1, "many work. open issue on gihub if you are interesting adding this feature")
-    if (wire2.areas) {
-      update_voltage(wire2)
-    } else {
-      update_voltage(wire2, "can't calc this shape")
+  [wire1, wire2].forEach(wire => {
+    if (!mine_force && !wire.areas) { // if not valid: their method and weird shape
+      update_voltage(wire, "can't calc this shape")
+    } else { // rest just print the result
+      update_voltage(wire)
     }
-  }
+  })
 }

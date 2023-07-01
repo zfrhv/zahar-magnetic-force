@@ -77,9 +77,11 @@
 
 .measure_slide::-webkit-slider-thumb {
   appearance: none;
-  width: 4%;
+  width: min(4%, 8px);
   /* the actual height */
-  padding-bottom: min(11%, 13px);
+  padding-bottom: min(11%, 20px);
+  margin-top: 2.7vw;
+  transform: translateY(-130%);
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
   border-radius: 100px;
@@ -88,6 +90,8 @@
 .measure_slide {
   overflow: visible;
   height: .5vw;
+  background: repeating-linear-gradient(90deg, #ffffff, #ffffff 2%, transparent 0, transparent 40%) no-repeat 64% 50%;
+  background-size: 60% 100%;
 }
 
 /* The switch - the box around the slider */
