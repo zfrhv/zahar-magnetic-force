@@ -90,7 +90,7 @@
 .measure_slide {
   overflow: visible;
   height: .5vw;
-  background: repeating-linear-gradient(90deg, #ffffff, #ffffff 2%, transparent 0, transparent 40%) no-repeat 64% 50%;
+  background: repeating-linear-gradient(90deg, #c6ccc1, #c6ccc1 2%, transparent 0, transparent 40%) no-repeat 64% 50%;
   background-size: 60% 100%;
 }
 
