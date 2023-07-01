@@ -442,7 +442,8 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       const text = document.createElement('span');
       text.innerText = name + ":";
       text.style.float = "left";
-      text.style.width = "23%";
+      text.style.width = "20%";
+      text.style.fontSize = toggle_force.offsetWidth/3 + "px";
       part.append(text);
       subj_part.append(part);
   
@@ -464,7 +465,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       slidebar.min = 0;
       slidebar.max = 100;
       // add style
-      slidebar.style.width = "65%";
+      slidebar.style.width = "70%";
       slidebar.style.verticalAlign = "middle";
       slidebar.classList.add("measure_slide");
 
