@@ -68,6 +68,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   const current_arrows = 4
   // draw current flow
+  const wire1_current = new THREE.Group()
+  wire1_current.name = "wire1_current"
+  wire1.add(wire1_current)
   for (let arrow_counter = 1/current_arrows/2; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
     const index = Math.floor(arrow_counter*wire1.points_vec.length)
     const position = wire1.points_vec[index].clone()
@@ -75,7 +78,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, wire1_material.color )
     speed.setLength(1, 60, 60)
-    wire1.add(speed)
+    wire1_current.add(speed)
   }
 
   // calculate the mass center
@@ -120,6 +123,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire2.add(wire2_shape)
 
   // draw current flow
+  const wire2_current = new THREE.Group()
+  wire2_current.name = "wire2_current"
+  wire2.add(wire2_current)
   for (let arrow_counter = 1/current_arrows/2; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
     const index = Math.floor(arrow_counter*wire2.points_vec.length)
     const position = wire2.points_vec[index].clone()
@@ -127,7 +133,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     position.add(direction.clone().multiplyScalar(20))
     const speed = new THREE.ArrowHelper( direction, position, 0, wire2_material.color )
     speed.setLength(1, 60, 60)
-    wire2.add(speed)
+    wire2_current.add(speed)
   }
 
   // calculate the mass center
@@ -369,6 +375,24 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     })
   }
 
+  wire1.current = 0;
+  function update_wire1_current() {
+    // keep the arrow with easy to see size
+    const size = Math.sqrt(Math.abs(wire2.current))*Math.sign(wire2.current)
+    wire1_current.children.forEach(arrow => {
+      arrow.setLength(1, 60*size, 60*size)
+    })
+  }
+
+  wire2.current = 0;
+  function update_wire2_current() {
+    // keep the arrow with easy to see size
+    const size = Math.sqrt(Math.abs(wire2.current))*Math.sign(wire2.current)
+    wire2_current.children.forEach(arrow => {
+      arrow.setLength(1, 60*size, 60*size)
+    })
+  }
+
   // wire1.spin = 0;
   // function update_wire1_spins() {
   //   // keep the arrow with easy to see size
@@ -390,6 +414,10 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   // }
 
   const inputs = {
+    Current: {
+      G: function () { wire1.current = (this.value-50)/50; update_wire1_current() },
+      B: function () { wire2.current = (this.value-50)/50; update_wire2_current() },
+    },
     Orientation: {
       G_X: function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
       G_Y: function () { wire1.rotation.y = this.value/100*pi*2 },
@@ -423,7 +451,19 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   
       const slidebar = document.createElement('input');
       slidebar.type = 'range';
-      slidebar.value = subj != "Orientation" ? 50 : 0;
+      switch(subj) {
+        case "Current":
+          slidebar.value = 100
+          break;
+        case "Orientation":
+          slidebar.value = 0
+          break;
+        case "Speed":
+          slidebar.value = 50
+          break;
+        default:
+          slidebar.value = 50
+      }
       slidebar.min = 0;
       slidebar.max = 100;
       // add style
@@ -438,6 +478,8 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   
       slidebar.onchange = inputs[subj][name];
       slidebar.oninput = inputs[subj][name];
+
+      slidebar.onchange();
     }
   }
 }
@@ -457,6 +499,7 @@ window.calc_force = function (toolbar, scene) {
   const voltage2_arrows = scene.getObjectByName("voltages2")
 
   wire1.name = "Green wire"
+  wire1.current = wire1_mesh.current
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
   wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
@@ -469,6 +512,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage_arrows = voltage1_arrows
 
   wire2.name = "Blue wire"
+  wire2.current = wire2_mesh.current
   wire2.position = wire2_mesh.position
   wire2.rotation = wire2_mesh.rotation
   wire2.mass_center = wire2_mesh.mass_center.clone().applyEuler(wire2.rotation)
@@ -527,15 +571,18 @@ window.calc_force = function (toolbar, scene) {
         // const v_1_spin = v_1.clone().normalize().multiplyScalar(wire1.spin)
         // const v_2_spin = v_2.clone().normalize().multiplyScalar(wire2.spin)
 
-        // const v_1_n = v_1.clone().add(wire1.speed).add(v_1_spin)
-        // const v_2_n = v_2.clone().add(v_2_spin)
+        // const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed).add(v_1_spin)
+        // const v_2_n = v_2.clone().multiplyScalar(wire2.current).add(v_2_spin)
         // const v_1_p = wire1.speed.clone().add(v_1_spin)
         // const v_2_p = new THREE.Vector3(0,0,0).add(v_2_spin)
 
-        const v_1_n = v_1.clone().add(wire1.speed)
-        const v_2_n = v_2
+        const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
+        const v_2_n = v_2.clone().multiplyScalar(wire2.current)
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
+        if (point_1 ==1 && point_2==1) {
+          console.log(wire1_mesh.current)
+        }
 
         const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
@@ -560,8 +607,8 @@ window.calc_force = function (toolbar, scene) {
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
       } else {
         // "their" force calculation
-        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2))
-        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2))
+        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
+        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
       }
 
       F_1_T.add(f_1)
