@@ -107,6 +107,7 @@ input[type='range']::-ms-thumb {
   border-radius: 100px;
 }
 
+
 .measure_slide {
   overflow: visible;
   height: .5vw;
