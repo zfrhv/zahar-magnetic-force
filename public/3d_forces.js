@@ -441,13 +441,13 @@ window.calc_force = function (toolbar, scene) {
   const wire1 = {}
   const wire2 = {}
 
-  const wire1_mesh     = scene.getObjectByName("wire1")
-  const wire2_mesh     = scene.getObjectByName("wire2")
-  const force_on_1     = scene.getObjectByName("force_on_1")
-  const force_on_2     = scene.getObjectByName("force_on_2")
-  const curve_1        = scene.getObjectByName("curve_1")
-  const curve_2        = scene.getObjectByName("curve_2")
-  const wire1_speeds   = scene.getObjectByName("wire1_speeds")
+  const wire1_mesh      = scene.getObjectByName("wire1")
+  const wire2_mesh      = scene.getObjectByName("wire2")
+  const force_on_1      = scene.getObjectByName("force_on_1")
+  const force_on_2      = scene.getObjectByName("force_on_2")
+  const curve_1         = scene.getObjectByName("curve_1")
+  const curve_2         = scene.getObjectByName("curve_2")
+  const wire1_speeds    = scene.getObjectByName("wire1_speeds")
   const voltage1_arrows = scene.getObjectByName("voltages1")
   const voltage2_arrows = scene.getObjectByName("voltages2")
 
