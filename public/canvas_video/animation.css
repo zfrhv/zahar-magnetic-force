@@ -80,8 +80,8 @@
   width: min(4%, 8px);
   /* the actual height */
   padding-bottom: min(11%, 20px);
-  margin-top: 2.7vw;
-  transform: translateY(-130%);
+  margin-top: 2vw;
+  transform: translateY(-120%);
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
   border-radius: 100px;
