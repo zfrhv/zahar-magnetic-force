@@ -443,7 +443,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       text.innerText = name + ":";
       text.style.float = "left";
       text.style.width = "auto";
-      // text.style.fontSize = "min(30px, 75%)";
       part.append(text);
       subj_part.append(part);
   

@@ -79,7 +79,8 @@
   appearance: none;
   width: 8px;
   height: 20px;
-  transform: translateY(-8px);
+  margin-top: -8px;
+  margin-bottom: 8px;
   background: #6fa805;
   box-shadow: 0 0 0 0 transparent;
   border-radius: 100px;
