@@ -426,9 +426,14 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       slidebar.value = subj != "Orientation" ? 50 : 0;
       slidebar.min = 0;
       slidebar.max = 100;
+      // add style
       slidebar.style.width = "70%";
       slidebar.style.verticalAlign = "middle";
       slidebar.classList.add("measure_slide");
+
+      // add classes for easy searching
+      slidebar.classList.add(subj.toLowerCase());
+      name.split("_").forEach(symbol => slidebar.classList.add(symbol.toLowerCase()))
       part.append(slidebar);
   
       slidebar.onchange = inputs[subj][name];
@@ -451,6 +456,7 @@ window.calc_force = function (toolbar, scene) {
   const voltage1_arrows = scene.getObjectByName("voltages1")
   const voltage2_arrows = scene.getObjectByName("voltages2")
 
+  wire1.name = "Green wire"
   wire1.position = wire1_mesh.position
   wire1.rotation = wire1_mesh.rotation
   wire1.mass_center = wire1_mesh.mass_center.clone().applyEuler(wire1.rotation)
@@ -460,7 +466,9 @@ window.calc_force = function (toolbar, scene) {
   // wire1.spin = wire1_mesh.spin
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
+  wire1.voltage_arrows = voltage1_arrows
 
+  wire2.name = "Blue wire"
   wire2.position = wire2_mesh.position
   wire2.rotation = wire2_mesh.rotation
   wire2.mass_center = wire2_mesh.mass_center.clone().applyEuler(wire2.rotation)
@@ -468,6 +476,7 @@ window.calc_force = function (toolbar, scene) {
   // wire2.spin = wire2_mesh.spin
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
   wire2.length = wire2_mesh.length
+  wire2.voltage_arrows = voltage2_arrows
 
   if (wire2_mesh.areas) {
     wire2.areas = wire2_mesh.areas.map(vec => vec.clone().applyEuler(wire2.rotation).add(wire2.position))
@@ -619,33 +628,34 @@ window.calc_force = function (toolbar, scene) {
   curve_1.rotation.setFromVector3(vec_to_euler(F_1_rotating_T))
   curve_2.rotation.setFromVector3(vec_to_euler(F_2_rotating_T))
 
-  // update voltage2
-  if (!mine_force && !wire2.areas) {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Blue wire voltage: .*$","gm"),"Blue wire voltage: can't calc this shape")
-    voltage2_arrows.children.forEach(arrow => {
-      arrow.setLength(1, 0, 0)
-    })
-  } else {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Blue wire voltage: .*$","gm"),"Blue wire voltage: " + Math.abs(wire2.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
-    // keep the arrow with easy to see size
-    const size = Math.sqrt(Math.abs(wire2.voltage))*Math.sign(wire2.voltage)
-    voltage2_arrows.children.forEach(arrow => {
-      arrow.setLength(1, 60*size, 60*size)
+  function update_voltage(wire, message) {
+    let value
+    let arrow_size
+    let wire_name
+    if (message) {
+      value = message
+      arrow_size = 0
+    } else {
+      value = Math.abs(wire.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0]
+      // keep the arrow with easy to see size
+      arrow_size = Math.sqrt(Math.abs(wire.voltage))*Math.sign(wire.voltage)
+    }
+    voltage.innerHTML = voltage.innerHTML.replace( new RegExp(wire.name+" voltage: .*$","gm"),wire.name+" voltage: " + value)
+    wire.voltage_arrows.children.forEach(arrow => {
+      arrow.setLength(1, 60*arrow_size, 60*arrow_size)
     })
   }
 
-  // update voltage1
-  if (!mine_force) {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Green wire voltage: .*$","gm"),"Green wire voltage: can't calc with this method")
-    voltage1_arrows.children.forEach(arrow => {
-      arrow.setLength(1, 0, 0)
-    })
-  } else {
-    voltage.innerHTML = voltage.innerHTML.replace( new RegExp("Green wire voltage: .*$","gm"),"Green wire voltage: " + Math.abs(wire1.voltage*10).toFixed(20).match(/^-?\d*\.?0*\d{0,2}/)[0])
-    // keep the arrow with easy to see size
-    const size = Math.sqrt(Math.abs(wire1.voltage))*Math.sign(wire1.voltage)
-    voltage1_arrows.children.forEach(arrow => {
-      arrow.setLength(1, 60*size, 60*size)
-    })
+  // update voltages
+  if (mine_force) { // mine force
+    update_voltage(wire1)
+    update_voltage(wire2)
+  } else { // their force
+    update_voltage(wire1, "many work. open issue on gihub if you are interesting adding this feature")
+    if (wire2.areas) {
+      update_voltage(wire2)
+    } else {
+      update_voltage(wire2, "can't calc this shape")
+    }
   }
 }
