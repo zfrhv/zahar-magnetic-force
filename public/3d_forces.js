@@ -544,6 +544,8 @@ window.calc_force = function (toolbar, scene) {
   const mine_force = toolbar.children[0].children[1].children[0].checked
   const voltage = wire2_mesh.voltage
 
+  // const mass_of_electron_over_proton = 1/1000
+
   const F_1_T = new THREE.Vector3(0,0,0)
   const F_2_T = new THREE.Vector3(0,0,0)
   const F_1_rotating_T = new THREE.Vector3(0,0,0)
@@ -586,8 +588,9 @@ window.calc_force = function (toolbar, scene) {
 
         // const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed).add(v_1_spin)
         // const v_2_n = v_2.clone().multiplyScalar(wire2.current).add(v_2_spin)
-        // const v_1_p = wire1.speed.clone().add(v_1_spin)
-        // const v_2_p = new THREE.Vector3(0,0,0).add(v_2_spin)
+        // // TODO maybe need -mass_of_electron_over_proton here? (negative)
+        // const v_1_p = wire1.speed.clone().add(v_1_spin.clone().multiplyScalar(mass_of_electron_over_proton))
+        // const v_2_p = new THREE.Vector3(0,0,0).add(v_2_spin.clone().multiplyScalar(mass_of_electron_over_proton))
 
         const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
         const v_2_n = v_2.clone().multiplyScalar(wire2.current)
@@ -604,6 +607,8 @@ window.calc_force = function (toolbar, scene) {
 
         // calculating "field" on electrons in wire2 to measure the voltage
         const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
+        // TODO check this and explain it in the docs. there is force on proton indeed, but it will barely move so the Δspeed between electron and proton will be barely noticable, thus voltage as well?
+        // const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (Math.pow(R.length(), 2)) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
         const distance_2 = wire2.length / (parts_2-1)
@@ -612,6 +617,7 @@ window.calc_force = function (toolbar, scene) {
 
         // calculate voltage for wire 1 as well
         const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n) / (Math.pow(R.length(), 2)) )
+        // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (Math.pow(R.length(), 2)) )
         const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
         const distance_1 = wire1.length / (parts_1-1)
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
