@@ -12,8 +12,8 @@ let idle = function() {
   
   function resetTimer() {
     clearTimeout(time);
-    // after 30 min
-    time = setTimeout(draw_web, 3000);
+    // draw web after 20 min
+    time = setTimeout(draw_web, 20*60*1000);
 
     if (has_web) { clear_web(); }
   }
