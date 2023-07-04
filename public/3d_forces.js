@@ -435,6 +435,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     subj_title.style.fontWeight = "bold";
     subj_part.append(subj_title);
     slidebars.append(subj_part);
+    if (subj == "Current") {
+      subj_title.click()
+    }
     for(const name in inputs[subj]) {
       const part = document.createElement('div');
       part.style.marginLeft = '5%';
