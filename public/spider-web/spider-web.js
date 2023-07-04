@@ -4,6 +4,10 @@ let idle = function() {
   document.onmousemove = resetTimer;
   document.onkeydown = resetTimer;
   
+  const lines = 7;
+  const circles = 6;
+  const animation_time = '5'; // in seconds, example: animation_time = '3.5'
+  const clear_time = '0.4'
     
   
   function resetTimer() {
@@ -14,18 +18,21 @@ let idle = function() {
     if (has_web) { clear_web(); }
   }
   
-  function clear_web() {
+  async function clear_web() {
     let elements = document.getElementById('spider-web').getElementsByTagName('path');
     for (let i=0; i < elements.length; i++) {
-      elements[i].style.transition = '0.5s';
+      elements[i].style.transition = clear_time + 's';
       elements[i].style.transitionDelay = '0s';
       elements[i].style.strokeDashoffset = '100%';
     }
+    await new Promise(r => setTimeout(r, Number(clear_time)*1000));
+    svg_element.style.zIndex = -100;
     has_web = false;
   }
   
-  function draw_web() {
+  async function draw_web() {
     has_web = true;
+    svg_element.style.zIndex = 100;
     let elements = document.getElementById('spider-web').getElementsByTagName('path');
     for (let i=0; i < elements.length; i++) {
       elements[i].style.transition = elements[i].style._transition;
@@ -35,11 +42,6 @@ let idle = function() {
   }
     
   function create_web(svg_element) {
-    const lines = 7;
-    const circles = 6;
-    const animation_time = '5'; // in seconds, example: animation_time = '3.5'
-
-
     let lines_paths = [];
     let web_path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     let path_string = '';
@@ -87,7 +89,6 @@ let idle = function() {
   let svg_element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg_element.id = 'spider-web';
   svg_element.setAttribute("viewBox", "0,0 200,200");
-  svg_element.style.zIndex = 1000;
 
   create_web(svg_element);
   document.body.appendChild(svg_element);
