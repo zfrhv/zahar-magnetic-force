@@ -1,0 +1,19 @@
+
+#spider-web {
+    z-index:-1;
+    position: fixed;
+    width: 170%;
+    height: 170%;
+    top: -70%;
+    left: -70%;
+}
+  
+#spider-web path {
+  stroke-width: 0.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: white;
+  fill: none;
+  stroke-dasharray: 100%;
+}
+  
