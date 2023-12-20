@@ -16,7 +16,7 @@
 
   textarea {
     color: #d6d5d2;
-    background-color: #212129;
+    background-color: #3e3e41;
   }
 
   ::-webkit-scrollbar-track {
@@ -52,7 +52,7 @@
 
   textarea {
     color: #d6d5d2;
-    background-color: #212129;
+    background-color: #3e3e41;
   }
 
   ::-webkit-scrollbar-track {
@@ -169,4 +169,6 @@ mjx-container {
 
 textarea {
   width: 100%;
+  border-radius: 7px;
+  padding: 7px;
 }
