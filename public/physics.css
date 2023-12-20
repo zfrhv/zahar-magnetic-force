@@ -155,9 +155,11 @@ summary {
 }
 
 .collapse {
-  border-left: 4px solid #8aafff;
   padding-left: 10px;
   text-align: center;
+}
+.collapse[open] {
+  border-left: 4px solid #8aafff;
 }
 
 mjx-container {
