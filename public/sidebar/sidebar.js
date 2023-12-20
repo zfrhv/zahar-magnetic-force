@@ -28,6 +28,7 @@ sidebar.innerHTML = `
   <a href="sensing_equation.html">Sensing Equation</a>
   <a href="comparing_equations.html">Comparing Equations</a>
   <a href="discussion.html">Discussion</a>
+  <a href="https://github.com/zfrhv/zahar-magnetic-force/issues" target="_blank"><img src="./svg/feedback.svg" style="height: 18px;"/> Feedback</a>
 </div>
 `
 document.getElementById("SideBar").replaceWith(sidebar)
