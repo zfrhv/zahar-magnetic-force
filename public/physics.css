@@ -120,7 +120,7 @@ iframe {
   width: 60%;
 }
 
-img {
+.page-content img {
   border: 0.2vw solid #d6d5d2;
   border-radius: 1vw;
   width: 60%;
