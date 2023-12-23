@@ -1,3 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg width="195" height="136" version="1.1" viewBox="0 0 195 136" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-9.7 -9.03)" fill="none" stroke-linecap="round"><path id="branch" d="m10 20c16-4 28-9 49-1 22 5 24 5 41 0.8 16-5 32-5 45 0.5 15 6 27 0.2 36-2 13-4 19 6 15 18-4 9-5 10-3 24 1 8 3 10-0.7 24-3 11-1 14 4 27 7 10 6 21-3 33" stroke="#835d41" stroke-width=".6"/><g id="templates" display="none"><use id="dl" fill="#4b831d" href="#leaf_shape" name="dark_leaf"/><use id="ll" fill="#5a9e23" href="#leaf_shape" name="light_leaf"/><path id="leaf_shape" d="m26 43c-6-5 0.3-10 0.3-10s6 7-0.3 10z"/></g><use transform="rotate(54,46,22)" href="#dl"/><use transform="rotate(64,64,65)" href="#dl"/><use transform="rotate(207 108 12)" href="#ll"/><use transform="rotate(51,133,197)" href="#ll"/><use transform="rotate(149,114,59.9)" href="#ll"/><use transform="rotate(217 109 13.9)" href="#ll"/><use transform="rotate(149,108,70.9)" href="#ll"/><use transform="rotate(207 112 33.9)" href="#ll"/><use transform="rotate(204 113 49)" href="#ll"/><use transform="rotate(162,107,72.9)" href="#ll"/><use transform="rotate(133,96.6,109)" href="#ll"/><use transform="rotate(195 117 67.2)" href="#ll"/><use transform="matrix(-.9 .2 -.3 -.9 237 161)" href="#ll"/><use transform="matrix(-.5 -.6 .6 -.5 185 174)" href="#ll"/><use transform="rotate(123,36,30)" href="#dl"/><use transform="rotate(53,64,49)" href="#dl"/><use transform="rotate(123,47,38)" href="#dl"/><use transform="rotate(116,60,50)" href="#dl"/><use transform="rotate(45,88,116)" href="#dl"/><use transform="rotate(123,75,53)" href="#dl"/><use transform="rotate(62,97,109)" href="#dl"/><use transform="rotate(114,89,66)" href="#dl"/><use transform="rotate(72,103,118)" href="#dl"/><use transform="rotate(106,106,87)" href="#dl"/></g></svg>
+<svg width="195" height="136" version="1.1" viewBox="0 0 195 136" xml:space="preserve"
+  xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(-9.7 -9.03)" fill="none" stroke-linecap="round">
+    <def>
+      <use id="dl" fill="#4b831d" href="#leaf_shape" name="dark_leaf" />
+      <use id="ll" fill="#5a9e23" href="#leaf_shape" name="light_leaf" />
+      <path id="leaf_shape" d="m26 43c-6-5 0.3-10 0.3-10s6 7-0.3 10z" />
+    </def>
+    <path id="branch"
+      d="m10 20c16-4 28-9 49-1 22 5 24 5 41 0.8 16-5 32-5 45 0.5 15 6 27 0.2 36-2 13-4 19 6 15 18-4 9-5 10-3 24 1 8 3 10-0.7 24-3 11-1 14 4 27 7 10 6 21-3 33"
+      stroke="#835d41" stroke-width=".6" />
+    <use transform="rotate(54,46,22)" href="#dl" />
+    <use transform="rotate(64,64,65)" href="#dl" />
+    <use transform="rotate(207 108 12)" href="#ll" />
+    <use transform="rotate(51,133,197)" href="#ll" />
+    <use transform="rotate(149,114,59.9)" href="#ll" />
+    <use transform="rotate(217 109 13.9)" href="#ll" />
+    <use transform="rotate(149,108,70.9)" href="#ll" />
+    <use transform="rotate(207 112 33.9)" href="#ll" />
+    <use transform="rotate(204 113 49)" href="#ll" />
+    <use transform="rotate(162,107,72.9)" href="#ll" />
+    <use transform="rotate(133,96.6,109)" href="#ll" />
+    <use transform="rotate(195 117 67.2)" href="#ll" />
+    <use transform="matrix(-.9 .2 -.3 -.9 237 161)" href="#ll" />
+    <use transform="matrix(-.5 -.6 .6 -.5 185 174)" href="#ll" />
+    <use transform="rotate(123,36,30)" href="#dl" />
+    <use transform="rotate(53,64,49)" href="#dl" />
+    <use transform="rotate(123,47,38)" href="#dl" />
+    <use transform="rotate(116,60,50)" href="#dl" />
+    <use transform="rotate(45,88,116)" href="#dl" />
+    <use transform="rotate(123,75,53)" href="#dl" />
+    <use transform="rotate(62,97,109)" href="#dl" />
+    <use transform="rotate(114,89,66)" href="#dl" />
+    <use transform="rotate(72,103,118)" href="#dl" />
+    <use transform="rotate(106,106,87)" href="#dl" />
+  </g>
+</svg>
