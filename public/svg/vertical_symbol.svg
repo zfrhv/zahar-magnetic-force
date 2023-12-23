@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="80mm" height="80mm" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" version="2" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr_1" markerHeight="6" markerWidth="5" orient="auto-start-reverse" viewBox="-3 -4 3 8">
+      <path transform="rotate(180 .125 0)" d="m3-3-3 3 3 3" stroke="#fd6347"/>
+    </marker>
+    <marker id="arr_2" markerHeight="6" markerWidth="5" orient="auto-start-reverse" viewBox="-3 -4 3 8">
+      <path transform="rotate(180 .125 0)" d="m3-3-3 3 3 3" stroke="#1e90ff"/>
+    </marker>
+    <marker id="arr_3" markerHeight="6" markerWidth="5" orient="auto-start-reverse" viewBox="-3 -4 3 8">
+      <path transform="rotate(180 .125 0)" d="m3-3-3 3 3 3" stroke="#3caf6f"/>
+    </marker>
+    <marker id="arr_4" markerHeight="6" markerWidth="5" orient="auto-start-reverse" viewBox="-3 -4 3 8">
+      <path transform="rotate(180 .125 0)" d="m3-3-3 3 3 3" stroke="#daa520"/>
+    </marker>
+  </defs>
+  <path d="m31.5 40.4 3.93-3.59 3.38 4.09" stroke="#808080" stroke-width="1.09"/>
+  <g transform="matrix(.536 -.49 .466 .564 17.2 28.3)" stroke="#808080" stroke-dasharray="1.17662, 2.94154">
+    <path d="m37.6 56.4-0.146-24.5"/>
+    <path d="m37.1 56.4h-32.7"/>
+  </g><g stroke-width="1.09">
+  <path d="m63.2 41.8-28.3 2.52" marker-start="url(#arr_1)" stroke="#fd6347"/>
+  <path d="m52.3 28.6-17.2 15.6" marker-start="url(#arr_2)" stroke="#1e90ff"/>
+  <path d="m20.2 26.8 15.8 19.2" marker-start="url(#arr_3)" stroke="#3caf6f"/>
+  <path d="m45.6 57.5-10.8-13" marker-start="url(#arr_4)" stroke="#daa520"/>
+</g></svg>
