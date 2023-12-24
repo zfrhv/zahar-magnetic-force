@@ -43,17 +43,12 @@
         <br/>
         <br/>
       </div>
-      <div id="equation_anatomy" class="animation_box">
-        <canvas width="1000" height="1000"></canvas>
-      </div>
+      <img src="./svg/symbols_explanation.svg" />
       <div class="markdown">
         \\({\color{Tomato}\vec A}\ \parallel\ {\color{MediumSeaGreen}\vec B}={\color{GoldenRod}\vec C}\\):
 
         \\({\color{Tomato}\vec A}\ \bot\ {\color{MediumSeaGreen}\vec B}={\color{DodgerBlue}\vec D}\\):
       </div>
-      <!-- <div id="vertical_symbol" class="animation_box">
-        <canvas width="1000" height="1000"></canvas>
-      </div> -->
       <img src="./svg/vertical_symbol.svg" />
       <div class="markdown">
         $$\color{#f7c860}I = q \cdot v$$
@@ -284,11 +279,7 @@
       elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
   </script>
-  <script src="drawings.js"></script>
   <script type="module" src="3d_forces.js"></script>
-  <script type="module">
-    draw_symbols_explanation()
-  </script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
   
   <link rel="stylesheet" href="spider-web/spider-web.css ">
