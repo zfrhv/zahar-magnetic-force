@@ -8,7 +8,7 @@ let idle = function() {
   const circles = 6
   const animation_time = '5' // in seconds, example: animation_time = '3.5'
   const clear_time = '0.4'
-  const idle_time = 0.05*60*1000 // draw web after 20 min
+  const idle_time = 20*60*1000 // draw web after 20 min
   
   function resetTimer() {
     clearTimeout(time);
