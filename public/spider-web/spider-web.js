@@ -4,16 +4,15 @@ let idle = function() {
   document.onmousemove = resetTimer;
   document.onkeydown = resetTimer;
   
-  const lines = 7;
-  const circles = 6;
-  const animation_time = '5'; // in seconds, example: animation_time = '3.5'
+  const lines = 7
+  const circles = 6
+  const animation_time = '5' // in seconds, example: animation_time = '3.5'
   const clear_time = '0.4'
-    
+  const idle_time = 0.05*60*1000 // draw web after 20 min
   
   function resetTimer() {
     clearTimeout(time);
-    // draw web after 20 min
-    time = setTimeout(draw_web, 20*60*1000);
+    time = setTimeout(draw_web, idle_time);
 
     if (has_web) { clear_web(); }
   }
@@ -39,6 +38,8 @@ let idle = function() {
       elements[i].style.transitionDelay = elements[i].style._transitionDelay;
       elements[i].style.strokeDashoffset = '0%';
     }
+    // move the spider
+
   }
     
   function create_web(svg_element) {
@@ -80,6 +81,15 @@ let idle = function() {
 
     lines_paths.forEach(line => svg_element.appendChild(line));
     svg_element.appendChild(web_path);
+
+    // add the spider
+    const spider = document.createElement('image')
+    spider.setAttribute("href", "./spider-web/spoody.svg")
+    spider.setAttribute("width", "30")
+    spider.setAttribute("height", "30")
+    spider.setAttribute("x", "150")
+    spider.setAttribute("y", "150")
+    svg_element.appendChild(spider)
   }
   
   

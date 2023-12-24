@@ -34,6 +34,28 @@
   <div class="page">
     <img src="./svg/top-branch.svg" style="position: absolute; width: 100%; transform: translateY(-6.2%) translateX(5%); height: auto; pointer-events: none;"/>
     <article class="page-content">
+
+      <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <path id="myPath" d="M10 80 Q 52.5 10, 95 80 T 180 80" stroke="black" fill="transparent"/>
+      </svg>
+      <style>
+@keyframes pathAnimation {
+  0%, 20%, 40%, 60% {
+    /* Your starting and ending path */
+    d: path('M10 80 Q 52.5 10, 95 80 T 180 80');
+  }
+  10%, 30% {
+    /* Your intermediate path */
+    d: path('M10 80 Q 52.5 150, 95 80 T 180 80');
+  }
+}
+
+#myPath {
+  animation: pathAnimation 5s linear infinite; /* Animation properties */
+}
+      </style>
+      
+
       <div class="markdown">
         # <center><u>b</u></center>
 
