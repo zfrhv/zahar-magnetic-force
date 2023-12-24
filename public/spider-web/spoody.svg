@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="116mm" height="68.9mm" version="1.1" viewBox="0 0 116 68.9" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-30.1 -94.6)">
+  <g id="legs" fill="none" stroke="#1a0c02">
+   <path d="m70.6 136-20 1.32-8.68 14.2 1.13 11.9"/>
+   <path d="m66.6 126-19.8-6.6-14.2 12.8-0.377 9.25"/>
+   <path d="m70 114-20-10.4-16.2 8.49-3.21 11.7"/>
+   <path d="m103 104 15.3-9.25 17.2 2.64 9.62 14.2"/>
+   <path d="m109 116 12.6-5.09 13 7.55 5.09 15.1"/>
+   <path d="m105 135 15.7 4.72 7.74 11.7-2.64 9.25"/>
+  </g>
+  <path d="m63.4 125s-0.759-19.6 27.9-24.5c17.7-3.02 26.4 11.7 25.7 22.6-0.624 9.04-6.42 21.6-23.4 21.1-15.1-0.377-27.2-2.26-30.2-19.2z" fill="#1a1206" style="paint-order:fill markers stroke"/>
+  <g id="eyes" fill="#f5eeda">
+   <ellipse cx="102" cy="119" rx="5.45" ry="4.62" stroke-width="1.75"/>
+   <ellipse cx="83.7" cy="123" rx="4.36" ry="4.2" stroke-width="2.11"/>
+  </g>
+  <g id="pupils">
+   <ellipse cx="84.4" cy="124" rx="1.58" ry="1.48" stroke-width="1.8"/>
+   <ellipse cx="103" cy="120" rx="2.22" ry="2.06" stroke-width="2.17"/>
+  </g>
+ </g>
+</svg>
