@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg width="116mm" height="68.9mm" version="1.1" viewBox="0 0 116 68.9" xmlns="http://www.w3.org/2000/svg">
  <g transform="translate(-30.1 -94.6)">
-  <g id="legs" fill="none" stroke="#1a0c02">
+  <g id="legs" fill="none" stroke="#1a0c02" stroke-width="3">
    <path d="m70.6 136-20 1.32-8.68 14.2 1.13 11.9"/>
    <path d="m66.6 126-19.8-6.6-14.2 12.8-0.377 9.25"/>
    <path d="m70 114-20-10.4-16.2 8.49-3.21 11.7"/>
@@ -20,4 +20,22 @@
    <ellipse cx="103" cy="120" rx="2.22" ry="2.06" stroke-width="2.17"/>
   </g>
  </g>
+
+ <style>
+  @keyframes spiderWave {
+    73%, 79%, 85%, 91%, 97% {
+      d: path('m105 135 18.3 2.23 9.86 -12.18 -6.54 -15.1');
+    }
+    76%, 82%, 88%, 94% {
+      d: path('m105 135 18.3 2.23 13.77 -9.22 2.56 -16.17');
+    }
+    0%, 70%, 100% {
+      d: path('m105 135 15.7 4.72 7.74 11.7-2.64 19.25');
+    }
+  }
+
+  #legs path:last-child {
+    animation: spiderWave 10s linear infinite;
+  }
+ </style>
 </svg>

@@ -24,6 +24,11 @@ let idle = function() {
       elements[i].style.transitionDelay = '0s';
       elements[i].style.strokeDashoffset = '100%';
     }
+    // move the spider
+    const spider = document.getElementById('spider')
+    spider.style.x = 50
+    spider.style.y = 80
+    spider.style.opacity = 0
     await new Promise(r => setTimeout(r, Number(clear_time)*1000));
     svg_element.style.zIndex = -100;
     has_web = false;
@@ -39,7 +44,10 @@ let idle = function() {
       elements[i].style.strokeDashoffset = '0%';
     }
     // move the spider
-
+    const spider = document.getElementById('spider')
+    spider.style.opacity = 1
+    spider.style.x = 100
+    spider.style.y = 100
   }
     
   function create_web(svg_element) {
@@ -83,12 +91,17 @@ let idle = function() {
     svg_element.appendChild(web_path);
 
     // add the spider
-    const spider = document.createElement('image')
+    const spider = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+    spider.setAttribute("id", "spider")
     spider.setAttribute("href", "./spider-web/spoody.svg")
     spider.setAttribute("width", "30")
     spider.setAttribute("height", "30")
-    spider.setAttribute("x", "150")
-    spider.setAttribute("y", "150")
+    spider.setAttribute("x", "100")
+    spider.setAttribute("y", "100")
+    spider.style.x = 50
+    spider.style.y = 80
+    spider.style.opacity = 0
+    spider.style.transition = "0.5s ease"
     svg_element.appendChild(spider)
   }
   
