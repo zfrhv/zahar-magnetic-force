@@ -1,4 +1,11 @@
-﻿
+﻿// Append css
+const css_link = document.createElement("link");
+css_link.href = "./spider_web/spider_web.css";
+css_link.type = "text/css";
+css_link.rel = "stylesheet";
+css_link.media = "screen,print";
+document.getElementsByTagName("head")[0].appendChild(css_link);
+
 let idle = function() {
   let time;
   document.onmousemove = resetTimer;
@@ -93,7 +100,7 @@ let idle = function() {
     // add the spider
     const spider = document.createElementNS('http://www.w3.org/2000/svg', 'image')
     spider.setAttribute("id", "spider")
-    spider.setAttribute("href", "./spider-web/spoody.svg")
+    spider.setAttribute("href", "./spider_web/spoody.svg")
     spider.setAttribute("width", "30")
     spider.setAttribute("height", "30")
     spider.setAttribute("x", "100")

@@ -1,11 +1,10 @@
 // Append css
-const animation_css_link = document.createElement("link");
-animation_css_link.href = "./canvas_video/animation.css";
-animation_css_link.type = "text/css";
-animation_css_link.rel = "stylesheet";
-animation_css_link.media = "screen,print";
-
-document.getElementsByTagName("head")[0].appendChild(animation_css_link);
+const css_link = document.createElement("link");
+css_link.href = "./canvas_video/animation.css";
+css_link.type = "text/css";
+css_link.rel = "stylesheet";
+css_link.media = "screen,print";
+document.getElementsByTagName("head")[0].appendChild(css_link);
 
 // Main
 window.addEventListener('load', () => {

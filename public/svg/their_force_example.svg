@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="100mm" height="100mm" fill="none" stroke-linecap="round" stroke-linejoin="round" version="1.1"
+  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="c_g" overflow="visible" markerHeight="6" markerWidth="6" viewBox="0 0 5.4 5.4">
+      <circle r="3.3" fill="#3e8207" stroke="#2a2a2c" />
+    </marker>
+    <marker id="c_b" overflow="visible" markerHeight="8.4" markerWidth="8.4" viewBox="0 0 7.6 7.6">
+      <circle r="3.3" fill="#6898cc" stroke="#2a2a2c" />
+    </marker>
+    <marker id="arr_p" overflow="visible" markerHeight="6" markerWidth="5" orient="auto-start-reverse" viewBox="0 0 5 6">
+      <path d="m-3-2 3 2-3 2" stroke="#2a2a2c" />
+    </marker>
+    <marker id="arr_b" overflow="visible" markerHeight="6" markerWidth="5" orient="auto-start-reverse" viewBox="0 0 5 6">
+      <path d="m-3-2 3 2-3 2 z" fill="#6898cc" stroke="#6898cc" />
+    </marker>
+  </defs>
+  <path d="m48.7 49.5h-20.7" marker-start="url(#arr_p)" stroke="#2a2a2c" />
+  <path d="m49.7 49.5h21.3" stroke="#2a2a2c" stroke-dasharray="3.1, 4.15" />
+  <path d="m28 62.7 0-13.2" marker-end="url(#c_g)" marker-start="url(#arr_b)" stroke="#6898cc" />
+  <path d="m71.6 29.3v20" marker-end="url(#c_b)" marker-start="url(#arr_p)" stroke="#2a2a2c" />
+</svg>
