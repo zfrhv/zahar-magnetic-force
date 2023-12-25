@@ -38,7 +38,6 @@
   <meta name="twitter:description" content="Discovering and explaining a better way to calculate and understand magnetic forces">
   <meta name="twitter:image" content="https://zahar-magnetic-force.web.app/main_page.png">
 
-  <script src="tools/canvas/shapes.js"></script>
   <script src="equations.js"></script>
   <link rel="stylesheet" type="text/css" href="physics.css" />
 </head>
@@ -53,9 +52,10 @@
         ## Magnetic force equation is WRONG
         ---
       </div>
-      <div id="their_force_example" class="animation_box">
+      <!-- <div id="their_force_example" class="animation_box">
         <canvas width="1000" height="1000" class="animation_content"></canvas>
-      </div>
+      </div> -->
+      <img src="./svg/their_force_example.svg" />
       <div class="markdown">
         Both particles are positivly charged.  
         The <span style="color:#79da2a">green</span> particle goes right, and the <span style="color:#78b9ff">blue</span> particle goes up.  
@@ -154,21 +154,8 @@
       elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
     });
   </script>
-  <script src="drawings.js"></script>
-  <script id="physics.js">
-    // Draw their force wrong
-    draw_particles(
-      document.getElementById("their_force_example").getElementsByTagName("canvas")[0].getContext("2d"),
-      { place: { x: 250, y: 500 }, speed: { x: 250, y: 0 } },
-      { place: { x: 750, y: 500 }, speed: { x: 0, y: -250 } },
-      their_force,
-      570
-    )
-  </script>
   <script type="module" src="3d_forces.js"></script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
-
-  <link rel="stylesheet" href="spider-web/spider-web.css ">
-  <script src="spider-web/spider-web.js"></script>
+  <script src="spider_web/spider_web.js"></script>
 </body>
 </html>
