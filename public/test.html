@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script id="Polyfill" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
+
+  <!-- Import maps polyfill -->
+	<!-- Remove this when import-maps will be widely supported -->
+	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+  <script id="ThreeJS" type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.144.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.144.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+
+  <title>Physics</title>
+  <link rel="icon" type="image/svg+xml" href="physics.svg">
+
+  <script src="equations.js"></script>
+  <link rel="stylesheet" type="text/css" href="physics.css" />
+</head>
+
+<body>
+  <script id="SideBar" src="./sidebar/sidebar.js"></script>
+  <div class="page">
+    <img src="./svg/top-branch.svg" style="position: absolute; width: 100%; transform: translateY(-6.2%) translateX(5%); height: auto; pointer-events: none;"/>
+    <article class="page-content">
+      <div class="markdown">
+        # <center><u>b</u></center>
+
+        a
+      </div>
+      <canvas-video id="calc_two_circles" name="calc_two_circles" type="calculate" style="position: relative;"></canvas-video>
+    </article>
+    <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
+    });
+  </script>
+  <script type="module" src="test.js"></script>
+  <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
+  <script>
+    window.calc = () => {
+      const toolbar = document.getElementById("calc_two_circles").children[1]
+      // if mine force
+      toolbar.children[0].children[1].children[0].click()
+
+      toolbar.children[1].children[3].children[0].value = 100
+      toolbar.children[1].children[3].children[0].onchange()
+      for (let a = 0; a <= 25; a+=2.5) {
+        for (let b = 0; b <= 25; b+=2.5) {
+          for (let c = 0; c <= 25; c+=2.5) {
+            toolbar.children[1].children[0].children[0].value = a
+            toolbar.children[1].children[0].children[0].onchange()
+            toolbar.children[1].children[1].children[0].value = b
+            toolbar.children[1].children[1].children[0].onchange()
+            toolbar.children[1].children[2].children[0].value = c
+            toolbar.children[1].children[2].children[0].onchange()
+            toolbar.children[0].children[0].click()
+          }
+        }
+      }
+
+    }
+  </script>
+  <script src="spider_web/spider_web.js"></script>
+</body>
+</html>
