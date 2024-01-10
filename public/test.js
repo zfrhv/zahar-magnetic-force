@@ -608,15 +608,16 @@ window.calc_force = function (toolbar, scene) {
         f_2.add(R_hat.clone().multiplyScalar( combine(vertical_1(v_1, R_hat), vertical_1(v_2, R_hat)) * 4 ))
         f_2.add( vertical_1(v_2, R_hat).multiplyScalar(combine(v_1, R_hat) * 3/2) )
         f_2.add( vertical_1(v_1, R_hat).multiplyScalar(combine(v_2, R_hat) * 3/2) )
-        f_2.multiplyScalar(1 / Math.pow(R.length(), 2)) // its 1/L^2 ? cuz in my theory its 1/L^4
+        f_2.multiplyScalar(1 / Math.pow(R.length(), 2))
 
         f_1 = f_2.clone().multiplyScalar(-1)
 
-        // ?
-        f_2_rotating.add(vertical_1(v_1, R_hat).cross(vertical_1(v_2, R_hat)).multiplyScalar(4.5))
-        f_2_rotating.add(vertical_1(v_2, R_hat).cross(parallel_1(v_1, R_hat)).multiplyScalar(9))
-        f_2_rotating.add(vertical_1(v_1, R_hat).cross(parallel_1(v_2, R_hat)).multiplyScalar(4.5))
-        f_2_rotating.multiplyScalar(1 / Math.pow(R.length(), 3))
+        // rotation force around the particles themselve doesnt matters?
+        // maybe its so tiny that it just doesnt matters
+        // f_2_rotating.add(vertical_1(v_1, R_hat).cross(vertical_1(v_2, R_hat)).multiplyScalar(4.5))
+        // f_2_rotating.add(vertical_1(v_2, R_hat).cross(parallel_1(v_1, R_hat)).multiplyScalar(9))
+        // f_2_rotating.add(vertical_1(v_1, R_hat).cross(parallel_1(v_2, R_hat)).multiplyScalar(4.5))
+        f_2_rotating.multiplyScalar(1 / Math.pow(R.length(), 2))
         // F_2_rotating_T.add(f_2_rotating)
       } else {
         // "their" force calculation
