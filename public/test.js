@@ -604,11 +604,12 @@ window.calc_force = function (toolbar, scene) {
         let f_1_rotating = new THREE.Vector3(0,0,0)
         let f_2_rotating = new THREE.Vector3(0,0,0)
 
-        f_2.add(R_hat.clone().multiplyScalar( - combine(v_1, R_hat) * combine(v_2, R_hat) ))
+        // something definetly wrong here, when degree G_T is 1/4, then G_X shouldnt matter, but it does, why?
+        f_2.add(R_hat.clone().multiplyScalar( - combine(v_1, R_hat) * combine(v_2, R_hat) * 8 ))
         f_2.add(R_hat.clone().multiplyScalar( combine(vertical_1(v_1, R_hat), vertical_1(v_2, R_hat)) * 4 ))
-        f_2.add( vertical_1(v_2, R_hat).multiplyScalar(combine(v_1, R_hat) * 3/2) )
-        f_2.add( vertical_1(v_1, R_hat).multiplyScalar(combine(v_2, R_hat) * 3/2) )
-        f_2.multiplyScalar(1 / Math.pow(R.length(), 2))
+        f_2.add( vertical_1(v_2, R_hat).multiplyScalar(combine(v_1, R_hat) * 4) )
+        f_2.add( vertical_1(v_1, R_hat).multiplyScalar(combine(v_2, R_hat) * 4) )
+        f_2.multiplyScalar(1 / Math.pow(R.length(), 4))
 
         f_1 = f_2.clone().multiplyScalar(-1)
 
@@ -685,7 +686,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage   *= 267.079_464_85
   let foce_const
   if (mine_force) {
-    foce_const = 267_079_464.85 * 0.75
+    foce_const = 267_079_464_850_000_000
   } else {
     foce_const = 267_079_464.85
   }
