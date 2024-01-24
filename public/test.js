@@ -604,22 +604,20 @@ window.calc_force = function (toolbar, scene) {
         let f_1_rotating = new THREE.Vector3(0,0,0)
         let f_2_rotating = new THREE.Vector3(0,0,0)
 
-        // something definetly wrong here, when degree G_T is 1/4, then G_X shouldnt matter, but it does, why?
-        f_2.add(R_hat.clone().multiplyScalar( - combine(v_1, R_hat) * combine(v_2, R_hat) * 8 ))
-        f_2.add(R_hat.clone().multiplyScalar( combine(vertical_1(v_1, R_hat), vertical_1(v_2, R_hat)) * 4 ))
-        f_2.add( vertical_1(v_2, R_hat).multiplyScalar(combine(v_1, R_hat) * 4) )
-        f_2.add( vertical_1(v_1, R_hat).multiplyScalar(combine(v_2, R_hat) * 4) )
+        // something definetly wrong here, when degree G_Y is 1/4, then G_X shouldnt matter, but it does, why?
+        f_2.add(R_hat.clone().multiplyScalar( - combine(v_1, R_hat) * combine(v_2, R_hat) * 6 ))
+        f_2.add(R_hat.clone().multiplyScalar( combine(vertical_1(v_1, R_hat), vertical_1(v_2, R_hat)) * 3 ))
+        f_2.add( vertical_1(v_2, R_hat).multiplyScalar(combine(v_1, R_hat) * 3) )
+        f_2.add( vertical_1(v_1, R_hat).multiplyScalar(combine(v_2, R_hat) * 3) )
         f_2.multiplyScalar(1 / Math.pow(R.length(), 4))
 
         f_1 = f_2.clone().multiplyScalar(-1)
 
-        // rotation force around the particles themselve doesnt matters?
-        // maybe its so tiny that it just doesnt matters
-        // f_2_rotating.add(vertical_1(v_1, R_hat).cross(vertical_1(v_2, R_hat)).multiplyScalar(4.5))
-        // f_2_rotating.add(vertical_1(v_2, R_hat).cross(parallel_1(v_1, R_hat)).multiplyScalar(9))
-        // f_2_rotating.add(vertical_1(v_1, R_hat).cross(parallel_1(v_2, R_hat)).multiplyScalar(4.5))
-        f_2_rotating.multiplyScalar(1 / Math.pow(R.length(), 2))
-        // F_2_rotating_T.add(f_2_rotating)
+        f_2_rotating.add(vertical_1(v_1, R_hat).cross(vertical_1(v_2, R_hat)))
+        f_2_rotating.add(vertical_1(v_2, R_hat).cross(parallel_1(v_1, R_hat)).multiplyScalar(2))
+        f_2_rotating.add(vertical_1(v_1, R_hat).cross(parallel_1(v_2, R_hat)))
+        f_2_rotating.multiplyScalar(1 / Math.pow(R.length(), 3))
+        F_2_rotating_T.add(f_2_rotating)
       } else {
         // "their" force calculation
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
