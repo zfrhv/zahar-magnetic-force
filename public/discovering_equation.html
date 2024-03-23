@@ -171,7 +171,7 @@
 
       </div>
       <details class="collapse">
-        <summary>And if we check between wires, there are 4 parts: (click on this text)</summary>
+        <summary>And if we check between two wire parts, there are 4 parts: (click on this text)</summary>
         <div style="text-align: left;">
           <div class="markdown">
             $$2 \cdot Top\ Part = \begin{aligned}
@@ -203,28 +203,53 @@
             \- 2\vec{v_1}_\- \cdot \vec{v_2}_\+ + 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
             \+ 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
             \+ 2\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
+            <br/>
+            $$Top\ Part = \begin{aligned}
+            \+ 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 2\vec{v_1}_\+ \cdot \vec{v_2}_\- \\\\
+            \+ 2\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 2\vec{v_1}_\- \cdot \vec{v_2}_\+ \\\\
+            \+ 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
+            \+ 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) - 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r})  \end{aligned}$$
+            <br/>
+            $$Top\ Part = \begin{aligned}
+            \+ 2\vec{v_2}_\- \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
+            \+ 2\vec{v_2}_\+ \cdot (\vec{v_1}_\+ - \vec{v_1}_\-) \\\\
+            \+ 3(\vec{v_2}_\- \cdot \hat{r}) \cdot ((\vec{v_1}_\+ \cdot \hat{r}) - (\vec{v_1}_\- \cdot \hat{r})) \\\\
+            \+ 3(\vec{v_2}_\+ \cdot \hat{r}) \cdot ((\vec{v_1}_\- \cdot \hat{r}) - (\vec{v_1}_\+ \cdot \hat{r}))  \end{aligned}$$
+            <br/>
+            $$Top\ Part = \begin{aligned}
+            \+ 2\vec{v_2}_\- \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
+            \- 2\vec{v_2}_\+ \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
+            \+ 3(\vec{v_2}_\- \cdot \hat{r}) \cdot ((\vec{v_1}_\+ \cdot \hat{r}) - (\vec{v_1}_\- \cdot \hat{r})) \\\\
+            \- 3(\vec{v_2}_\+ \cdot \hat{r}) \cdot ((\vec{v_1}_\+ \cdot \hat{r}) - (\vec{v_1}_\- \cdot \hat{r}))  \end{aligned}$$
+            <br/>
+            $$Top\ Part = \begin{aligned}
+            \+ 2(\vec{v_2}_\- - \vec{v_2}_\+) \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
+            \- 3((\vec{v_2}_\- \cdot \hat{r}) - (\vec{v_2}_\+ \cdot \hat{r})) \cdot ((\vec{v_1}_\- \cdot \hat{r}) - (\vec{v_1}_\+ \cdot \hat{r})) \end{aligned}$$
+            <br/>
+            $$Top\ Part = \begin{aligned}
+            \+ 2(\vec{v_2}_\- - \vec{v_2}_\+) \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
+            \- 3((\vec{v_2}_\- - \vec{v_2}_\+) \cdot \hat{r}) \cdot ((\vec{v_1}_\- - \vec{v_1}_\+) \cdot \hat{r}) \end{aligned}$$
     
-            But in real life when we measure force between the wires, the material is not moving, so the speed of the protons is 0:
+            Multiply by the charge:
     
-            $$Top\ Part = 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) $$
-    
+            $$Top\ Part \cdot q_1 \cdot q_2 = \begin{aligned}
+            \+ 2 \cdot q_2 \cdot (\vec{v_2}_\- - \vec{v_2}_\+) \cdot q_1 \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
+            \- 3 \cdot q_2 \cdot ((\vec{v_2}_\- - \vec{v_2}_\+) \cdot \hat{r}) \cdot q_1 \cdot ((\vec{v_1}_\- - \vec{v_1}_\+) \cdot \hat{r}) \end{aligned}$$
+            <br/>
+            $$Top\ Part \cdot q_1 \cdot q_2 = \begin{aligned}
+            \+ 2 \cdot I_2 \cdot I_1 \\\\
+            \- 3 \cdot (I_2 \cdot \hat{r}) \cdot (I_1 \cdot \hat{r}) \end{aligned}$$
+
             So we will get:
-    
-            $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}))}{\vec{r}\ ^2}$$
-            <br/>
-            $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot (2 \cdot |v_1| \cdot |v_2| \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(|v_1| \cdot \hat{v_1}_\- \cdot \hat{r}) \cdot (|v_2| \cdot \hat{v_2}_\- \cdot \hat{r}))}{\vec{r}\ ^2}$$
-            <br/>
-            $$\vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot |v_1| \cdot |v_2| \cdot (2 \cdot \hat{v_1}_\- \cdot \hat{v_2}_\- - 3(\hat{v_1}_\- \cdot \hat{r}) \cdot (\hat{v_2}_\- \cdot \hat{r}))}{\vec{r}\ ^2}$$
-            <br/>
+
             <div id="final_equation">
-            $$\vec{F} = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{\vec{r}\ ^2}$$    
+            $$\vec{F} = \frac{Constant \cdot (2 \cdot I_2 \cdot I_1 - 3 \cdot (I_2 \cdot \hat{r}) \cdot (I_1 \cdot \hat{r}))}{\vec{r}\ ^2}$$
             </div>
           </div>
         </div>
       </details>
       <div class="markdown">
-        Final equation:
-        $$\color{#f7c860} Force\ between\ two\ wire\ parts = \frac{Constant \cdot |I_1| \cdot |I_2| \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3 \cdot (\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
+        $$\color{#f7c860} Force\ between\ two\ wire\ parts = \frac{Constant \cdot (2 \cdot I_1 \cdot I_2 - 3 \cdot (I_1 \cdot \hat{r}) \cdot (I_2 \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
         when the constant is:
         $$\color{#f7c860} Constant = \frac{μ_0}{4\pi}$$
       </div>
