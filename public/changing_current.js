@@ -383,9 +383,9 @@ window.changing_current = function (toolbar, scene) {
         // const field_difference_in_wire_direction_c_c = field_difference_c_c.clone().dot(v_2.clone().normalize())
         // wire2.voltage += field_difference_in_wire_direction_c_c * distance_2 * 100000
 
-
-        const top_c_c = + 2*Math.pow(c_c.clone().dot(R_hat).length(), 2)
-                        -  Math.pow(c_c.clone().cross(R_hat).length(), 2)
+        const c_c_vert = Math.pow(c_c.clone().dot(R_hat).length(), 2)
+        const c_c_horz = Math.pow(c_c.clone().cross(R_hat).length(), 2)
+        const top_c_c = + c_c_vert - 2*c_c_horz -4*c_c_vert*c_c_horz *100
         const field_difference_c_c = R_hat.clone().multiplyScalar( top_c_c / (Math.pow(R.length(), 2)) )
         const field_difference_in_wire_direction_c_c = field_difference_c_c.clone().dot(v_2.clone().normalize())
         wire2.voltage += field_difference_in_wire_direction_c_c * distance_2 * 100000
