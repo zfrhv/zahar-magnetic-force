@@ -345,9 +345,9 @@ window.changing_current = function (toolbar, scene) {
       const R_hat = R.clone().normalize()
 
       if (mine_force) {
-        const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
-        const v_2_n = v_2.clone().multiplyScalar(wire2.current)
-        const v_1_p = wire1.speed.clone()
+        const v_1_n = v_1.clone()
+        const v_2_n = v_2.clone()
+        const v_1_p = new THREE.Vector3(0,0,0)
         const v_2_p = new THREE.Vector3(0,0,0)
 
         const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
@@ -355,8 +355,8 @@ window.changing_current = function (toolbar, scene) {
         const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
         const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
 
-        f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (Math.pow(R.length(), 2)) )
-        f_1 = f_2.clone().negate()
+        const f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (Math.pow(R.length(), 2)) )
+        const f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
         const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / (Math.pow(R.length(), 2)) )
@@ -376,19 +376,19 @@ window.changing_current = function (toolbar, scene) {
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
 
 
-        const c_c = v_1_n.clone().normalize()
+        const c_1_n = v_1.clone().multiplyScalar(wire1.current_change)
+        const c_2_n = new THREE.Vector3(0,0,0)
+        const c_1_p = new THREE.Vector3(0,0,0)
+        const c_2_p = new THREE.Vector3(0,0,0)
 
-        // const top_c_c = + Math.pow(c_c.length(), 2) - 3/2*Math.pow(c_c.clone().dot(R_hat), 2)
-        // const field_difference_c_c = R_hat.clone().multiplyScalar( top_c_c / (Math.pow(R.length(), 2)) )
-        // const field_difference_in_wire_direction_c_c = field_difference_c_c.clone().dot(v_2.clone().normalize())
-        // wire2.voltage += field_difference_in_wire_direction_c_c * distance_2 * 100000
+        const c_top_n_n = + ((c_1_n.clone().sub(c_2_n)).dot(R_hat))^2
+        const c_top_p_n = 0
+        const c_top_n_p = 0
+        const c_top_p_p = 0
 
-        const c_c_vert = Math.pow(c_c.clone().dot(R_hat).length(), 2)
-        const c_c_horz = Math.pow(c_c.clone().cross(R_hat).length(), 2)
-        const top_c_c = + c_c_vert - 2*c_c_horz -4*c_c_vert*c_c_horz *100
-        const field_difference_c_c = R_hat.clone().multiplyScalar( top_c_c / (Math.pow(R.length(), 2)) )
-        const field_difference_in_wire_direction_c_c = field_difference_c_c.clone().dot(v_2.clone().normalize())
-        wire2.voltage += field_difference_in_wire_direction_c_c * distance_2 * 100000
+        const f_2_c = R_hat.clone().multiplyScalar(( c_top_p_n + c_top_n_n - c_top_n_p - c_top_p_p ) / (Math.pow(R.length(), 2)) * 1000)
+        console.log(f_2_c.clone().dot(v_2))
+        wire2.voltage += f_2_c.clone().dot(v_2)
       }
     }
 
@@ -411,7 +411,7 @@ window.changing_current = function (toolbar, scene) {
   // scale for better display
   if (mine_force) {
     // wire2.voltage *= 2.67_079_464_85 * 3 * 1000 /2 / 1.127
-    wire2.voltage *= 2.67_079_464_85 * 3
+    wire2.voltage *= 2.67_079_464_85 * 2
   } else {
     wire2.voltage *= 2.67_079_464_85 * 3
   }
