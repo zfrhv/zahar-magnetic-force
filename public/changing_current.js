@@ -381,7 +381,7 @@ window.changing_current = function (toolbar, scene) {
         const c_1_p = new THREE.Vector3(0,0,0)
         const c_2_p = new THREE.Vector3(0,0,0)
 
-        const c_top_n_n = + Math.pow((c_1_n.clone().sub(c_2_n)).dot(R_hat), 2)
+        const c_top_n_n = + (c_1_n.clone().sub(c_2_n)).dot(R_hat)
         const c_top_p_n = 0
         const c_top_n_p = 0
         const c_top_p_p = 0
@@ -407,9 +407,9 @@ window.changing_current = function (toolbar, scene) {
   // add dl (doing f/(parts*parts) is the same as doing (f*Q1*dl)*dl)
   if (mine_force) {
     // wire2.voltage *= 2.67_079_464_85 * 3 * 1000 /2 / 1.127
-    // wire2.voltage /= (parts_1-1)
-    // wire2.voltage /= (parts_2-1)
-    wire2.voltage *= 1000000000000000
+    wire2.voltage /= (parts_1-1)
+    wire2.voltage /= (parts_2-1)
+    wire2.voltage *= 40
   } else {
     wire2.voltage /= (parts_1-1)
     wire2.voltage /= (parts_2-1)
