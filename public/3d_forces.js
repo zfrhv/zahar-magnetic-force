@@ -7,7 +7,7 @@ import { Path3 } from './tools/threejs/path3.js'
 const pi = Math.PI
 const err_num = 0.00001
 
-const wires_distance_from_center = 200;
+let wires_distance_from_center = new THREE.Vector3(0, 200, 0)
 const wires_radius = 150
 
 function vec_to_euler(vector) {
@@ -91,7 +91,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // transform the whole shape
   wire1.rotation.x = pi/2
-  wire1.position.y = wires_distance_from_center
+  wire1.position.copy(wires_distance_from_center)
   scene.add(wire1)
 
   // draw voltage flow
@@ -147,7 +147,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // transform the whole shape
   wire2.rotation.x = pi/2
-  wire2.position.y = -wires_distance_from_center
+  wire2.position.copy(wires_distance_from_center.clone().negate())
   scene.add(wire2)
 
   // voltage text
@@ -406,6 +406,11 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   //   })
   // }
 
+  function update_wires_distance() {
+    wire1.position.copy(wires_distance_from_center)
+    wire2.position.copy(wires_distance_from_center.clone().negate())
+  }
+
   const inputs = {
     Current: {
       G: function () { wire1.current = (this.value-50)/50; update_wire_current(wire1) },
@@ -424,7 +429,12 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     // Spin: {
     //   G: function () { wire1.spin = (this.value-50)/10; update_wire_spins(wire1) },
     //   B: function () { wire2.spin = (this.value-50)/10; update_wire_spins(wire2) }
-    // }
+    // },
+    Distance: {
+      X: function () { wires_distance_from_center.x = (this.value-50)*4; update_wires_distance() },
+      Y: function () { wires_distance_from_center.y = (this.value-50)*4; update_wires_distance() },
+      Z: function () { wires_distance_from_center.z = (this.value-50)*4; update_wires_distance() }
+    },
   }
   for(const subj in inputs) {
     const subj_part = document.createElement('details');
@@ -460,6 +470,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
           break;
         case "Speed":
           slidebar.value = 50
+          break;
+        case "Distance":
+          slidebar.value = name == "Y" ? 100 : 50
           break;
         default:
           slidebar.value = 50
