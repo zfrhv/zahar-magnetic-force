@@ -600,10 +600,11 @@ window.calc_force = function (toolbar, scene) {
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        const top_p_n = + Math.pow(v_1_p.clone().sub(v_2_n).length(), 2) - 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_n_p = + Math.pow(v_1_n.clone().sub(v_2_p).length(), 2) - 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
-        const top_n_n = - Math.pow(v_1_n.clone().sub(v_2_n).length(), 2) + 3/2*Math.pow(v_1_n.clone().dot(R_hat) - v_2_n.clone().dot(R_hat), 2)
-        const top_p_p = - Math.pow(v_1_p.clone().sub(v_2_p).length(), 2) + 3/2*Math.pow(v_1_p.clone().dot(R_hat) - v_2_p.clone().dot(R_hat), 2)
+        let dv;
+        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
+        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
+        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
+        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
 
         f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (Math.pow(R.length(), 2)) )
         f_1 = f_2.clone().negate()
