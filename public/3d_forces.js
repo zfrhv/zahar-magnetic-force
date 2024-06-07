@@ -601,18 +601,18 @@ window.calc_force = function (toolbar, scene) {
         const v_2_p = new THREE.Vector3(0,0,0)
 
         let dv;
-        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
-        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
-        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
-        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (Math.pow(dv.length(), 2) - 3/2*Math.pow(dv.dot(R_hat), 2))
+        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
+        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
+        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
+        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
 
-        f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (Math.pow(R.length(), 2)) )
+        f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (R.length()**2) )
         f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
-        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - top_n_p - top_p_p) / (2 * Math.pow(R.length(), 2)) )
+        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - top_n_p - top_p_p) / (2 * R.length()**2) )
         // TODO check this and explain it in the docs. there is force on proton indeed, but it will barely move so the Δspeed between electron and proton will be barely noticable, thus voltage as well?
-        // const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (Math.pow(R.length(), 2)) )
+        // const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
         const distance_2 = wire2.length / (parts_2-1)
@@ -620,15 +620,15 @@ window.calc_force = function (toolbar, scene) {
         wire2.voltage += field_difference_in_wire_direction * distance_2
 
         // calculate voltage for wire 1 as well
-        const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - top_p_n - top_p_p) / (2 * Math.pow(R.length(), 2)) )
-        // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (Math.pow(R.length(), 2)) )
+        const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - top_p_n - top_p_p) / (2 * R.length()**2) )
+        // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
         const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
         const distance_1 = wire1.length / (parts_1-1)
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
       } else {
         // "their" force calculation
-        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
-        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(Math.pow(R.length(), 2)).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
+        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
+        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
 
         if (wire1.areas && point_1 === 1) {
           for (let i = 0; i < wire1.areas.length; i++) {
@@ -637,11 +637,11 @@ window.calc_force = function (toolbar, scene) {
       
             const R_A_old = absolute_place_2.clone().sub(area_place)
             const R_A_hat_old = R_A_old.clone().normalize()
-            const old_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_old).dot(wire1.surface_vec) / Math.pow(R_A_old.length(), 2) * wire1.area_value
+            const old_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_old).dot(wire1.surface_vec) / R_A_old.length()**2 * wire1.area_value
       
             const R_A_new = absolute_place_2.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
             const R_A_hat_new = R_A_new.clone().normalize()
-            const new_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_new).dot(wire1.surface_vec) / Math.pow(R_A_new.length(), 2) * wire1.area_value
+            const new_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_new).dot(wire1.surface_vec) / R_A_new.length()**2 * wire1.area_value
       
             wire1.voltage += -(new_flux - old_flux) / dt
           }
@@ -653,11 +653,11 @@ window.calc_force = function (toolbar, scene) {
       
             const R_A_old = absolute_place_1.clone().sub(area_place)
             const R_A_hat_old = R_A_old.clone().normalize()
-            const old_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_old).dot(wire2.surface_vec) / Math.pow(R_A_old.length(), 2) * wire2.area_value
+            const old_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_old).dot(wire2.surface_vec) / R_A_old.length()**2 * wire2.area_value
       
             const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
             const R_A_hat_new = R_A_new.clone().normalize()
-            const new_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_new).dot(wire2.surface_vec) / Math.pow(R_A_new.length(), 2) * wire2.area_value
+            const new_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_new).dot(wire2.surface_vec) / R_A_new.length()**2 * wire2.area_value
       
             wire2.voltage += -(new_flux - old_flux) / dt
           } 
@@ -681,7 +681,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage /= (parts_2-1)
 
   // the actual force
-  // const equation_constant = Math.pow(10, -7)
+  // const equation_constant = 10**-7
   // const actual_F2_force = F_2_T.clone().multiplyScalar(equation_constant)
   // const actual_F1_rotation_force = F_1_T.clone().multiplyScalar(equation_constant)
   // console.log(actual_F1_rotation_force)
