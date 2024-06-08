@@ -623,9 +623,8 @@ window.calc_force = function (toolbar, scene) {
         f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
+        // TODO why divide by 2? idk, just thats how the numbers align
         const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - top_n_p - top_p_p) / (2 * R.length()**2) )
-        // TODO check this and explain it in the docs. there is force on proton indeed, but it will barely move so the Δspeed between electron and proton will be barely noticable, thus voltage as well?
-        // const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
         const distance_2 = wire2.length / (parts_2-1)
