@@ -147,7 +147,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // transform the whole shape
   wire2.rotation.x = pi/2
-  wire2.position.copy(wires_distance_from_center.clone().negate())
+  wire2.position.copy(wires_distance_from_center).negate()
   scene.add(wire2)
 
   // voltage text
@@ -408,7 +408,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   function update_wires_distance() {
     wire1.position.copy(wires_distance_from_center)
-    wire2.position.copy(wires_distance_from_center.clone().negate())
+    wire2.position.copy(wires_distance_from_center).negate()
   }
 
   const inputs = {
