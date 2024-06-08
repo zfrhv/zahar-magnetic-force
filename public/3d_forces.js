@@ -619,6 +619,12 @@ window.calc_force = function (toolbar, scene) {
         dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
         dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
 
+        // seems the same, but they are same only after integral? they are not equal?
+        // dv = v_1_p.clone().sub(v_2_n); const top_p_n = + (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
+        // dv = v_1_n.clone().sub(v_2_p); const top_n_p = + (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
+        // dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
+        // dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
+
         f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (R.length()**2) )
         f_1 = f_2.clone().negate()
 
