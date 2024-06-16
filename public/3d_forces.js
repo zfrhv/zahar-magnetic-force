@@ -613,24 +613,130 @@ window.calc_force = function (toolbar, scene) {
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        let dv;
-        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
-        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
-        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
-        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (dv.length()**2 - 3/2*dv.dot(R_hat)**2)
+        function top(dv, R_hat) {
+          // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
+          return dv.length()**2 - 3/2*dv.dot(R_hat)**2
 
-        // seems the same, but they are same only after integral? they are not equal?
-        // dv = v_1_p.clone().sub(v_2_n); const top_p_n = + (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
-        // dv = v_1_n.clone().sub(v_2_p); const top_n_p = + (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
-        // dv = v_1_n.clone().sub(v_2_n); const top_n_n = - (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
-        // dv = v_1_p.clone().sub(v_2_p); const top_p_p = - (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2)
+          // return - 3/2*dv.dot(R_hat)**2
+          // you told that dv doesnt matters, what did the job here is the dot product.
+          // so lets do dv + oppose
+          // return -0.5*dv.length()**2 + 1.5*dv.clone().cross(R_hat).length()**2
+          // return 1.5*dv.clone().cross(R_hat).length()**2
+          // now the problem is the cross, so dv is always pure, in this position its wether the cross wether the combine
+          // i think the connection between the cross and the combine is bad.
+          // maybe need something like cross()*combine()
+          // lets try only combine + cross?
+
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2
+          // return dv.clone().cross(R_hat).length()**2
+          // return - 0.5*dv.dot(R_hat)**2
+          // they work together to make that voltage, the cross is twice bigger tho which makes sense, cuz he doesnt has 0.5
+          // so they both have exactly the same voltage if we ignore the constants
+          // maybe i can make some extra force that works only when they are together
+          // return dv.dot(R_hat)**2 * dv.clone().cross(R_hat).length()**2
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     8*(dv.dot(R_hat)**2 * dv.clone().cross(R_hat).length()**2)
+          // its balanced at the middle but at sides flips, i think they bring each other to 0 too stong, so lets try without ^2
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     100*(dv.dot(R_hat) * dv.clone().cross(R_hat).length())
+          // no its no effect at all, abs?
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     2*Math.abs(dv.dot(R_hat) * dv.clone().cross(R_hat).length())
+          // force flips again, its more stonger to one of the sides as well, lets try to increase one of the sides
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     4*Math.abs(dv.dot(R_hat)**2 * dv.clone().cross(R_hat).length())
+          // flips again, so the other side?
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     4*Math.abs(dv.dot(R_hat) * dv.clone().cross(R_hat).length()**2)
+          // flips again, lets try without abs?
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     100*dv.dot(R_hat) * dv.clone().cross(R_hat).length()**2
+          // no effect
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2      +     4*dv.dot(R_hat)**2 * dv.clone().cross(R_hat).length()
+          // also flips, need to think..
+
+          // oh is simple, combine()^2 and oppose()^2 give exactly same value at middle, so they need to be the same at middle
+          // but when you rotate it a little, whatever gives more value should have more influence
+          // return dv.clone().cross(R_hat).length()**2
+          // return 0 - dv.dot(R_hat)**2
+          // degree 0.00: combine()^2: 0,    oppose()^2: 0
+          // degree 22.5: combine()^2: 0.82, oppose()^2: 0.71
+          // degree 45.0: combine()^2: 1.5,  oppose()^2: 1.53
+          // degree 67.5: combine()^2: 1.31,  oppose()^2: 1.34
+          // degree 90.0: combine()^2: 0,    oppose()^2: 0
+          // they actually seem to have the same value the whole time
+          // but i can look if its a sin() or something?
+          // now lets check my combo
+          // return dv.clone().cross(R_hat).length()**2   *   dv.dot(R_hat)**2
+          // degree 0.00: combo: 0
+          // degree 22.5: combo: 0.61
+          // degree 45.0: combo: 0.37
+          // degree 67.5: combo: 0.18
+          // degree 90.0: combo: 0
+          // ye can already see its inbalanced
+          // next combo
+          // return dv.clone().cross(R_hat).length()   *   dv.dot(R_hat)
+          // its totally 0, so lets abs
+          // return Math.abs(dv.clone().cross(R_hat).length()   *   dv.dot(R_hat))
+          // degree 0.00: combo: 0
+          // degree 22.5: combo: 1.29
+          // degree 45.0: combo: 0.56
+          // degree 67.5: combo: 0.25
+          // degree 90.0: combo: 0
+          // also inbalanced
+          // return dv.dot(R_hat)**2 / dv.clone().cross(R_hat).length()**2 / 2
+          // degree 0.00: combo: 0
+          // degree 22.5: combo: 0.59
+          // degree 45.0: combo: 2.9
+          // degree 67.5: combo: 290
+          // degree 90.0: combo: 0
+          // it does flips the advantage to the other way but its not the correct to do it
+          // i need something with multiplication
+          // return dv.length()**2 * dv.clone().cross(R_hat).length()**2
+          // degree 0.00: combo: 0
+          // degree 22.5: combo: 0.97
+          // degree 45.0: combo: 1.53
+          // degree 67.5: combo: 1.34
+          // degree 90.0: combo: 0
+          // yet looks amazing but lets check next too
+          // return dv.length()**2 * dv.dot(R_hat)**2
+          // degree 0.00: combo: 0
+          // degree 22.5: combo: 0.82
+          // degree 45.0: combo: 1.5
+          // degree 67.5: combo: 1.31
+          // degree 90.0: combo: 0
+          // also looks amazing
+          // i bet we can use them both to cancel other side effects
+          // dv^2 * c^2
+          // (c^2 + o^2) * c^2
+          // c^4 + o^2 * c^2
+          // and the other one
+          // o^4 + o^2 * c^2
+          // so its basically like having
+          // 2 good - 1 bad = same o^2 thats my target
+          // o^4 + o^2 * c^2 => o^2
+          // o^2 * (o^2 + c^2) => o^2
+          // o^2 + c^2 => 0
+          // idk, but having something ^4 breaks everything
+          // i looks like in that position i have voltage not 0, but actually almost in any position i have some voltage that is very small, but it still doesnt goes to 0
+          // im not sure if that voltage is error or result
+          // yeah it is an error, increasing resolution does makes it smaller
+          // maybe stop with irritating guessing and finally think of some genius experiment
+
+          // return dv.clone().cross(R_hat).length()**2 - 0.5*dv.dot(R_hat)**2
+          // return dv.clone().cross(R_hat).length()**2
+          // return dv.dot(R_hat)**2
+          // return dv.clone().cross(R_hat).length()**2 + dv.dot(R_hat)**2
+          // return dv.length()**2 / 2
+        }
+
+        let dv;
+        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + top(dv, R_hat)
+        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + top(dv, R_hat)
+        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - top(dv, R_hat)
+        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - top(dv, R_hat)
 
         f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (R.length()**2) )
         f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
-        // TODO why divide by 2? idk, just thats how the numbers align
-        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n - top_n_p - top_p_p) / (2 * R.length()**2) )
+        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / R.length()**2 )
+        // const field_difference_2 = R_hat.clone().multiplyScalar( top_n_n / R.length()**2 )
+
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
         const distance_2 = wire2.length / (parts_2-1)
@@ -638,7 +744,7 @@ window.calc_force = function (toolbar, scene) {
         wire2.voltage += field_difference_in_wire_direction * distance_2
 
         // calculate voltage for wire 1 as well
-        const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - top_p_n - top_p_p) / (2 * R.length()**2) )
+        const field_difference_1 = R_hat.clone().negate().multiplyScalar( (top_n_p + top_n_n) / R.length()**2 )
         // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
         const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
         const distance_1 = wire1.length / (parts_1-1)
@@ -654,11 +760,11 @@ window.calc_force = function (toolbar, scene) {
             const area_place = wire1.areas[i]
       
             const R_A_old = absolute_place_2.clone().sub(area_place)
-            const R_A_hat_old = R_A_old.clone().normalize()
+            const R_A_hat_old = R_A_old.clone().normalize().negate() // instead of (a-b) to (b-a) i just do (a-b).negate()
             const old_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_old).dot(wire1.surface_vec) / R_A_old.length()**2 * wire1.area_value
       
             const R_A_new = absolute_place_2.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
-            const R_A_hat_new = R_A_new.clone().normalize()
+            const R_A_hat_new = R_A_new.clone().normalize().negate()
             const new_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_new).dot(wire1.surface_vec) / R_A_new.length()**2 * wire1.area_value
       
             wire1.voltage += -(new_flux - old_flux) / dt
