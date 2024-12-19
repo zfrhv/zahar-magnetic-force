@@ -84,7 +84,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // calculate the mass center
   wire1.mass_center = new THREE.Vector3(0,0,0)
-  for (let i=0; i < wire1.points_vec.length; i++) {
+  for (let i=1; i < wire1.points_vec.length; i++) {
     wire1.mass_center.add(wire1.points_vec[i])
   }
   wire1.mass_center.divideScalar(wire1.points_vec.length)
@@ -140,7 +140,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // calculate the mass center
   wire2.mass_center = new THREE.Vector3(0,0,0)
-  for (let i=0; i < wire2.points_vec.length; i++) {
+  for (let i=1; i < wire2.points_vec.length; i++) {
     wire2.mass_center.add(wire2.points_vec[i])
   }
   wire2.mass_center.divideScalar(wire2.points_vec.length)
@@ -578,21 +578,23 @@ window.calc_force = function (toolbar, scene) {
   const parts_1 = wire1.points_vec.length-1
   const parts_2 = wire2.points_vec.length-1
 
-  const speeds_1 = [null]
+  const first_speed_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[parts_1]).normalize()
+  const speeds_1 = [first_speed_1]
   for (let point_1 = 1; point_1 < parts_1; point_1++) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
-  const speeds_2 = [null]
+  const first_speed_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[parts_2]).normalize()
+  const speeds_2 = [first_speed_2]
   for (let point_2 = 1; point_2 < parts_2; point_2++) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
-  for (let point_1 = 1; point_1 < parts_1; point_1++) {
+  for (let point_1 = 0; point_1 < parts_1; point_1++) {
 
     const relative_place_1 = wire1.points_vec[point_1]
     const v_1 = speeds_1[point_1]
     const absolute_place_1 = wire1.position.clone().add(relative_place_1)
 
-    for (let point_2 = 1; point_2 < parts_2; point_2++) {
+    for (let point_2 = 0; point_2 < parts_2; point_2++) {
 
       const relative_place_2 = wire2.points_vec[point_2]
       const v_2 = speeds_2[point_2]
@@ -600,6 +602,7 @@ window.calc_force = function (toolbar, scene) {
 
       const R = absolute_place_1.clone().sub(absolute_place_2)
       const R_hat = R.clone().normalize()
+      const R_h_2 = R_hat.clone().negate()
 
       let f_1 = null
       let f_2 = null
@@ -621,23 +624,78 @@ window.calc_force = function (toolbar, scene) {
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        function top(dv, R_hat) {
-          // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
-          return dv.length()**2 - 3/2*dv.dot(R_hat)**2
-        }
+        // function top(dv, R_hat) {
+        //   // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
+        //   return dv.length()**2 - 3/2*dv.dot(R_hat)**2
+        // }
 
-        let dv;
-        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + top(dv, R_hat)
-        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + top(dv, R_hat)
-        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - top(dv, R_hat)
-        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - top(dv, R_hat)
+        // let dv;
+        // dv = v_1_p.clone().sub(v_2_n); const top_p_n = + top(dv, R_hat)
+        // dv = v_1_n.clone().sub(v_2_p); const top_n_p = + top(dv, R_hat)
+        // dv = v_1_n.clone().sub(v_2_n); const top_n_n = - top(dv, R_hat)
+        // dv = v_1_p.clone().sub(v_2_p); const top_p_p = - top(dv, R_hat)
 
-        f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (R.length()**2) )
+        // f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (R.length()**2) )
+        // f_1 = f_2.clone().negate()
+
+        // // calculating "field" on electrons in wire2 to measure the voltage
+        // const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / R.length()**2 )
+        // // const field_difference_2 = R_hat.clone().multiplyScalar( top_n_n / R.length()**2 )
+
+
+
+        // 4th method? idk but its old now
+        // F_2_rotating_T.add(v_2_n.clone().cross(v_1_n).multiplyScalar(3/2 * 1/3 / R.length()))
+        // F_1_rotating_T.add(v_1_n.clone().cross(v_2_n).multiplyScalar(3/2 * 1/3 / R.length()))
+        // function vertical_1(v1, v2) {
+        //   const v2_unit = v2.clone().normalize()
+        //   return v2_unit.clone().cross( v1.clone().cross(v2_unit) )
+        // }
+        // f_2 = R_hat.clone().multiplyScalar(3/2* ( vertical_1(v_1_n, R_hat).dot(vertical_1(v_2_n, R_hat)) ) / (R.length()**2))
+        // f_1 = f_2.clone().negate()
+
+        // const field_difference_2 = f_2
+        // const field_difference_1 = f_1
+
+
+        // new method
+        const new_const = 1
+        f_2 = R_hat.clone().multiplyScalar(( - new_const * v_2_n.clone().dot(R_hat) * v_1_n.clone().dot(R_h_2) ) / (R.length()**2))
+        const f_2_rotation = v_2_n.clone().cross(R_h_2).multiplyScalar(new_const * v_1_n.clone().dot(R_h_2)/R.length())
+        const f_1_rotation = v_1_n.clone().cross(R_hat).multiplyScalar(new_const * v_2_n.clone().dot(R_hat)/R.length())
+        F_2_rotating_T.add(f_2_rotation)
+        F_1_rotating_T.add(f_1_rotation)
+        const sideways_force = f_1_rotation.clone().add(f_2_rotation).cross(R_hat).multiplyScalar(1/R.length())
+        f_2.add(sideways_force)
         f_1 = f_2.clone().negate()
 
-        // calculating "field" on electrons in wire2 to measure the voltage
-        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / R.length()**2 )
-        // const field_difference_2 = R_hat.clone().multiplyScalar( top_n_n / R.length()**2 )
+        const field_difference_2 = new THREE.Vector3(0,0,0)
+        const field_difference_1 = new THREE.Vector3(0,0,0)
+
+        // if (point_1/parts_1*360 == 0 && point_2/parts_2*360 == 180) {
+        //   console.log(absolute_place_1)
+        //   console.log(absolute_place_2)
+        //   console.log(sideways_force)
+        //   console.log("--------")
+        // }
+        // if (point_1/parts_1*360 == 180 && point_2/parts_2*360 == 0) {
+        //   console.log(absolute_place_1)
+        //   console.log(absolute_place_2)
+        //   console.log(sideways_force)
+        //   console.log("--------")
+        // }
+
+        // const field_difference_2 = f_2
+        // const field_difference_1 = f_1
+
+        // WHY ITS NOT IN CENTER FORCE? EVERYTHING IS SYMMETRIC
+        // yea idk whats wrong, need to diagnose cuz it works in my other place
+
+        // i can agree that maybe its not the full function so there is trash left, but sideways force should be 0 at the end.
+        // and its not 0 here, so something here is broken.
+
+
+        
 
         // check its vlue in the wire direction because on other directions the electricity cant flow
         const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
@@ -645,9 +703,9 @@ window.calc_force = function (toolbar, scene) {
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance_2
 
-        // calculate voltage for wire 1 as well
-        const field_difference_1 = R_hat.clone().negate().multiplyScalar( (top_n_p + top_n_n) / R.length()**2 )
-        // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
+        // // calculate voltage for wire 1 as well
+        // const field_difference_1 = R_hat.clone().negate().multiplyScalar( (top_n_p + top_n_n) / R.length()**2 )
+        // // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
         const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
         const distance_1 = wire1.length / (parts_1-1)
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
