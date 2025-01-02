@@ -383,11 +383,14 @@ window.changing_current = function (toolbar, scene) {
 
         const c_top_n_n = + (c_1_n.clone().sub(c_2_n)).dot(R_hat)
         const c_top_p_n = 0
-        const c_top_n_p = 0
+        const c_top_n_p = + (c_1_n.clone().sub(c_2_p)).dot(R_hat)
         const c_top_p_p = 0
 
-        const f_2_c = R_hat.clone().multiplyScalar(( c_top_p_n + c_top_n_n - c_top_n_p - c_top_p_p ) / (Math.pow(R.length(), 2)))
-        wire2.voltage += f_2_c.clone().dot(v_2)
+        const f_2_n = R_hat.clone().multiplyScalar(( c_top_p_n + c_top_n_n ) / R.length() * 9.1)
+        wire2.voltage += f_2_n.clone().dot(v_2)
+
+        // well it really is 1/r and not 1/r^2. only that const looks weird for me, it should be clean without constant?
+        // oh wait maybe they have constant and mine is actually clean. cuz their equations have many constants...
       }
     }
 
@@ -409,7 +412,7 @@ window.changing_current = function (toolbar, scene) {
     // wire2.voltage *= 2.67_079_464_85 * 3 * 1000 /2 / 1.127
     wire2.voltage /= (parts_1-1)
     wire2.voltage /= (parts_2-1)
-    wire2.voltage *= 40
+    wire2.voltage /= (parts_2-1)
   } else {
     wire2.voltage /= (parts_1-1)
     wire2.voltage /= (parts_2-1)
