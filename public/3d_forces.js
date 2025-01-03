@@ -318,6 +318,20 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   scene.add(torque_on_1)
   scene.add(torque_on_2)
 
+  // draw voltage flow
+  const current_change = new THREE.Group()
+  current_change.name = "current_change"
+  wire1.add(current_change)
+  for (let arrow_counter = 1/(current_arrows-1)/2; arrow_counter < 1; arrow_counter+= 1/(current_arrows-1)) {
+    const index = Math.floor(arrow_counter*wire1.points_vec.length)
+    const position = wire1.points_vec[index].clone()
+    const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
+    position.add(direction.clone().multiplyScalar(20))
+    const speed = new THREE.ArrowHelper( direction, position, 0, 0xcd75d1 )
+    current_change.add(speed)
+  }
+  wire1.current_change = 0
+
   // create force toggle
   const toggle_force = document.createElement('label');
   toggle_force.style.width = "60%";
@@ -381,6 +395,14 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     })
   }
 
+  function update_wire_current_change(wire) {
+    // keep the arrow with easy to see size
+    const size = Math.sqrt(Math.abs(wire.current_change))*Math.sign(wire.current_change)
+    current_change.children.forEach(arrow => {
+      arrow.setLength(1, 60*size, 60*size)
+    })
+  }
+
   // // update spins
   // wire1.spin = 0;
   // wire2.spin = 0;
@@ -402,6 +424,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     Current: {
       G: function () { wire1.current = (this.value-50)/50; update_wire_current(wire1) },
       B: function () { wire2.current = (this.value-50)/50; update_wire_current(wire2) },
+    },
+    Current_Change: {
+      G: function () { wire1.current_change = (this.value-50)/50; update_wire_current_change(wire1) },
     },
     Orientation: {
       G_X: function () { wire1.rotation.x = this.value/100*pi*2 + pi/2 },
@@ -451,6 +476,9 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       switch(subj) {
         case "Current":
           slidebar.value = 100
+          break;
+        case "Current_Change":
+          slidebar.value = 50
           break;
         case "Orientation":
           slidebar.value = 0
@@ -554,6 +582,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage = 0
   const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
+  wire1.current_change = wire1_mesh.current_change/100
   // wire1.spin = wire1_mesh.spin
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.length = wire1_mesh.length
@@ -666,7 +695,7 @@ window.calc_force = function (toolbar, scene) {
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        const a_1_n = a_1.clone().multiplyScalar(wire1.current**2).add(new THREE.Vector3(0,0,0))
+        const a_1_n = a_1.clone().multiplyScalar(wire1.current**2).add(v_1.clone().multiplyScalar(wire1.current_change))
         const a_2_n = a_2.clone().multiplyScalar(wire2.current**2)
         const a_1_p = new THREE.Vector3(0,0,0)
         const a_2_p = new THREE.Vector3(0,0,0)
@@ -674,7 +703,7 @@ window.calc_force = function (toolbar, scene) {
         function f_v(dv) {
           // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
           // which i think is the only option for f(v) ~ dv^2 where f is only in r direction
-          return (dv.length()**2 - 3/2*dv.dot(R_hat)**2) / (R.length()**2)
+          return (dv.length()**2 - 3/2*dv.dot(R_hat)**2) / R.length()**2
         }
         function f_a(da) {
           return da.dot(R_hat) / R.length()
@@ -696,7 +725,7 @@ window.calc_force = function (toolbar, scene) {
         // const field_difference_1 = R_hat.clone().multiplyScalar( f_n_p + f_n_n - (f_n_p * mass_of_electron_over_proton) - (f_p_p* mass_of_electron_over_proton) )
 
         // LATEST
-        // TODO 1. output all and not just voltage, 2. add changing current, 3. solve this:
+        // TODO solve this:
         // aw shoot, there is voltage where not supposed to be:
         // green current: 0, orientation G_X: 1, B_Y: 3/4
         // it means that electron can travel on the loop and he is sped up. free energy.
@@ -710,7 +739,7 @@ window.calc_force = function (toolbar, scene) {
         //   const v2_unit = v2.clone().normalize()
         //   return v2_unit.clone().cross( v1.clone().cross(v2_unit) )
         // }
-        // f_2 = R_hat.clone().multiplyScalar(3/2* ( vertical_1(v_1_n, R_hat).dot(vertical_1(v_2_n, R_hat)) ) / (R.length()**2))
+        // f_2 = R_hat.clone().multiplyScalar(3/2* ( vertical_1(v_1_n, R_hat).dot(vertical_1(v_2_n, R_hat)) ) / R.length()**2)
         // f_1 = f_2.clone().negate()
 
         // const field_difference_2 = f_2
@@ -719,7 +748,7 @@ window.calc_force = function (toolbar, scene) {
 
         // new method
         const new_const = 1
-        // f_2 = R_hat.clone().multiplyScalar(( - new_const * v_2_n.clone().dot(R_hat) * v_1_n.clone().dot(R_h_2) ) / (R.length()**2))
+        // f_2 = R_hat.clone().multiplyScalar(( - new_const * v_2_n.clone().dot(R_hat) * v_1_n.clone().dot(R_h_2) ) / R.length()**2)
         // const f_2_torque = v_2_n.clone().cross(R_h_2).multiplyScalar(new_const * v_1_n.clone().dot(R_h_2)/R.length())
         // const f_1_torque = v_1_n.clone().cross(R_hat).multiplyScalar(new_const * v_2_n.clone().dot(R_hat)/R.length())
         // F_2_torque_T.add(f_2_torque)
@@ -765,6 +794,7 @@ window.calc_force = function (toolbar, scene) {
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
         f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
 
+        // "their" voltage calculation
         if (wire1.areas && point_1 === 1) {
           for (let i = 0; i < wire1.areas.length; i++) {
             const dt = err_num
@@ -792,7 +822,7 @@ window.calc_force = function (toolbar, scene) {
       
             const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
             const R_A_hat_new = R_A_new.clone().normalize()
-            const new_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_new).dot(wire2.surface_vec) / R_A_new.length()**2 * wire2.area_value
+            const new_flux = v_1.clone().multiplyScalar(wire1.current + wire1.current_change * dt).cross(R_A_hat_new).dot(wire2.surface_vec) / R_A_new.length()**2 * wire2.area_value
       
             wire2.voltage += -(new_flux - old_flux) / dt
           } 
@@ -830,15 +860,21 @@ window.calc_force = function (toolbar, scene) {
   F_1_torque_T.multiplyScalar(foce_const*2/3)
   F_2_torque_T.multiplyScalar(foce_const*2/3)
 
+  function roundBasedOnMain(main, second) {
+    const mainMagnitude = Math.floor(Math.log10(Math.abs(main)));
+    const factor = Math.pow(10, mainMagnitude);
+    return Math.round(second * factor) / factor;
+  }
+
   function update_force(wire, force) {
     wire.force.setDirection(force.clone().normalize())
     wire.force.setLength(force.length(), force.length()*0.2, force.length()*0.2)
     wire.force.position.set(wire.position.x + wire.mass_center.x, wire.position.y + wire.mass_center.y, wire.position.z + wire.mass_center.z)
-    const numbers = force.length().toFixed(20).toString().match(/^(\d*\.?|0\.0)/)[0].length + 3
-    force.x = Number(force.x.toFixed(20).substring(0, numbers)).toString()
-    force.y = Number(force.y.toFixed(20).substring(0, numbers)).toString()
-    force.z = Number(force.z.toFixed(20).substring(0, numbers)).toString()
-    const value = `{x: ${force.x}, y: ${force.y}, z: ${force.z}}`
+    force = force.clone().multiplyScalar(1/10)
+    const f_x = roundBasedOnMain(force.length(), force.x)
+    const f_y = roundBasedOnMain(force.length(), force.y)
+    const f_z = roundBasedOnMain(force.length(), force.z)
+    const value = `(${f_x}, ${f_y}, ${f_z})`
     const forces_results = results.querySelector(".forces_results")
     forces_results.innerHTML = forces_results.innerHTML.replace( new RegExp(wire.name+": .*$","gm"),wire.name+": " + value)
   }
@@ -847,11 +883,11 @@ window.calc_force = function (toolbar, scene) {
     wire.torque.scale.setScalar(torque.length() / 20500)
     wire.torque.position.set(wire.position.x + wire.mass_center.x, wire.position.y + wire.mass_center.y, wire.position.z + wire.mass_center.z)
     wire.torque.rotation.setFromVector3(vec_to_euler(torque))
-    const numbers = torque.length().toFixed(20).toString().match(/^(\d*\.?|0\.0)/)[0].length + 3
-    torque.x = Number(torque.x.toFixed(20).substring(0, numbers)).toString()
-    torque.y = Number(torque.y.toFixed(20).substring(0, numbers)).toString()
-    torque.z = Number(torque.z.toFixed(20).substring(0, numbers)).toString()
-    const value = `{x: ${torque.x}, y: ${torque.y}, z: ${torque.z}}`
+    torque = torque.clone().multiplyScalar(1/1000)
+    const t_x = roundBasedOnMain(torque.length(), torque.x)
+    const t_y = roundBasedOnMain(torque.length(), torque.y)
+    const t_z = roundBasedOnMain(torque.length(), torque.z)
+    const value = `(${t_x}, ${t_y}, ${t_z})`
     const torque_results = results.querySelector(".torque_results")
     torque_results.innerHTML = torque_results.innerHTML.replace( new RegExp(wire.name+": .*$","gm"),wire.name+": " + value)
   }

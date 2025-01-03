@@ -261,8 +261,8 @@ window.changing_current_init = function (toolbar, scene, path1, path2) {
       // keep the arrow with easy to see size
       const size = Math.sqrt(Math.abs(wire1.current_change))*Math.sign(wire1.current_change)
       current_change.children.forEach(arrow => {
-      arrow.setLength(1, 60*size, 60*size)
-    })
+        arrow.setLength(1, 60*size, 60*size)
+      })
     },
   }
   const height = slidebars.offsetHeight / (Object.keys(inputs).length);
