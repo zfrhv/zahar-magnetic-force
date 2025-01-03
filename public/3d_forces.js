@@ -84,7 +84,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // calculate the mass center
   wire1.mass_center = new THREE.Vector3(0,0,0)
-  for (let i=1; i < wire1.points_vec.length; i++) {
+  for (let i=0; i < wire1.points_vec.length; i++) {
     wire1.mass_center.add(wire1.points_vec[i])
   }
   wire1.mass_center.divideScalar(wire1.points_vec.length)
@@ -140,7 +140,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // calculate the mass center
   wire2.mass_center = new THREE.Vector3(0,0,0)
-  for (let i=1; i < wire2.points_vec.length; i++) {
+  for (let i=0; i < wire2.points_vec.length; i++) {
     wire2.mass_center.add(wire2.points_vec[i])
   }
   wire2.mass_center.divideScalar(wire2.points_vec.length)
@@ -575,29 +575,51 @@ window.calc_force = function (toolbar, scene) {
   const F_1_rotating_T = new THREE.Vector3(0,0,0)
   const F_2_rotating_T = new THREE.Vector3(0,0,0)
 
-  const parts_1 = wire1.points_vec.length-1
-  const parts_2 = wire2.points_vec.length-1
+  let parts_1 = wire1.points_vec.length
+  let parts_2 = wire2.points_vec.length
 
-  const first_speed_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[parts_1]).normalize()
-  const speeds_1 = [first_speed_1]
-  for (let point_1 = 1; point_1 < parts_1; point_1++) {
+  const speeds_1 = []
+  for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
-  const first_speed_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[parts_2]).normalize()
-  const speeds_2 = [first_speed_2]
-  for (let point_2 = 1; point_2 < parts_2; point_2++) {
+  speeds_1.unshift(speeds_1[0])
+  speeds_1.push(speeds_1[speeds_1.length-1])
+  const speeds_2 = []
+  for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
+  speeds_2.unshift(speeds_2[0])
+  speeds_2.push(speeds_2[speeds_2.length-1])
+
+  // dx = v*dt = dt (all v is 1)
+  // a = dv/dt = dv/dx
+  const dx_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[0]).length()
+  const accelerations_1 = []
+  for (let point_1 = 2; point_1 < parts_1-2; point_1++) {
+    accelerations_1.push(speeds_1[point_1+1].clone().sub(speeds_1[point_1-1]).multiplyScalar(1/dx_1))
+  }
+  accelerations_1.unshift(accelerations_1[0],accelerations_1[0])
+  accelerations_1.push(accelerations_1[accelerations_1.length-1],accelerations_1[accelerations_1.length-1])
+  const dx_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[0]).length()
+  const accelerations_2 = []
+  for (let point_2 = 2; point_2 < parts_2-2; point_2++) {
+    accelerations_2.push(speeds_2[point_2+1].clone().sub(speeds_2[point_2-1]).multiplyScalar(1/dx_2))
+  }
+  accelerations_2.unshift(accelerations_2[0],accelerations_2[0])
+  accelerations_2.push(accelerations_2[accelerations_2.length-1],accelerations_2[accelerations_2.length-1])
+
   for (let point_1 = 0; point_1 < parts_1; point_1++) {
 
     const relative_place_1 = wire1.points_vec[point_1]
     const v_1 = speeds_1[point_1]
+    const a_1 = accelerations_1[point_1]
     const absolute_place_1 = wire1.position.clone().add(relative_place_1)
 
     for (let point_2 = 0; point_2 < parts_2; point_2++) {
 
       const relative_place_2 = wire2.points_vec[point_2]
       const v_2 = speeds_2[point_2]
+      const a_2 = accelerations_2[point_2]
       const absolute_place_2 = wire2.position.clone().add(relative_place_2)
 
       const R = absolute_place_1.clone().sub(absolute_place_2)
@@ -624,25 +646,38 @@ window.calc_force = function (toolbar, scene) {
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        function top(dv, R_hat) {
+        const a_1_n = a_1.clone()
+        const a_2_n = a_2.clone()
+        const a_1_p = new THREE.Vector3(0,0,0)
+        const a_2_p = new THREE.Vector3(0,0,0)
+
+        function f_v(dv) {
           // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
-          return dv.length()**2 - 3/2*dv.dot(R_hat)**2
+          return (dv.length()**2 - 3/2*dv.dot(R_hat)**2) / (R.length()**2)
+        }
+        function f_a(da) {
+          return da.dot(R_hat) / R.length()
         }
 
-        let dv;
-        dv = v_1_p.clone().sub(v_2_n); const top_p_n = + top(dv, R_hat)
-        dv = v_1_n.clone().sub(v_2_p); const top_n_p = + top(dv, R_hat)
-        dv = v_1_n.clone().sub(v_2_n); const top_n_n = - top(dv, R_hat)
-        dv = v_1_p.clone().sub(v_2_p); const top_p_p = - top(dv, R_hat)
+        let dv, da;
+        dv = v_1_p.clone().sub(v_2_n); da = a_1_p.clone().sub(a_2_n); const f_p_n = + f_v(dv) + f_a(da)
+        dv = v_1_n.clone().sub(v_2_p); da = a_1_n.clone().sub(a_2_p); const f_n_p = + f_v(dv) + f_a(da)
+        dv = v_1_n.clone().sub(v_2_n); da = a_1_n.clone().sub(a_2_n); const f_n_n = - f_v(dv) - f_a(da)
+        dv = v_1_p.clone().sub(v_2_p); da = a_1_p.clone().sub(a_2_p); const f_p_p = - f_v(dv) - f_a(da)
 
-        f_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_p + top_n_n + top_p_p) / (R.length()**2) )
+        f_2 = R_hat.clone().multiplyScalar( f_p_n + f_n_p + f_n_n + f_p_p )
         f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
-        const field_difference_2 = R_hat.clone().multiplyScalar( (top_p_n + top_n_n) / R.length()**2 )
-        // const field_difference_2 = R_hat.clone().multiplyScalar( top_n_n / R.length()**2 )
-        const field_difference_1 = R_hat.clone().negate().multiplyScalar( (top_n_p + top_n_n) / R.length()**2 )
-        // const field_difference_1 = R_hat.clone().multiplyScalar( (top_n_p + top_n_n - (top_n_p * mass_of_electron_over_proton) - (top_p_p* mass_of_electron_over_proton)) / (R.length()**2) )
+        const field_difference_2 = R_hat.clone().multiplyScalar( f_p_n + f_n_n )
+        // const field_difference_2 = R_hat.clone().multiplyScalar( f_n_n )
+        const field_difference_1 = R_hat.clone().negate().multiplyScalar( f_n_p + f_n_n )
+        // const field_difference_1 = R_hat.clone().multiplyScalar( f_n_p + f_n_n - (f_n_p * mass_of_electron_over_proton) - (f_p_p* mass_of_electron_over_proton) )
+
+        // LATEST
+        // TODO 1. output all and not just voltage, 2. add changing current, 3. solve this:
+        // aw shoot, there is voltage where not supposed to be:
+        // green current: 0, orientation G_X: 1, B_Y: 3/4
 
 
 
