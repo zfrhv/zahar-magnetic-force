@@ -871,10 +871,10 @@ window.calc_force = function (toolbar, scene) {
     wire.force.setLength(force.length(), force.length()*0.2, force.length()*0.2)
     wire.force.position.set(wire.position.x + wire.mass_center.x, wire.position.y + wire.mass_center.y, wire.position.z + wire.mass_center.z)
     force = force.clone().multiplyScalar(1/10)
-    const f_x = roundBasedOnMain(force.length(), force.x)
-    const f_y = roundBasedOnMain(force.length(), force.y)
-    const f_z = roundBasedOnMain(force.length(), force.z)
-    const value = `(${f_x}, ${f_y}, ${f_z})`
+    force.x = roundBasedOnMain(force.length(), force.x)
+    force.y = roundBasedOnMain(force.length(), force.y)
+    force.z = roundBasedOnMain(force.length(), force.z)
+    const value = `(${force.x}, ${force.y}, ${force.z})`
     const forces_results = results.querySelector(".forces_results")
     forces_results.innerHTML = forces_results.innerHTML.replace( new RegExp(wire.name+": .*$","gm"),wire.name+": " + value)
   }
@@ -884,10 +884,10 @@ window.calc_force = function (toolbar, scene) {
     wire.torque.position.set(wire.position.x + wire.mass_center.x, wire.position.y + wire.mass_center.y, wire.position.z + wire.mass_center.z)
     wire.torque.rotation.setFromVector3(vec_to_euler(torque))
     torque = torque.clone().multiplyScalar(1/1000)
-    const t_x = roundBasedOnMain(torque.length(), torque.x)
-    const t_y = roundBasedOnMain(torque.length(), torque.y)
-    const t_z = roundBasedOnMain(torque.length(), torque.z)
-    const value = `(${t_x}, ${t_y}, ${t_z})`
+    torque.x = roundBasedOnMain(torque.length(), torque.x)
+    torque.y = roundBasedOnMain(torque.length(), torque.y)
+    torque.z = roundBasedOnMain(torque.length(), torque.z)
+    const value = `(${torque.x}, ${torque.y}, ${torque.z})`
     const torque_results = results.querySelector(".torque_results")
     torque_results.innerHTML = torque_results.innerHTML.replace( new RegExp(wire.name+": .*$","gm"),wire.name+": " + value)
   }
