@@ -703,25 +703,24 @@ window.calc_force = function (toolbar, scene) {
         function f_v(dv) {
           // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
           // which i think is the only option for f(v) ~ dv^2 where f is only in r direction
-          return (dv.length()**2 - 3/2*dv.dot(R_hat)**2) / R.length()**2
+          return R_hat.clone().multiplyScalar(  (dv.length()**2 - 3/2*dv.dot(R_hat)**2) / R.length()**2  )
         }
         function f_a(da) {
-          return da.dot(R_hat) / R.length()
+          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  )
         }
 
-        let dv, da;
-        dv = v_1_p.clone().sub(v_2_n); da = a_1_p.clone().sub(a_2_n); const f_p_n = + f_v(dv) + f_a(da)
-        dv = v_1_n.clone().sub(v_2_p); da = a_1_n.clone().sub(a_2_p); const f_n_p = + f_v(dv) + f_a(da)
-        dv = v_1_n.clone().sub(v_2_n); da = a_1_n.clone().sub(a_2_n); const f_n_n = - f_v(dv) - f_a(da)
-        dv = v_1_p.clone().sub(v_2_p); da = a_1_p.clone().sub(a_2_p); const f_p_p = - f_v(dv) - f_a(da)
+        const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
+        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
+        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
+        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
 
-        f_2 = R_hat.clone().multiplyScalar( f_p_n + f_n_p + f_n_n + f_p_p )
+        f_2 = f_p_n.clone().add(f_n_p).add(f_n_n).add(f_p_p)
         f_1 = f_2.clone().negate()
 
         // calculating "field" on electrons in wire2 to measure the voltage
-        const field_difference_2 = R_hat.clone().multiplyScalar( f_p_n + f_n_n )
-        // const field_difference_2 = R_hat.clone().multiplyScalar( f_n_n )
-        const field_difference_1 = R_hat.clone().negate().multiplyScalar( f_n_p + f_n_n )
+        const field_difference_2 = f_p_n.clone().add(f_n_n)
+        // const field_difference_2 = f_n_n
+        const field_difference_1 = f_n_p.clone().add(f_n_n).negate()
         // const field_difference_1 = R_hat.clone().multiplyScalar( f_n_p + f_n_n - (f_n_p * mass_of_electron_over_proton) - (f_p_p* mass_of_electron_over_proton) )
 
         // LATEST
