@@ -701,30 +701,24 @@ window.calc_force = function (toolbar, scene) {
         const a_2_p = new THREE.Vector3(0,0,0)
 
         function f_v(dv) {
-          // dv^2 - 1.5(dv * r)^2 is same as (dv x r)^2 - 0.5(dv * r)^2
-          // which i think is the only option for f(v) ~ dv^2 where f is only in r direction
-          return R_hat.clone().multiplyScalar(  (dv.length()**2 - 3/2*dv.dot(R_hat)**2) / R.length()**2  )
-
-          // guesses via E_p
-          // return R_hat.clone().multiplyScalar(  0.77 * dv.clone().cross(R_hat).length()**2 / R.length()**2  )
+          return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
         }
-        function f_a(dv, da) {
-          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  )
-          // return R_hat.clone().multiplyScalar(  da.dot(R_hat) * da.clone().normalize().cross(R_hat).length()**2 / R.length()  )
-
-          // guesses via E_p
-          // const v_hat = dv.clone().normalize()
-          // return R_hat.clone().multiplyScalar(  1/8 * ( da.clone().dot(v_hat) + 0 * da.clone().cross(v_hat).length() ) * v_hat.clone().dot(R_hat) / R.length()  )
-          // return new THREE.Vector3(0,0,0)
+        function f_a(da) {
+          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  ))
         }
 
-        const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(v_1_p.clone().sub(v_2_n), a_1_p.clone().sub(a_2_n)))
-        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(v_1_n.clone().sub(v_2_p), a_1_n.clone().sub(a_2_p)))
-        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(v_1_n.clone().sub(v_2_n), a_1_n.clone().sub(a_2_n))).negate()
-        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(v_1_p.clone().sub(v_2_p), a_1_p.clone().sub(a_2_p))).negate()
+        const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
+        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
+        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
+        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
 
         f_2 = f_p_n.clone().add(f_n_p).add(f_n_n).add(f_p_p)
         f_1 = f_2.clone().negate()
+
+        // fix the missing rotational momentum
+        const fix_spin = R.clone().cross(f_2).multiplyScalar(-1/2)
+        F_2_torque_T.add(fix_spin)
+        F_1_torque_T.add(fix_spin.clone().negate())
 
         // calculating "field" on electrons in wire2 to measure the voltage
         const field_difference_2 = f_p_n.clone().add(f_n_n)
