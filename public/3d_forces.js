@@ -31,17 +31,16 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  const total_parts = 1000
+  // if its more tha 100 the CatmullRomCurve3 algorithm starts to break
+  const total_parts = 100
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
 
   const wire1_points = path1.getSpacedPoints(parts_1)
   const wire2_points = path2.getSpacedPoints(parts_2)
-  console.log(wire2_points[0])
-  console.log(wire2_points[wire2_points.length-2])
-  // TODO getSpacedPoints instead of getPoints returns extra point at the end, deal with it
-  // TODO if the curve is closed (just read CatmullRomCurve3 property) then properly calc v and a. (im talking about the edge points)
+  wire1_points.pop()
+  wire2_points.pop()
 
   // draw shapes WIRE1
   const wire1 = new THREE.Group()
@@ -578,6 +577,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.current_change = wire1_mesh.current_change/100
   // wire1.spin = wire1_mesh.spin
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
+  wire1.path = wire1_mesh.path
   wire1.length = wire1_mesh.length
   wire1.force = force_on_1
   wire1.torque = torque_on_1
@@ -591,6 +591,7 @@ window.calc_force = function (toolbar, scene) {
   wire2.voltage = 0
   // wire2.spin = wire2_mesh.spin
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
+  wire2.path = wire2_mesh.path
   wire2.length = wire2_mesh.length
   wire2.force = force_on_2
   wire2.torque = torque_on_2
@@ -620,35 +621,55 @@ window.calc_force = function (toolbar, scene) {
   let parts_1 = wire1.points_vec.length
   let parts_2 = wire2.points_vec.length
 
-  const speeds_1 = []
+  let speeds_1 = []
   for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
-  speeds_1.unshift(speeds_1[0])
-  speeds_1.push(speeds_1[speeds_1.length-1])
-  const speeds_2 = []
+  if (wire1.path.closed) {
+    speeds_1.unshift(wire1.points_vec[1].clone().sub(wire1.points_vec[wire1.points_vec.length-1]).normalize())
+    speeds_1.push(wire1.points_vec[0].clone().sub(wire1.points_vec[wire1.points_vec.length-2]).normalize())
+  } else {
+    speeds_1.unshift(speeds_1[0])
+    speeds_1.push(speeds_1[speeds_1.length-1])
+  }
+  let speeds_2 = []
   for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
-  speeds_2.unshift(speeds_2[0])
-  speeds_2.push(speeds_2[speeds_2.length-1])
+  if (wire2.path.closed) {
+    speeds_2.unshift(wire2.points_vec[1].clone().sub(wire2.points_vec[wire2.points_vec.length-1]).normalize())
+    speeds_2.push(wire2.points_vec[0].clone().sub(wire2.points_vec[wire2.points_vec.length-2]).normalize())
+  } else {
+    speeds_2.unshift(speeds_2[0])
+    speeds_2.push(speeds_2[speeds_2.length-1])
+  }
 
   // dx = v*dt => dt = dx/v
   // a = dv/dt = dv/(dx/v) = v*dv/dx = v^2*unit(dv)/dx (here v is 1, when it changes later multiply it back)
   const dx_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[0]).length()
   const accelerations_1 = []
-  for (let point_1 = 2; point_1 < parts_1-2; point_1++) {
+  for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
     accelerations_1.push(speeds_1[point_1+1].clone().sub(speeds_1[point_1-1]).multiplyScalar(1/dx_1))
   }
-  accelerations_1.unshift(accelerations_1[0],accelerations_1[0])
-  accelerations_1.push(accelerations_1[accelerations_1.length-1],accelerations_1[accelerations_1.length-1])
+  if (wire1.path.closed) {
+    accelerations_1.unshift(speeds_1[1].clone().sub(speeds_1[speeds_1.length-1]).multiplyScalar(1/dx_1))
+    accelerations_1.push(speeds_1[0].clone().sub(speeds_1[speeds_1.length-2]).multiplyScalar(1/dx_1))
+  } else {
+    accelerations_1.unshift(accelerations_1[0])
+    accelerations_1.push(accelerations_1[accelerations_1.length-1])
+  }
   const dx_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[0]).length()
   const accelerations_2 = []
-  for (let point_2 = 2; point_2 < parts_2-2; point_2++) {
+  for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
     accelerations_2.push(speeds_2[point_2+1].clone().sub(speeds_2[point_2-1]).multiplyScalar(1/dx_2))
   }
-  accelerations_2.unshift(accelerations_2[0],accelerations_2[0])
-  accelerations_2.push(accelerations_2[accelerations_2.length-1],accelerations_2[accelerations_2.length-1])
+  if (wire2.path.closed) {
+    accelerations_2.unshift(speeds_2[1].clone().sub(speeds_2[speeds_2.length-1]).multiplyScalar(1/dx_2))
+    accelerations_2.push(speeds_2[0].clone().sub(speeds_2[speeds_2.length-2]).multiplyScalar(1/dx_2))
+  } else {
+    accelerations_2.unshift(accelerations_2[0])
+    accelerations_2.push(accelerations_2[accelerations_2.length-1])
+  }
 
   for (let point_1 = 0; point_1 < parts_1; point_1++) {
 
@@ -694,23 +715,16 @@ window.calc_force = function (toolbar, scene) {
         const a_2_p = new THREE.Vector3(0,0,0)
 
         function f_v(dv) {
-          // return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
-          return new THREE.Vector3(0,0,0)
+          return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
         }
         function f_a(da) {
-          // return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  ))
-          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  )
+          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  ))
         }
 
-        // const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
-        // const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
-        // const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
-        // const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
-
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
-        const f_n_p = new THREE.Vector3(0,0,0)
-        const f_n_n = new THREE.Vector3(0,0,0)
-        const f_p_p = new THREE.Vector3(0,0,0)
+        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
+        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
+        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
 
         f_2 = f_p_n.clone().add(f_n_p).add(f_n_n).add(f_p_p)
         f_1 = f_2.clone().negate()

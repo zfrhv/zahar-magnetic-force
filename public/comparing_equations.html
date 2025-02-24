@@ -122,75 +122,6 @@
         document.getElementById('calc_custom_paths').scrollIntoView();
         toolbar.children[0].children[0].click()
         })">Check</button>
-
-      <div class="markdown" id="energy_problem">
-        energy problem:
-        its temporaty?
-      </div>
-      <textarea class="energy_problem" rows="3">
-0, 0, 150
-0, 0, 100
-      </textarea>
-      <textarea class="energy_problem" rows="3">
-0, 150.00, 0.00
-0, 148.82, 18.80
-0, 145.29, 37.30
-0, 139.47, 55.22
-0, 131.45, 72.26
-0, 121.35, 88.17
-0, 109.35, 102.68
-0, 95.61, 115.58
-0, 80.37, 126.65
-0, 63.87, 135.72
-0, 46.35, 142.66
-0, 28.11, 147.34
-0, 9.42, 149.70
-0, -9.42, 149.70
-0, -28.11, 147.34
-0, -46.35, 142.66
-0, -63.87, 135.72
-0, -80.37, 126.65
-0, -95.61, 115.58
-0, -109.35, 102.68
-0, -121.35, 88.17
-0, -131.45, 72.26
-0, -139.47, 55.22
-0, -145.29, 37.30
-0, -148.82, 18.80
-0, -150.00, 0.00
-0, -148.82, -18.80
-0, -145.29, -37.30
-0, -139.47, -55.22
-0, -131.45, -72.26
-0, -121.35, -88.17
-0, -109.35, -102.68
-0, -95.61, -115.58
-0, -80.37, -126.65
-0, -63.87, -135.72
-0, -46.35, -142.66
-0, -28.11, -147.34
-0, -9.42, -149.70
-0, 9.42, -149.70
-0, 28.11, -147.34
-0, 46.35, -142.66
-0, 63.87, -135.72
-0, 80.37, -126.65
-0, 95.61, -115.58
-0, 109.35, -102.68
-0, 121.35, -88.17
-0, 131.45, -72.26
-0, 139.47, -55.22
-0, 145.29, -37.30
-0, 148.82, -18.80
-0, 150.00, 0.00
-      </textarea>
-      <button onclick="window.apply_paths(...document.getElementsByClassName('energy_problem')); new Promise(r => setTimeout(r, 100)).then(() => {
-        const toolbar = document.getElementById('calc_custom_paths').children[1];
-        toolbar.getElementsByClassName('force_type')[0].checked = true;
-        document.getElementById('calc_custom_paths').scrollIntoView();
-        toolbar.children[0].children[0].click()
-        })">Check</button>
-
     </article>
     <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
   </div>
@@ -250,8 +181,8 @@
         if (points_2.length > 2 && points_2[0].clone().sub(points_2[points_2.length-1]).length() < points_2[0].clone().sub(points_2[1]).length() * 1.5) {
           closed_2 = true
         }
-        path1 = new CatmullRomCurve3(points_1, closed_1, 'catmullrom', 0.001)
-        path2 = new CatmullRomCurve3(points_2, closed_2, 'catmullrom', 0.001)
+        path1 = new CatmullRomCurve3(points_1, closed_1, 'catmullrom', 0.01)
+        path2 = new CatmullRomCurve3(points_2, closed_2, 'catmullrom', 0.01)
 
         const old_canvas = document.getElementById("calc_custom_paths")
         old_canvas.parentNode.replaceChild(calc_custom_paths, old_canvas)
@@ -262,8 +193,8 @@
     input1.addEventListener('input', update_calc)
     input2.addEventListener('input', update_calc)
 
-    path1 = new CatmullRomCurve3(string_to_points(input1.value), true, 'catmullrom', 0.001)
-    path2 = new CatmullRomCurve3(string_to_points(input2.value), true, 'catmullrom', 0.001)
+    path1 = new CatmullRomCurve3(string_to_points(input1.value), true, 'catmullrom', 0.01)
+    path2 = new CatmullRomCurve3(string_to_points(input2.value), true, 'catmullrom', 0.01)
     window.calc_custom_paths_init = function (toolbar, scene) {
       window.calc_force_init(toolbar, scene, path1, path2)
     }
