@@ -1,7 +1,7 @@
-import * as THREE from 'three'
-import { Line2 } from 'three/addons/lines/Line2.js'
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
+import * as THREE from '/node_modules/three/build/three.module.js'
+import { Line2 } from 'examples/jsm/lines/Line2.js'
+import { LineMaterial } from 'examples/jsm/lines/LineMaterial.js'
+import { LineGeometry } from 'examples/jsm/lines/LineGeometry.js'
 import { Path3 } from './tools/threejs/path3.js'
 
 const pi = Math.PI

@@ -1,8 +1,7 @@
-import * as THREE from 'three'
-import { Line2 } from 'three/addons/lines/Line2.js'
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
-import { Path3 } from './tools/threejs/path3.js'
+import * as THREE from '/node_modules/three/build/three.module.js'
+import { Line2 } from '/vendor_mods/three/examples/jsm/lines/Line2.js'
+import { LineMaterial } from '/vendor_mods/three/examples/jsm/lines/LineMaterial.js'
+import { LineGeometry } from '/vendor_mods/three/examples/jsm/lines/LineGeometry.js'
 
 const pi = Math.PI
 const err_num = 0.00001
@@ -17,9 +16,9 @@ function vec_to_euler(vector) {
 window.calc_two_circles_init = function (toolbar, scene) {
   const points = []
   for ( let degree = 0; degree < 2*Math.PI+err_num; degree += 2*Math.PI/30 ) {
-    points.push(Math.sin(degree)*wires_radius, Math.cos(degree)*wires_radius, 0)
+    points.push(new THREE.Vector3(Math.sin(degree)*wires_radius, Math.cos(degree)*wires_radius, 0))
   }
-  const path = new Path3(points)
+  const path = new THREE.CatmullRomCurve3(points, true, 'centripetal', 0.1)
 
   window.calc_force_init(toolbar, scene, path, path)
 }
@@ -37,30 +36,24 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
 
-  const wire1_points = path1.getPoints(parts_1)
-  const wire2_points = path2.getPoints(parts_2)
-
-  const wire1_points_vec = []
-  const wire2_points_vec = []
-
-  for (let point_1 = 0; point_1 < wire1_points.length; point_1 += 3) {
-    wire1_points_vec.push(new THREE.Vector3(wire1_points[point_1], wire1_points[point_1+1], wire1_points[point_1+2]))
-  }
-  for (let point_2 = 0; point_2 < wire2_points.length; point_2 += 3) {
-    wire2_points_vec.push(new THREE.Vector3(wire2_points[point_2], wire2_points[point_2+1], wire2_points[point_2+2]))
-  }
+  const wire1_points = path1.getSpacedPoints(parts_1)
+  const wire2_points = path2.getSpacedPoints(parts_2)
+  console.log(wire2_points[0])
+  console.log(wire2_points[wire2_points.length-2])
+  // TODO getSpacedPoints instead of getPoints returns extra point at the end, deal with it
+  // TODO if the curve is closed (just read CatmullRomCurve3 property) then properly calc v and a. (im talking about the edge points)
 
   // draw shapes WIRE1
   const wire1 = new THREE.Group()
   const wire1_material = new THREE.MeshBasicMaterial({ color: 0x3e8207 })
   wire1.name = "wire1"
-  wire1.points_vec = wire1_points_vec
+  wire1.points_vec = wire1_points
   wire1.length = wire1_length
   wire1.path = path1
 
   // draw circle wire
   const wire1_path = new LineGeometry()
-  wire1_path.setPositions(wire1_points)
+  wire1_path.setPositions(wire1_points.flatMap(v => [v.x, v.y, v.z]))
   const wire1_shape_material = new LineMaterial({color: wire1_material.color, linewidth: 15})
   const wire1_shape = new Line2( wire1_path, wire1_shape_material )
   wire1_shape_material.resolution.set( window.innerWidth, window.innerHeight )
@@ -111,13 +104,13 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const wire2 = new THREE.Group()
   const wire2_material = new THREE.MeshBasicMaterial({ color: 0x6898cc })
   wire2.name = "wire2"
-  wire2.points_vec = wire2_points_vec
+  wire2.points_vec = wire2_points
   wire2.length = wire2_length
   wire2.path = path2
 
   // draw circle wire
   const wire2_path = new LineGeometry()
-  wire2_path.setPositions(wire2_points)
+  wire2_path.setPositions(wire2_points.flatMap(v => [v.x, v.y, v.z]))
   const wire2_shape_material = new LineMaterial({color: wire2_material.color, linewidth: 15})
   const wire2_shape = new Line2( wire2_path, wire2_shape_material )
   wire2_shape_material.resolution.set( window.innerWidth, window.innerHeight )
@@ -701,16 +694,23 @@ window.calc_force = function (toolbar, scene) {
         const a_2_p = new THREE.Vector3(0,0,0)
 
         function f_v(dv) {
-          return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
+          // return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
+          return new THREE.Vector3(0,0,0)
         }
         function f_a(da) {
-          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  ))
+          // return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  ))
+          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  )
         }
 
+        // const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
+        // const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
+        // const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
+        // const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
+
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
-        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
-        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
-        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
+        const f_n_p = new THREE.Vector3(0,0,0)
+        const f_n_n = new THREE.Vector3(0,0,0)
+        const f_p_p = new THREE.Vector3(0,0,0)
 
         f_2 = f_p_n.clone().add(f_n_p).add(f_n_n).add(f_p_p)
         f_1 = f_2.clone().negate()

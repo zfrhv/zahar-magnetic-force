@@ -56,8 +56,8 @@ const calculator_svg = `
 async function calculate(looping_animation, animation_main) {
   const [THREE, { OrbitControls }] =
   await Promise.all([
-    import('three'),
-    import('three/addons/controls/OrbitControls.js')
+    import("/node_modules/three/build/three.module.js"),
+    import("/vendor_mods/three/examples/jsm/controls/OrbitControls.js")
   ]);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -114,10 +114,10 @@ async function calculate(looping_animation, animation_main) {
 async function insert_obj(looping_animation, animation_main) {
   const [THREE, { OrbitControls }, { OBJLoader }, { MTLLoader }] =
   await Promise.all([
-    import('three'),
-    import('three/addons/controls/OrbitControls.js'),
-    import('three/addons/loaders/OBJLoader.js'),
-    import('three/addons/loaders/MTLLoader.js')
+    import('/node_modules/three/package.json'),
+    import('/node_modules/three/examples/jsm/controls/OrbitControls.js'),
+    import('/node_modules/three/examples/jsm/loaders/OBJLoader.js'),
+    import('/node_modules/three/examples/jsm/loaders/MTLLoader.js')
   ]);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true });
