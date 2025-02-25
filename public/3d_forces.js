@@ -679,10 +679,6 @@ window.calc_force = function (toolbar, scene) {
     accelerations_2.push(accelerations_2[accelerations_2.length-1])
   }
 
-
-  // let debug_last_E = 0 // energy
-  // let debug_counter = 0
-
   for (let point_1 = 0; point_1 < parts_1; point_1++) {
 
     const relative_place_1 = wire1.points_vec[point_1]
@@ -699,22 +695,12 @@ window.calc_force = function (toolbar, scene) {
 
       const R = absolute_place_1.clone().sub(absolute_place_2)
       const R_hat = R.clone().normalize()
-      const R_h_2 = R_hat.clone().negate()
 
       let f_1 = null
       let f_2 = null
 
       if (mine_force) {
         // full "mine" force calculation
-
-        // const v_1_spin = v_1.clone().normalize().multiplyScalar(wire1.spin)
-        // const v_2_spin = v_2.clone().normalize().multiplyScalar(wire2.spin)
-
-        // const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed).add(v_1_spin)
-        // const v_2_n = v_2.clone().multiplyScalar(wire2.current).add(v_2_spin)
-        // // TODO maybe need -mass_of_electron_over_proton here? (negative)
-        // const v_1_p = wire1.speed.clone().add(v_1_spin.clone().multiplyScalar(mass_of_electron_over_proton))
-        // const v_2_p = new THREE.Vector3(0,0,0).add(v_2_spin.clone().multiplyScalar(mass_of_electron_over_proton))
 
         const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
         const v_2_n = v_2.clone().multiplyScalar(wire2.current)
@@ -727,7 +713,7 @@ window.calc_force = function (toolbar, scene) {
         const a_2_p = new THREE.Vector3(0,0,0)
 
         function f_v(dv) {
-          return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
+          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  )
         }
         function f_a(da) {
           // TODO why did i had to negate here? (this solved the energy problem) idk if i care enough. not yet
@@ -736,6 +722,9 @@ window.calc_force = function (toolbar, scene) {
 
         // TODO why my and their voltages are different
         // its different for speed, but same for change of current
+        // its probably cuz of the work calc, need to include proton work as well or speed relative to proton withouth wire speed.
+
+        // TODO so why did i had minus on f(v)? and why its not twice bigger than f(r)? f(r) should get *1/2 why are they the same?
 
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
         const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
@@ -750,52 +739,12 @@ window.calc_force = function (toolbar, scene) {
         F_2_torque_T.add(fix_spin)
         F_1_torque_T.add(fix_spin.clone().negate())
 
-        // force on electron in wire direction
-        const field_difference_in_wire_direction = f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize())
-        const distance_2 = wire2.length / (parts_2-1)
-        // voltage = how much energy it takes to move a 1 charge from point A to point B
-        wire2.voltage += field_difference_in_wire_direction * distance_2
-
-        // calculate voltage for wire 1 as well
-        const field_difference_in_wire_direction_1 = f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize())
-        const distance_1 = wire1.length / (parts_1-1)
-        wire1.voltage += field_difference_in_wire_direction_1 * distance_1
-
-        // // debugging
-        // if (point_1 == debug_counter && point_2 == debug_counter) {
-        //   // i measure the energy after dt, so both particles have to move then i check the energy different vs work
-
-        //   let debug_curr_E = 0 // delta E
-        //   let debug_W_r = 0 // work of f(r)
-        //   let debug_W_v = 0 // work of f(v)
-          
-        //   function debug_E_between_particles(dv) {
-        //     return -(2*dv.clone().cross(R_hat).length()**2 - dv.dot(R_hat)**2) / R.length()
-        //   }
-        //   debug_curr_E += debug_E_between_particles(v_1_p.clone().sub(v_2_n))
-        //   debug_curr_E += debug_E_between_particles(v_1_n.clone().sub(v_2_p))
-        //   debug_curr_E -= debug_E_between_particles(v_1_n.clone().sub(v_2_n))
-        //   debug_curr_E -= debug_E_between_particles(v_1_p.clone().sub(v_2_p))
-
-        //   // calc each individually
-        //   const f_p_n_r = f_v(v_1_p.clone().sub(v_2_n))
-        //   const f_n_p_r = f_v(v_1_n.clone().sub(v_2_p))
-        //   const f_n_n_r = f_v(v_1_n.clone().sub(v_2_n)).negate()
-        //   const f_p_n_v = f_a(a_1_p.clone().sub(a_2_n))
-        //   const f_n_p_v = f_a(a_1_n.clone().sub(a_2_p))
-        //   const f_n_n_v = f_a(a_1_n.clone().sub(a_2_n)).negate()
-        //   debug_W_r += f_n_p_r.clone().add(f_n_n_r).dot(v_1)
-        //   debug_W_r += f_p_n_r.clone().add(f_n_n_r).negate().dot(v_2)
-        //   debug_W_v += f_n_p_v.clone().add(f_n_n_v).dot(v_1)
-        //   debug_W_v += f_p_n_v.clone().add(f_n_n_v).negate().dot(v_2)
-
-        //   if (debug_last_E) {
-        //     console.log(debug_counter, debug_last_E - debug_curr_E, debug_W_r*10, debug_W_v*10)
-        //   }
-        //   debug_last_E = debug_curr_E
-          
-        //   debug_counter += 1
-        // }
+        // calc voltage: force on electron in wire direction * distance to next spot
+        // wire2.voltage += f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
+        // wire1.voltage += f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
+        // TODO this is the problem. or need to calc proton work as well, or the distance is relative to proton (remove the wire speed when calc)
+        wire2.voltage += f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
+        wire1.voltage += f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
       } else {
         // "their" force calculation
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
