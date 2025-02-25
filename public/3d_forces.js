@@ -14,8 +14,8 @@ function vec_to_euler(vector) {
 }
 
 window.calc_two_circles_init = function (toolbar, scene) {
-  const points = []
-  for ( let degree = 0; degree < 2*Math.PI+err_num; degree += 2*Math.PI/30 ) {
+  const points = [] // CatmullRomCurve3 is broken at the edges even when i specify closed. so i make twice more points then take half
+  for ( let degree = 0; degree < 4*Math.PI; degree += 2*Math.PI/100 ) {
     points.push(new THREE.Vector3(Math.sin(degree)*wires_radius, Math.cos(degree)*wires_radius, 0))
   }
   const path = new THREE.CatmullRomCurve3(points, true, 'centripetal', 0.1)
@@ -31,16 +31,24 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   const wire1_length = path1.getLength()
   const wire2_length = path2.getLength()
 
-  // if its more tha 100 the CatmullRomCurve3 algorithm starts to break
-  const total_parts = 100
+  const total_parts = 1000
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
 
-  const wire1_points = path1.getSpacedPoints(parts_1)
-  const wire2_points = path2.getSpacedPoints(parts_2)
-  wire1_points.pop()
-  wire2_points.pop()
+  let wire1_points = path1.getSpacedPoints(parts_1)
+  let wire2_points = path2.getSpacedPoints(parts_2)
+  // CatmullRomCurve3 is broken at the edges even when i specify closed. so i make twice more points then take half
+  if (path1.closed) {
+    const start = Math.floor(wire1_points.length/4)
+    const end = Math.floor(wire1_points.length*3/4)
+    wire1_points = wire1_points.slice(start, end)
+  }
+  if (path2.closed) {
+    const start = Math.floor(wire2_points.length/4)
+    const end = Math.floor(wire2_points.length*3/4)
+    wire2_points = wire2_points.slice(start, end)
+  }
 
   // draw shapes WIRE1
   const wire1 = new THREE.Group()
@@ -48,7 +56,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire1.name = "wire1"
   wire1.points_vec = wire1_points
   wire1.length = wire1_length
-  wire1.path = path1
+  wire1.closed = path1.closed
 
   // draw circle wire
   const wire1_path = new LineGeometry()
@@ -105,7 +113,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   wire2.name = "wire2"
   wire2.points_vec = wire2_points
   wire2.length = wire2_length
-  wire2.path = path2
+  wire2.closed = path2.closed
 
   // draw circle wire
   const wire2_path = new LineGeometry()
@@ -158,14 +166,14 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
 
   // Check if 2d shape, to be able to use Faraday's law
   function areas_for_faradays_law(wire) {
-    is_2d: if (wire.path.points.length >= 9) {
-      const main_point = new THREE.Vector3(wire.path.points[0], wire.path.points[1], wire.path.points[2])
-      // make sure that the circiot is closed
-      if (new THREE.Vector3(wire.path.points[wire.path.points.length-3], wire.path.points[wire.path.points.length-2], wire.path.points[wire.path.points.length-1]).sub(main_point).length() > err_num) {
+    is_2d: if (wire.points_vec.length >= 3) {
+      const main_point = wire.points_vec[0]
+      // make sure that the shape is closed
+      if (!wire.closed) {
         break is_2d
       }
-      const new_x = new THREE.Vector3(wire.path.points[3], wire.path.points[4], wire.path.points[5]).sub(main_point).normalize()
-      const surface_vec = new THREE.Vector3(wire.path.points[6], wire.path.points[7], wire.path.points[8]).sub(main_point).cross(new_x).normalize()
+      const new_x = wire.points_vec[1].clone().sub(main_point).normalize()
+      const surface_vec = wire.points_vec[2].clone().sub(main_point).cross(new_x).normalize()
       const new_y = new_x.clone().cross(surface_vec).normalize()
   
       // yea i can probably use here 4D matrix instead of doing "sub(main_point)" and then "add(main_point)". but idk how to use matrixes so maybe in the future
@@ -175,9 +183,8 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       const to_new_axis = to_original_axis.clone().invert()
       // check if each dot is on the surface + get the max and min points of the surface
       const relative_locations = []
-      for (let i=0; i < wire.path.points.length; i+=3) {
-        relative_locations.push(new THREE.Vector3(wire.path.points[i], wire.path.points[i+1], wire.path.points[i+2]).sub(main_point).applyMatrix3(to_new_axis))
-        const tmp = new THREE.Vector3(wire.path.points[i], wire.path.points[i+1], wire.path.points[i+2])
+      for (let i=0; i < wire.points_vec.length; i++) {
+        relative_locations.push(wire.points_vec[i].clone().sub(main_point).applyMatrix3(to_new_axis))
       }
       
       const min = new THREE.Vector2()
@@ -206,7 +213,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
           return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
       }
   
-      // check which dots are inside the surface
+      // check which dots are inside the surface and add them as small squares (like 2d integral squares)
       wire.areas = []
       const step = Math.sqrt((max.x-min.x) * (max.y-min.y) / parts_2)
       let width = min.x
@@ -214,6 +221,7 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
   
       while (height < max.y) {
         let crosses = 0
+        // not efficient check if spot (width, height) is inside the shape by measuring intersections with the edge
         for (let i=0; i < relative_locations.length-1; i++) {
           if ( is_intersecting({x: min.x-1, y: min.y-1}, {x: width, y: height}, relative_locations[i], relative_locations[i+1]) ) {
             crosses++
@@ -577,7 +585,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.current_change = wire1_mesh.current_change/100
   // wire1.spin = wire1_mesh.spin
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
-  wire1.path = wire1_mesh.path
+  wire1.closed = wire1_mesh.closed
   wire1.length = wire1_mesh.length
   wire1.force = force_on_1
   wire1.torque = torque_on_1
@@ -591,7 +599,7 @@ window.calc_force = function (toolbar, scene) {
   wire2.voltage = 0
   // wire2.spin = wire2_mesh.spin
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
-  wire2.path = wire2_mesh.path
+  wire2.closed = wire2_mesh.closed
   wire2.length = wire2_mesh.length
   wire2.force = force_on_2
   wire2.torque = torque_on_2
@@ -625,7 +633,7 @@ window.calc_force = function (toolbar, scene) {
   for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
-  if (wire1.path.closed) {
+  if (wire1.closed) {
     speeds_1.unshift(wire1.points_vec[1].clone().sub(wire1.points_vec[wire1.points_vec.length-1]).normalize())
     speeds_1.push(wire1.points_vec[0].clone().sub(wire1.points_vec[wire1.points_vec.length-2]).normalize())
   } else {
@@ -636,7 +644,7 @@ window.calc_force = function (toolbar, scene) {
   for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
-  if (wire2.path.closed) {
+  if (wire2.closed) {
     speeds_2.unshift(wire2.points_vec[1].clone().sub(wire2.points_vec[wire2.points_vec.length-1]).normalize())
     speeds_2.push(wire2.points_vec[0].clone().sub(wire2.points_vec[wire2.points_vec.length-2]).normalize())
   } else {
@@ -651,7 +659,7 @@ window.calc_force = function (toolbar, scene) {
   for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
     accelerations_1.push(speeds_1[point_1+1].clone().sub(speeds_1[point_1-1]).multiplyScalar(1/dx_1))
   }
-  if (wire1.path.closed) {
+  if (wire1.closed) {
     accelerations_1.unshift(speeds_1[1].clone().sub(speeds_1[speeds_1.length-1]).multiplyScalar(1/dx_1))
     accelerations_1.push(speeds_1[0].clone().sub(speeds_1[speeds_1.length-2]).multiplyScalar(1/dx_1))
   } else {
@@ -663,13 +671,17 @@ window.calc_force = function (toolbar, scene) {
   for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
     accelerations_2.push(speeds_2[point_2+1].clone().sub(speeds_2[point_2-1]).multiplyScalar(1/dx_2))
   }
-  if (wire2.path.closed) {
+  if (wire2.closed) {
     accelerations_2.unshift(speeds_2[1].clone().sub(speeds_2[speeds_2.length-1]).multiplyScalar(1/dx_2))
     accelerations_2.push(speeds_2[0].clone().sub(speeds_2[speeds_2.length-2]).multiplyScalar(1/dx_2))
   } else {
     accelerations_2.unshift(accelerations_2[0])
     accelerations_2.push(accelerations_2[accelerations_2.length-1])
   }
+
+
+  // let debug_last_E = 0 // energy
+  // let debug_counter = 0
 
   for (let point_1 = 0; point_1 < parts_1; point_1++) {
 
@@ -718,8 +730,11 @@ window.calc_force = function (toolbar, scene) {
           return R_hat.clone().multiplyScalar(  (dv.clone().cross(R_hat).length()**2 - 1/2*dv.dot(R_hat)**2) / R.length()**2  )
         }
         function f_a(da) {
-          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  ))
+          // TODO why did i had to negate here? (this solved the energy problem) idk if i care enough. not yet
+          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  )).negate()
         }
+
+        // TODO why my and their voltages are different
 
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
         const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
@@ -739,13 +754,6 @@ window.calc_force = function (toolbar, scene) {
         // const field_difference_2 = f_n_n
         const field_difference_1 = f_n_p.clone().add(f_n_n).negate()
         // const field_difference_1 = R_hat.clone().multiplyScalar( f_n_p + f_n_n - (f_n_p * mass_of_electron_over_proton) - (f_p_p* mass_of_electron_over_proton) )
-
-        // LATEST
-        // TODO solve this:
-        // aw shoot, there is voltage where not supposed to be:
-        // green current: 0, orientation G_X: 1, B_Y: 3/4
-        // it means that electron can travel on the loop and he is sped up. free energy.
-
 
 
         // 4th method? idk but its old now
@@ -789,6 +797,42 @@ window.calc_force = function (toolbar, scene) {
         const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
         const distance_1 = wire1.length / (parts_1-1)
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
+
+        // // debugging
+        // if (point_1 == debug_counter && point_2 == debug_counter) {
+        //   // i measure the energy after dt, so both particles have to move then i check the energy different vs work
+
+        //   let debug_curr_E = 0 // delta E
+        //   let debug_W_r = 0 // work of f(r)
+        //   let debug_W_v = 0 // work of f(v)
+          
+        //   function debug_E_between_particles(dv) {
+        //     return -(2*dv.clone().cross(R_hat).length()**2 - dv.dot(R_hat)**2) / R.length()
+        //   }
+        //   debug_curr_E += debug_E_between_particles(v_1_p.clone().sub(v_2_n))
+        //   debug_curr_E += debug_E_between_particles(v_1_n.clone().sub(v_2_p))
+        //   debug_curr_E -= debug_E_between_particles(v_1_n.clone().sub(v_2_n))
+        //   debug_curr_E -= debug_E_between_particles(v_1_p.clone().sub(v_2_p))
+
+        //   // calc each individually
+        //   const f_p_n_r = f_v(v_1_p.clone().sub(v_2_n))
+        //   const f_n_p_r = f_v(v_1_n.clone().sub(v_2_p))
+        //   const f_n_n_r = f_v(v_1_n.clone().sub(v_2_n)).negate()
+        //   const f_p_n_v = f_a(a_1_p.clone().sub(a_2_n))
+        //   const f_n_p_v = f_a(a_1_n.clone().sub(a_2_p))
+        //   const f_n_n_v = f_a(a_1_n.clone().sub(a_2_n)).negate()
+        //   debug_W_r += f_n_p_r.clone().add(f_n_n_r).dot(v_1)
+        //   debug_W_r += f_p_n_r.clone().add(f_n_n_r).negate().dot(v_2)
+        //   debug_W_v += f_n_p_v.clone().add(f_n_n_v).dot(v_1)
+        //   debug_W_v += f_p_n_v.clone().add(f_n_n_v).negate().dot(v_2)
+
+        //   if (debug_last_E) {
+        //     console.log(debug_counter, debug_last_E - debug_curr_E, debug_W_r*10, debug_W_v*10)
+        //   }
+        //   debug_last_E = debug_curr_E
+          
+        //   debug_counter += 1
+        // }
       } else {
         // "their" force calculation
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)

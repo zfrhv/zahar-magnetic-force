@@ -35,6 +35,7 @@
         
         - diagram updates after 3 sec when not modfying
         - if it didnt updated, then the input values are not valid
+        - recommended using straight lines or a shape made of 500 points
 
         ### Circuit 1 Path:
       </div>
@@ -175,11 +176,17 @@
         let closed_1 = false
         let closed_2 = false
         // if more than 2 points and last point == first point
-        if (points_1.length > 2 && points_1[0].clone().sub(points_1[points_1.length-1]).length() < points_1[0].clone().sub(points_1[1]).length() * 1.5) {
+        if (points_1.length > 2 && points_1[0].clone().sub(points_1[points_1.length-1]).length() < 0.01) {
           closed_1 = true
+          // CatmullRomCurve3 is broken at the edges even when i specify closed. so i make twice more points then take half
+          points_1.pop() // remove the closing point
+          points_1.push(...points_1) // duplicate twice
         }
-        if (points_2.length > 2 && points_2[0].clone().sub(points_2[points_2.length-1]).length() < points_2[0].clone().sub(points_2[1]).length() * 1.5) {
+        if (points_2.length > 2 && points_2[0].clone().sub(points_2[points_2.length-1]).length() < 0.01) {
           closed_2 = true
+          // CatmullRomCurve3 is broken at the edges even when i specify closed. so i make twice more points then take half
+          points_2.pop() // remove the closing point
+          points_2.push(...points_2) // duplicate twice
         }
         path1 = new CatmullRomCurve3(points_1, closed_1, 'catmullrom', 0.01)
         path2 = new CatmullRomCurve3(points_2, closed_2, 'catmullrom', 0.01)
