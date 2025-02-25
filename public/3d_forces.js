@@ -735,6 +735,7 @@ window.calc_force = function (toolbar, scene) {
         }
 
         // TODO why my and their voltages are different
+        // its different for speed, but same for change of current
 
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
         const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
@@ -749,52 +750,14 @@ window.calc_force = function (toolbar, scene) {
         F_2_torque_T.add(fix_spin)
         F_1_torque_T.add(fix_spin.clone().negate())
 
-        // calculating "field" on electrons in wire2 to measure the voltage
-        const field_difference_2 = f_p_n.clone().add(f_n_n)
-        // const field_difference_2 = f_n_n
-        const field_difference_1 = f_n_p.clone().add(f_n_n).negate()
-        // const field_difference_1 = R_hat.clone().multiplyScalar( f_n_p + f_n_n - (f_n_p * mass_of_electron_over_proton) - (f_p_p* mass_of_electron_over_proton) )
-
-
-        // 4th method? idk but its old now
-        // F_2_torque_T.add(v_2_n.clone().cross(v_1_n).multiplyScalar(3/2 * 1/3 / R.length()))
-        // F_1_torque_T.add(v_1_n.clone().cross(v_2_n).multiplyScalar(3/2 * 1/3 / R.length()))
-        // function vertical_1(v1, v2) {
-        //   const v2_unit = v2.clone().normalize()
-        //   return v2_unit.clone().cross( v1.clone().cross(v2_unit) )
-        // }
-        // f_2 = R_hat.clone().multiplyScalar(3/2* ( vertical_1(v_1_n, R_hat).dot(vertical_1(v_2_n, R_hat)) ) / R.length()**2)
-        // f_1 = f_2.clone().negate()
-
-        // const field_difference_2 = f_2
-        // const field_difference_1 = f_1
-
-
-        // new method
-        // f_2 = R_hat.clone().multiplyScalar(( - v_2_n.clone().dot(R_hat) * v_1_n.clone().dot(R_h_2) ) / R.length()**2)
-        // const f_2_torque = v_2_n.clone().cross(R_h_2).multiplyScalar(v_1_n.clone().dot(R_h_2)/R.length())
-        // const f_1_torque = v_1_n.clone().cross(R_hat).multiplyScalar(v_2_n.clone().dot(R_hat)/R.length())
-        // F_2_torque_T.add(f_2_torque)
-        // F_1_torque_T.add(f_1_torque)
-        // const sideways_force = f_1_torque.clone().add(f_2_torque).cross(R_hat).multiplyScalar(1/R.length())
-        // f_2.add(sideways_force)
-        // f_1 = f_2.clone().negate()
-
-        // const field_difference_2 = new THREE.Vector3(0,0,0)
-        // const field_difference_1 = new THREE.Vector3(0,0,0)
-
-        // const field_difference_2 = f_2
-        // const field_difference_1 = f_1
-        
-
-        // check its vlue in the wire direction because on other directions the electricity cant flow
-        const field_difference_in_wire_direction = field_difference_2.clone().dot(v_2.clone().normalize())
+        // force on electron in wire direction
+        const field_difference_in_wire_direction = f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize())
         const distance_2 = wire2.length / (parts_2-1)
         // voltage = how much energy it takes to move a 1 charge from point A to point B
         wire2.voltage += field_difference_in_wire_direction * distance_2
 
         // calculate voltage for wire 1 as well
-        const field_difference_in_wire_direction_1 = field_difference_1.clone().dot(v_1.clone().normalize())
+        const field_difference_in_wire_direction_1 = f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize())
         const distance_1 = wire1.length / (parts_1-1)
         wire1.voltage += field_difference_in_wire_direction_1 * distance_1
 
