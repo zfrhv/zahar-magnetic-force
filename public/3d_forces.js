@@ -653,7 +653,7 @@ window.calc_force = function (toolbar, scene) {
   }
 
   // dx = v*dt => dt = dx/v
-  // a = dv/dt = dv/(dx/v) = v*dv/dx = v^2*unit(dv)/dx (here v is 1, when it changes later multiply it back)
+  // a = dv/dt = dv/(dx/v) = v*dv/dx = v^2*unit(dv)/dx
   const dx_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[0]).length()
   const accelerations_1 = []
   for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
@@ -702,29 +702,28 @@ window.calc_force = function (toolbar, scene) {
       if (mine_force) {
         // full "mine" force calculation
 
-        const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
-        const v_2_n = v_2.clone().multiplyScalar(wire2.current)
+        // apperantely 1 current for their equestion is speed 1, and 1 current for my equation is speed 2.
+        // or for them its 1/2 and for me its 1. the point is that for my equation the speed is twice more than their equation.
+        // so current -> current*2. (this logic just matches the results)
+        const v_1_n = v_1.clone().multiplyScalar(wire1.current*2).add(wire1.speed)
+        const v_2_n = v_2.clone().multiplyScalar(wire2.current*2)
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        const a_1_n = a_1.clone().multiplyScalar(wire1.current**2).add(v_1.clone().multiplyScalar(wire1.current_change))
-        const a_2_n = a_2.clone().multiplyScalar(wire2.current**2)
+        const a_1_n = a_1.clone().multiplyScalar((wire1.current*2)**2).add(v_1.clone().multiplyScalar(wire1.current_change))
+        const a_2_n = a_2.clone().multiplyScalar((wire2.current*2)**2)
         const a_1_p = new THREE.Vector3(0,0,0)
         const a_2_p = new THREE.Vector3(0,0,0)
 
         function f_v(dv) {
-          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  )
+          dv = dv.clone().multiplyScalar(1/2) // "center of mass" perspective
+          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  ).multiplyScalar(1)
         }
         function f_a(da) {
-          // TODO why did i had to negate here? (this solved the energy problem) idk if i care enough. not yet
-          return R_hat.clone().multiplyScalar(  -1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  1/R.length()  )).negate()
+          da = da.clone().multiplyScalar(1/2) // "center of mass" perspective
+          return R_hat.clone().multiplyScalar(  1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -1/R.length()  )).multiplyScalar(1/2)
+          // TODO why do i multiply by 1/2 and not 2 ??? mathematically its twice more not twice less.
         }
-
-        // TODO why my and their voltages are different
-        // its different for speed, but same for change of current
-        // its probably cuz of the work calc, need to include proton work as well or speed relative to proton withouth wire speed.
-
-        // TODO so why did i had minus on f(v)? and why its not twice bigger than f(r)? f(r) should get *1/2 why are they the same?
 
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
         const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
@@ -740,9 +739,6 @@ window.calc_force = function (toolbar, scene) {
         F_1_torque_T.add(fix_spin.clone().negate())
 
         // calc voltage: force on electron in wire direction * distance to next spot
-        // wire2.voltage += f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
-        // wire1.voltage += f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
-        // TODO this is the problem. or need to calc proton work as well, or the distance is relative to proton (remove the wire speed when calc)
         wire2.voltage += f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
         wire1.voltage += f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
       } else {
