@@ -652,28 +652,28 @@ window.calc_force = function (toolbar, scene) {
     speeds_2.push(speeds_2[speeds_2.length-1])
   }
 
-  // dx = v*dt => dt = dx/v
-  // a = dv/dt = dv/(dx/v) = v*dv/dx = v^2*unit(dv)/dx
-  const dx_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[0]).length()
+  // dt = dx/v and v always has value 1 so dt=dx
+  // and bcz i do speed[i+1]-speed[i-1] then i will just do double_dt = 2*dx
+  const double_dt_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[0]).length() * 2
   const accelerations_1 = []
   for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
-    accelerations_1.push(speeds_1[point_1+1].clone().sub(speeds_1[point_1-1]).multiplyScalar(1/dx_1))
+    accelerations_1.push(speeds_1[point_1+1].clone().sub(speeds_1[point_1-1]).multiplyScalar(1/double_dt_1))
   }
   if (wire1.closed) {
-    accelerations_1.unshift(speeds_1[1].clone().sub(speeds_1[speeds_1.length-1]).multiplyScalar(1/dx_1))
-    accelerations_1.push(speeds_1[0].clone().sub(speeds_1[speeds_1.length-2]).multiplyScalar(1/dx_1))
+    accelerations_1.unshift(speeds_1[1].clone().sub(speeds_1[speeds_1.length-1]).multiplyScalar(1/double_dt_1))
+    accelerations_1.push(speeds_1[0].clone().sub(speeds_1[speeds_1.length-2]).multiplyScalar(1/double_dt_1))
   } else {
     accelerations_1.unshift(accelerations_1[0])
     accelerations_1.push(accelerations_1[accelerations_1.length-1])
   }
-  const dx_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[0]).length()
+  const double_dt_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[0]).length() * 2
   const accelerations_2 = []
   for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
-    accelerations_2.push(speeds_2[point_2+1].clone().sub(speeds_2[point_2-1]).multiplyScalar(1/dx_2))
+    accelerations_2.push(speeds_2[point_2+1].clone().sub(speeds_2[point_2-1]).multiplyScalar(1/double_dt_2))
   }
   if (wire2.closed) {
-    accelerations_2.unshift(speeds_2[1].clone().sub(speeds_2[speeds_2.length-1]).multiplyScalar(1/dx_2))
-    accelerations_2.push(speeds_2[0].clone().sub(speeds_2[speeds_2.length-2]).multiplyScalar(1/dx_2))
+    accelerations_2.unshift(speeds_2[1].clone().sub(speeds_2[speeds_2.length-1]).multiplyScalar(1/double_dt_2))
+    accelerations_2.push(speeds_2[0].clone().sub(speeds_2[speeds_2.length-2]).multiplyScalar(1/double_dt_2))
   } else {
     accelerations_2.unshift(accelerations_2[0])
     accelerations_2.push(accelerations_2[accelerations_2.length-1])
@@ -705,24 +705,25 @@ window.calc_force = function (toolbar, scene) {
         // apperantely 1 current for their equestion is speed 1, and 1 current for my equation is speed 2.
         // or for them its 1/2 and for me its 1. the point is that for my equation the speed is twice more than their equation.
         // so current -> current*2. (this logic just matches the results)
-        const v_1_n = v_1.clone().multiplyScalar(wire1.current*2).add(wire1.speed)
-        const v_2_n = v_2.clone().multiplyScalar(wire2.current*2)
+        const speed_const = 1
+        const v_1_n = v_1.clone().multiplyScalar(wire1.current*speed_const).add(wire1.speed)
+        const v_2_n = v_2.clone().multiplyScalar(wire2.current*speed_const)
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        const a_1_n = a_1.clone().multiplyScalar((wire1.current*2)**2).add(v_1.clone().multiplyScalar(wire1.current_change))
-        const a_2_n = a_2.clone().multiplyScalar((wire2.current*2)**2)
+        const a_1_n = a_1.clone().multiplyScalar((wire1.current*speed_const)**2).add(v_1.clone().multiplyScalar(wire1.current_change))
+        const a_2_n = a_2.clone().multiplyScalar((wire2.current*speed_const)**2)
         const a_1_p = new THREE.Vector3(0,0,0)
         const a_2_p = new THREE.Vector3(0,0,0)
 
+
+        const E_const = 1
         function f_v(dv) {
-          dv = dv.clone().multiplyScalar(1/2) // "center of mass" perspective
-          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  ).multiplyScalar(1)
+          // better to use pure dv and not v so i wont do v = dv/2.
+          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  ).multiplyScalar(E_const)
         }
         function f_a(da) {
-          da = da.clone().multiplyScalar(1/2) // "center of mass" perspective
-          return R_hat.clone().multiplyScalar(  1/2*da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -1/R.length()  )).multiplyScalar(1/2)
-          // TODO why do i multiply by 1/2 and not 2 ??? mathematically its twice more not twice less.
+          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -2/R.length()  )).multiplyScalar(E_const)
         }
 
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
