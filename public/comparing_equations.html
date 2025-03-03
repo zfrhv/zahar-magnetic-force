@@ -170,6 +170,15 @@
     }
 
     window.apply_paths = function apply_paths(input1, input2) {
+      create_paths(input1, input2)
+      if (path1 && path2) {
+        const old_canvas = document.getElementById("calc_custom_paths")
+        old_canvas.parentNode.replaceChild(calc_custom_paths, old_canvas)
+        old_canvas.replace_animation(calc_custom_paths)
+      }
+    }
+
+    function create_paths(input1, input2) {
       const points_1 = string_to_points(input1.value)
       const points_2 = string_to_points(input2.value)
       if (points_1 && points_2) {
@@ -190,18 +199,17 @@
         }
         path1 = new CatmullRomCurve3(points_1, closed_1, 'catmullrom', 0.01)
         path2 = new CatmullRomCurve3(points_2, closed_2, 'catmullrom', 0.01)
-
-        const old_canvas = document.getElementById("calc_custom_paths")
-        old_canvas.parentNode.replaceChild(calc_custom_paths, old_canvas)
-        old_canvas.replace_animation(calc_custom_paths)
+      } else {
+        path1 = null
+        path2 = null
       }
     }
 
     input1.addEventListener('input', update_calc)
     input2.addEventListener('input', update_calc)
 
-    path1 = new CatmullRomCurve3(string_to_points(input1.value), true, 'catmullrom', 0.01)
-    path2 = new CatmullRomCurve3(string_to_points(input2.value), true, 'catmullrom', 0.01)
+    create_paths(input1, input2)
+
     window.calc_custom_paths_init = function (toolbar, scene) {
       window.calc_force_init(toolbar, scene, path1, path2)
     }

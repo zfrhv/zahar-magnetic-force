@@ -702,7 +702,6 @@ window.calc_force = function (toolbar, scene) {
         F_2_torque_T.add(fix_spin.clone().negate())
 
         // calc voltage: force on electron in wire direction * distance to next spot
-        // TODO check this
         wire1.voltage += f_n_p.clone().add(f_n_n).dot(v_1.clone().normalize().multiplyScalar(wire1.length / parts_1))
         wire2.voltage += f_p_n.clone().add(f_n_n).negate().dot(v_2.clone().normalize().multiplyScalar(wire2.length / parts_2))
       } else {
