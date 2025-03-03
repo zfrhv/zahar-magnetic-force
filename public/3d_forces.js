@@ -498,6 +498,8 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       slidebar.style.width = "75%";
       slidebar.style.verticalAlign = "middle";
       slidebar.classList.add("measure_slide");
+      // prevent selection interference
+      slidebar.addEventListener("mousedown", function (event) {if (window.getSelection) {window.getSelection().removeAllRanges();}});
 
       // add classes for easy searching
       slidebar.classList.add(subj.toLowerCase());
@@ -702,46 +704,43 @@ window.calc_force = function (toolbar, scene) {
       if (mine_force) {
         // full "mine" force calculation
 
-        // apperantely 1 current for their equestion is speed 1, and 1 current for my equation is speed 2.
-        // or for them its 1/2 and for me its 1. the point is that for my equation the speed is twice more than their equation.
-        // so current -> current*2. (this logic just matches the results)
-        const speed_const = 1
-        const v_1_n = v_1.clone().multiplyScalar(wire1.current*speed_const).add(wire1.speed)
-        const v_2_n = v_2.clone().multiplyScalar(wire2.current*speed_const)
+        const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
+        const v_2_n = v_2.clone().multiplyScalar(wire2.current)
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
-        const a_1_n = a_1.clone().multiplyScalar((wire1.current*speed_const)**2).add(v_1.clone().multiplyScalar(wire1.current_change))
-        const a_2_n = a_2.clone().multiplyScalar((wire2.current*speed_const)**2)
+        const a_1_n = a_1.clone().multiplyScalar(wire1.current**2).add(v_1.clone().multiplyScalar(wire1.current_change))
+        const a_2_n = a_2.clone().multiplyScalar(wire2.current**2)
         const a_1_p = new THREE.Vector3(0,0,0)
         const a_2_p = new THREE.Vector3(0,0,0)
 
+        // so wire1.speed and wire1.current_change need to be decreased by 2 ?
+        // could it be bcz im using place[i+1]-place[i-1] instead of place[i+1]-place[i] ?
 
-        const E_const = 1
         function f_v(dv) {
           // better to use pure dv and not v so i wont do v = dv/2.
-          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  ).multiplyScalar(E_const)
+          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  )
         }
         function f_a(da) {
-          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -2/R.length()  )).multiplyScalar(E_const)
+          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -2/R.length()  ))
         }
 
-        const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n)))
-        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p)))
-        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n))).negate()
-        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p))).negate()
+        const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n))).negate()
+        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p))).negate()
+        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n)))
+        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p)))
 
-        f_2 = f_p_n.clone().add(f_n_p).add(f_n_n).add(f_p_p)
-        f_1 = f_2.clone().negate()
+        f_1 = f_p_n.clone().add(f_n_p).add(f_n_n).add(f_p_p)
+        f_2 = f_1.clone().negate()
 
         // fix the missing rotational momentum
-        const fix_spin = R.clone().cross(f_2).multiplyScalar(-1/2)
-        F_2_torque_T.add(fix_spin)
-        F_1_torque_T.add(fix_spin.clone().negate())
+        const fix_spin = R.clone().cross(f_1).multiplyScalar(-1/2)
+        F_1_torque_T.add(fix_spin)
+        F_2_torque_T.add(fix_spin.clone().negate())
 
         // calc voltage: force on electron in wire direction * distance to next spot
-        wire2.voltage += f_p_n.clone().add(f_n_n).dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
-        wire1.voltage += f_n_p.clone().add(f_n_n).negate().dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
+        wire1.voltage += f_n_p.clone().add(f_n_n).dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
+        wire2.voltage += f_p_n.clone().add(f_n_n).negate().dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
       } else {
         // "their" force calculation
         f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
