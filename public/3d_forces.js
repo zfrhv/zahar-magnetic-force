@@ -28,26 +28,35 @@ window.calc_two_circles = function (toolbar, scene) {
 }
 
 window.calc_force_init = function (toolbar, scene, path1, path2) {
-  const wire1_length = path1.getLength()
-  const wire2_length = path2.getLength()
+  let wire1_length = path1.getLength()
+  let wire2_length = path2.getLength()
+  // CatmullRomCurve3 is broken at the edges even when i specify closed. so i make twice more points then take half
+  if (path1.closed) { wire1_length = wire1_length/2 }
+  if (path2.closed) { wire2_length = wire2_length/2 }
 
   const total_parts = 1000
   const ration = Math.sqrt(wire1_length / wire2_length)
   const parts_1 = Math.round(ration / (ration+1) * total_parts)
   const parts_2 = total_parts - parts_1
 
-  let wire1_points = path1.getSpacedPoints(parts_1)
-  let wire2_points = path2.getSpacedPoints(parts_2)
+  let wire1_points
+  let wire2_points
   // CatmullRomCurve3 is broken at the edges even when i specify closed. so i make twice more points then take half
   if (path1.closed) {
+    wire1_points = path1.getSpacedPoints(parts_1*2)
     const start = Math.floor(wire1_points.length/4)
     const end = Math.floor(wire1_points.length*3/4)
     wire1_points = wire1_points.slice(start, end)
+  } else {
+    wire1_points = path1.getSpacedPoints(parts_1)
   }
   if (path2.closed) {
+    wire2_points = path2.getSpacedPoints(parts_2*2)
     const start = Math.floor(wire2_points.length/4)
     const end = Math.floor(wire2_points.length*3/4)
     wire2_points = wire2_points.slice(start, end)
+  } else {
+    wire2_points = path2.getSpacedPoints(parts_2)
   }
 
   // draw shapes WIRE1
@@ -257,30 +266,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     wire1_speeds.add(speed)
   }
 
-  // const wire1_spin = new THREE.Group()
-  // wire1_spin.name = "wire1_spin"
-  // wire1.add(wire1_spin)
-  // for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
-  //   const index = Math.floor(arrow_counter*wire1.points_vec.length)
-  //   const position = wire1.points_vec[index].clone()
-  //   const direction = wire1.points_vec[index+1].clone().sub(position).normalize()
-  //   position.add(direction.clone().multiplyScalar(20))
-  //   const spin_arrow = new THREE.ArrowHelper( direction, position, 0, 0xcd75d1 )
-  //   wire1_spin.add(spin_arrow)
-  // }
-
-  // const wire2_spin = new THREE.Group()
-  // wire2_spin.name = "wire2_spin"
-  // wire2.add(wire2_spin)
-  // for (let arrow_counter = 0; arrow_counter < 1; arrow_counter+= 1/current_arrows) {
-  //   const index = Math.floor(arrow_counter*wire2.points_vec.length)
-  //   const position = wire2.points_vec[index].clone()
-  //   const direction = wire2.points_vec[index+1].clone().sub(position).normalize()
-  //   position.add(direction.clone().multiplyScalar(20))
-  //   const spin_arrow = new THREE.ArrowHelper( direction, position, 0, 0xcd75d1 )
-  //   wire2_spin.add(spin_arrow)
-  // }
-
   // total force arrows
   const force_on_1 = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), wire1.position, 0, wire2_material.color)
   force_on_1.name = "force_on_1"
@@ -403,18 +388,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     })
   }
 
-  // // update spins
-  // wire1.spin = 0;
-  // wire2.spin = 0;
-  // function update_wire_spins(wire) {
-  //   // keep the arrow with easy to see size
-  //   const spin = wire.spin / 5
-  //   const size = Math.sqrt(Math.abs(spin))*Math.sign(spin)
-  //   wire.getObjectByName(`${wire.name}_spin`).children.forEach(arrow => {
-  //     arrow.setLength(1, 60*size, 60*size)
-  //   })
-  // }
-
   function update_wires_distance() {
     wire1.position.copy(wires_distance_from_center)
     wire2.position.copy(wires_distance_from_center).negate()
@@ -438,10 +411,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
       G_Y: function () { wire1.speed.y = (this.value-50)/10; update_speeds(wire1) },
       G_Z: function () { wire1.speed.z = (this.value-50)/10; update_speeds(wire1) }
     },
-    // Spin: {
-    //   G: function () { wire1.spin = (this.value-50)/10; update_wire_spins(wire1) },
-    //   B: function () { wire2.spin = (this.value-50)/10; update_wire_spins(wire2) }
-    // },
     Distance: {
       X: function () { wires_distance_from_center.x = (this.value-50)*4; update_wires_distance() },
       Y: function () { wires_distance_from_center.y = (this.value-50)*4; update_wires_distance() },
@@ -584,8 +553,7 @@ window.calc_force = function (toolbar, scene) {
   wire1.voltage = 0
   const abs_rotation = new THREE.Euler(wire1_mesh.rotation.x + wire1_speeds.rotation.x, wire1_mesh.rotation.z + wire1_speeds.rotation.z, wire1_mesh.rotation.y + wire1_speeds.rotation.y, "XYZ")
   wire1.speed = wire1_mesh.speed.clone().applyEuler(abs_rotation)
-  wire1.current_change = wire1_mesh.current_change/100
-  // wire1.spin = wire1_mesh.spin
+  wire1.current_change = wire1_mesh.current_change/50
   wire1.points_vec = wire1_mesh.points_vec.map(vec => vec.clone().applyEuler(wire1.rotation))
   wire1.closed = wire1_mesh.closed
   wire1.length = wire1_mesh.length
@@ -599,7 +567,6 @@ window.calc_force = function (toolbar, scene) {
   wire2.rotation = wire2_mesh.rotation
   wire2.mass_center = wire2_mesh.mass_center.clone().applyEuler(wire2.rotation)
   wire2.voltage = 0
-  // wire2.spin = wire2_mesh.spin
   wire2.points_vec = wire2_mesh.points_vec.map(vec => vec.clone().applyEuler(wire2.rotation))
   wire2.closed = wire2_mesh.closed
   wire2.length = wire2_mesh.length
@@ -621,8 +588,6 @@ window.calc_force = function (toolbar, scene) {
   const mine_force = toolbar.children[0].children[1].children[0].checked
   const results = wire2_mesh.results
 
-  // const mass_of_electron_over_proton = 1/1000
-
   const F_1_T = new THREE.Vector3(0,0,0)
   const F_2_T = new THREE.Vector3(0,0,0)
   const F_1_torque_T = new THREE.Vector3(0,0,0)
@@ -636,8 +601,8 @@ window.calc_force = function (toolbar, scene) {
     speeds_1.push(wire1.points_vec[point_1+1].clone().sub(wire1.points_vec[point_1-1]).normalize())
   }
   if (wire1.closed) {
-    speeds_1.unshift(wire1.points_vec[1].clone().sub(wire1.points_vec[wire1.points_vec.length-1]).normalize())
-    speeds_1.push(wire1.points_vec[0].clone().sub(wire1.points_vec[wire1.points_vec.length-2]).normalize())
+    speeds_1.unshift(wire1.points_vec[1].clone().sub(wire1.points_vec[parts_1-1]).normalize())
+    speeds_1.push(wire1.points_vec[0].clone().sub(wire1.points_vec[parts_1-2]).normalize())
   } else {
     speeds_1.unshift(speeds_1[0])
     speeds_1.push(speeds_1[speeds_1.length-1])
@@ -647,8 +612,8 @@ window.calc_force = function (toolbar, scene) {
     speeds_2.push(wire2.points_vec[point_2+1].clone().sub(wire2.points_vec[point_2-1]).normalize())
   }
   if (wire2.closed) {
-    speeds_2.unshift(wire2.points_vec[1].clone().sub(wire2.points_vec[wire2.points_vec.length-1]).normalize())
-    speeds_2.push(wire2.points_vec[0].clone().sub(wire2.points_vec[wire2.points_vec.length-2]).normalize())
+    speeds_2.unshift(wire2.points_vec[1].clone().sub(wire2.points_vec[parts_2-1]).normalize())
+    speeds_2.push(wire2.points_vec[0].clone().sub(wire2.points_vec[parts_2-2]).normalize())
   } else {
     speeds_2.unshift(speeds_2[0])
     speeds_2.push(speeds_2[speeds_2.length-1])
@@ -656,7 +621,7 @@ window.calc_force = function (toolbar, scene) {
 
   // dt = dx/v and v always has value 1 so dt=dx
   // and bcz i do speed[i+1]-speed[i-1] then i will just do double_dt = 2*dx
-  const double_dt_1 = wire1.points_vec[1].clone().sub(wire1.points_vec[0]).length() * 2
+  const double_dt_1 = wire1.length / parts_1 * 2
   const accelerations_1 = []
   for (let point_1 = 1; point_1 < parts_1-1; point_1++) {
     accelerations_1.push(speeds_1[point_1+1].clone().sub(speeds_1[point_1-1]).multiplyScalar(1/double_dt_1))
@@ -668,7 +633,7 @@ window.calc_force = function (toolbar, scene) {
     accelerations_1.unshift(accelerations_1[0])
     accelerations_1.push(accelerations_1[accelerations_1.length-1])
   }
-  const double_dt_2 = wire2.points_vec[1].clone().sub(wire2.points_vec[0]).length() * 2
+  const double_dt_2 = wire2.length / parts_2 * 2
   const accelerations_2 = []
   for (let point_2 = 1; point_2 < parts_2-1; point_2++) {
     accelerations_2.push(speeds_2[point_2+1].clone().sub(speeds_2[point_2-1]).multiplyScalar(1/double_dt_2))
@@ -709,13 +674,11 @@ window.calc_force = function (toolbar, scene) {
         const v_1_p = wire1.speed.clone()
         const v_2_p = new THREE.Vector3(0,0,0)
 
+        // multiply by wire1.current cuz dv changes, and then dt changes as well so its another wire1.current
         const a_1_n = a_1.clone().multiplyScalar(wire1.current**2).add(v_1.clone().multiplyScalar(wire1.current_change))
         const a_2_n = a_2.clone().multiplyScalar(wire2.current**2)
         const a_1_p = new THREE.Vector3(0,0,0)
         const a_2_p = new THREE.Vector3(0,0,0)
-
-        // so wire1.speed and wire1.current_change need to be decreased by 2 ?
-        // could it be bcz im using place[i+1]-place[i-1] instead of place[i+1]-place[i] ?
 
         function f_v(dv) {
           // better to use pure dv and not v so i wont do v = dv/2.
@@ -739,27 +702,28 @@ window.calc_force = function (toolbar, scene) {
         F_2_torque_T.add(fix_spin.clone().negate())
 
         // calc voltage: force on electron in wire direction * distance to next spot
-        wire1.voltage += f_n_p.clone().add(f_n_n).dot(v_1.clone().normalize().multiplyScalar(wire1.length / (parts_1-1)))
-        wire2.voltage += f_p_n.clone().add(f_n_n).negate().dot(v_2.clone().normalize().multiplyScalar(wire2.length / (parts_2-1)))
+        // TODO check this
+        wire1.voltage += f_n_p.clone().add(f_n_n).dot(v_1.clone().normalize().multiplyScalar(wire1.length / parts_1))
+        wire2.voltage += f_p_n.clone().add(f_n_n).negate().dot(v_2.clone().normalize().multiplyScalar(wire2.length / parts_2))
       } else {
         // "their" force calculation
-        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
-        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(R.length()**2).multiplyScalar(wire1.current).multiplyScalar(wire2.current)
+        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current*wire2.current)
+        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(R.length()**2).multiplyScalar(wire1.current*wire2.current)
 
         // "their" voltage calculation
         if (wire1.areas && point_1 === 1) {
           for (let i = 0; i < wire1.areas.length; i++) {
             const dt = err_num
             const area_place = wire1.areas[i]
-      
+
             const R_A_old = absolute_place_2.clone().sub(area_place)
             const R_A_hat_old = R_A_old.clone().normalize().negate() // instead of (a-b) to (b-a) i just do (a-b).negate()
             const old_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_old).dot(wire1.surface_vec) / R_A_old.length()**2 * wire1.area_value
-      
+
             const R_A_new = absolute_place_2.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
             const R_A_hat_new = R_A_new.clone().normalize().negate()
             const new_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_new).dot(wire1.surface_vec) / R_A_new.length()**2 * wire1.area_value
-      
+
             wire1.voltage += -(new_flux - old_flux) / dt
           }
         }
@@ -767,15 +731,15 @@ window.calc_force = function (toolbar, scene) {
           for (let i = 0; i < wire2.areas.length; i++) {
             const dt = err_num
             const area_place = wire2.areas[i]
-      
+
             const R_A_old = absolute_place_1.clone().sub(area_place)
             const R_A_hat_old = R_A_old.clone().normalize()
             const old_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_old).dot(wire2.surface_vec) / R_A_old.length()**2 * wire2.area_value
-      
+
             const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
             const R_A_hat_new = R_A_new.clone().normalize()
             const new_flux = v_1.clone().multiplyScalar(wire1.current + wire1.current_change * dt).cross(R_A_hat_new).dot(wire2.surface_vec) / R_A_new.length()**2 * wire2.area_value
-      
+
             wire2.voltage += -(new_flux - old_flux) / dt
           } 
         }
