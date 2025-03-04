@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script id="Polyfill" src="https://cdn.jsdelivr.net/npm/js-polyfills@0.1.43/polyfill.min.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="Markdown" src="https://cdn.jsdelivr.net/gh/markedjs/marked@bf1295a499c60abc096124ab33804071cb8d89fe/marked.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+
+  <title>Physics</title>
+  <link rel="icon" type="image/svg+xml" href="physics.svg">
+
+  <link rel="stylesheet" type="text/css" href="physics.css" />
+</head>
+
+<body>
+  <script id="SideBar" src="./sidebar/sidebar.js"></script>
+
+  <div class="page">
+    <img src="./svg/top-branch.svg" style="position: absolute; width: 100%; transform: translateY(-6.2%) translateX(5%); height: auto; pointer-events: none;"/>
+    <article class="page-content">
+
+      <div id="magnetic_force" class="markdown">
+        # <center><u>Deep Dive</u></center>
+
+        ...
+
+        Although there are some issues:
+        - Force thats not in \\(\hat r\\) direction will create additional spin forces to not violate the rotational momentum.  
+          If we check the force we get \\(τ \thickapprox a\\), so the torque will be the same no matter how far the particles are apart.  
+          This answers the quantum entangelment but for me it doesnt makes sense, so it requires further investigation.
+        - That E was just my guess, I couldnt find anything else but there could be other equations that fit same conditions.  
+          additionally to E there could also be \\(E \thickapprox \omega^2\\) or \\(E \thickapprox \frac{\omega^2}{r}\\) when \\(\omega\\) is the spin of the charged particle.  
+          Need more data than what I currently know.
+        - Why is it \\(-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2\\)? No clue, but maybe its something that can hint us of how the charges are made inside.
+
+        You can also post any revies\\issues or contribute on github: [zahar-magnetic-force](https://github.com/zfrhv/zahar-magnetic-force)
+      </div>
+    </article>
+    <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
+  </div>
+
+  <script async>
+    // Parse markdown
+    document.querySelectorAll('.markdown').forEach(elmNode => {
+      fisrt_spaces = elmNode.innerHTML.match(/^\n*( *)[^ ]/)[1]
+      elmNode.innerHTML = marked.parse(elmNode.innerHTML.replace(new RegExp("\n" + fisrt_spaces, "g"), "\n"))
+    });
+  </script>
+  <script src="spider_web/spider_web.js"></script>
+</body>
+
+</html>

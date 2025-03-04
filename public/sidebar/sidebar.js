@@ -22,7 +22,7 @@ sidebar.innerHTML = `
   <a id="close_sidebar" style="cursor: pointer;"><<</a>
   <a href="physics.html">Main Page</a>
   <a href="discovering_equation.html">Discovering Equation</a>
-  <a href="different_situations.html">Different Situations</a>
+  <a href="deep_dive.html">Deep Dive</a>
   <a href="comparing_equations.html">Comparing Equations</a>
   <a href="discussion.html">Discussion</a>
   <a href="https://github.com/zfrhv/zahar-magnetic-force/issues" target="_blank"><img src="./svg/feedback.svg" style="height: 18px;"/> Feedback</a>

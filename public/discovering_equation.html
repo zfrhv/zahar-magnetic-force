@@ -28,262 +28,33 @@
     <article class="page-content">
 
       <div class="markdown">
-        # <center><u>Magnetic Force Equation</u></center>
+        # <center><u>Discovering process</u></center>
 
-        Diagram of symbols:
-        <br/>
-        <br/>
+        The techniqe of discovering was:
+        - No clue what to do
+        - Take random guess
+        - See why the guess is wrong
+        - Understand the mistake and make a new guess having better knowladge
+
+        My first problem was that old method violates third newtons law, so I started guessing force that depends on the degrees between the speeds.  
+        Realized that the speeds must be relative, so force between 2 particles can depend only on the speed between those 2 particles. Thus \\(\Delta v\\) must be used.  
+
+        Judging by logic and units I needed \\(\Delta v^2\\) and not just \\(\Delta v\\), so I tried to find a force but nothing was working.  
+        I realizsed that I can't ignore the protons charges, and that they also create a force same as the electrons.  
+        Did a quick check whether \\(F = \frac{\Delta v^2}{r^2}\\) flips when we flip the speed of electron and it was a success.  
+        Since then (around 1-2 years passed) I knew that there is a better force function.  
+        I started a journey to find what is the speed + charges inside the wires and how do they change when resistance is different. (just wasted 1 year)  
+        I wrote a program in python for manual integration and started guessing forces that give exactly same result as the old method.  
+        After another 1-2 years I found the weird force \\(\frac{v^2 - v_r^2}{r^2}\\) but it was violating energy,  
+        and when playing with the code I found out that there should be another \\(F \thickapprox a/r\\) so I realized that everything is nonesense and threw it away.  
+        I began on looking on wire part as a whole ignoring the separation between protons and electrons.  
+        There I realized that I should work with energy instead of forces, and that i can derivtate the force from energy thus not violating anything.  
+        I found perfect for equation for wire parts but it wasnt working for changing current.  
+        Then I realized when the wire is moving all he gets is extra speed, so the force must depend on the speed, so I started over again.  
+        I found another force \\(\frac{\frac{1}{2}v_r^2 - v_{r_\bot}^2}{r^2}\\) and realized its the same as before (simple pythagoras), hinting that this is the only solution thats there.  
+        This time I started guessing from energy perspective, and in order to not violate energy I realized that there must be force that depends on the acceleration.  
+        And so I found this final result that exactly solves the wire parts forces (not freely moving charges).
       </div>
-      <img src="./svg/symbols_explanation.svg" />
-      <div class="markdown">
-        \\({\color{Tomato}\vec A}\ \parallel\ {\color{MediumSeaGreen}\vec B}={\color{GoldenRod}\vec C}\\):
-
-        \\({\color{Tomato}\vec A}\ \bot\ {\color{MediumSeaGreen}\vec B}={\color{DodgerBlue}\vec D}\\):
-      </div>
-      <img src="./svg/vertical_symbol.svg" />
-      <div class="markdown">
-        $$\color{#f7c860}I = q \cdot v$$
-        $$\color{#f7c860}\vec{v}\ \parallel\ \hat{r}\ :=\ (\vec{v} \cdot \hat{r}) \cdot \hat{r}$$
-        $$\color{#f7c860}\vec{v}\ \bot\ \hat{r}\ :=\ \vec{v} - (\vec{v} \cdot \hat{r}) \cdot \hat{r}$$
-
-
-        # <center><u>How I found the function</u></center>
-        Lets start from the things that i didnt like, and start building new equation.
-        1. \\(\vec{F}\\) in \\(\hat{r}\\) direction: it makes the most sense.
-        2. \\(F = \frac{something}{r^2}\\): when moving in 3d dimention in some direction, everything expands in 2d face,
-
-            its like measuring the surface of a ball \\ square at distance x, lets say its around \\(x^2\\). then looking on surface at the same degree with distance 2x, the surface extended to \\((2x)^2\\) which is \\(4x^2\\), so the area grew by 4.
-
-            and thats why when we will move \\(a\\) times, the area will expand \\(a^2\\) times. and a particular spot will have less material by \\(\frac{1}{a^2}\\)
-        3. When the equation tells that \\(\vec{F} = \vec{v}\ \times\ \vec{B}\\), relative to what the speed \\(\vec{v}\\) is ?
-
-            is it relative to the material where the electrons are in?
-
-            is it relative the some absolute speed that i decide?
-
-            is it relative to the material of the original wire which caused the magnetic field?
-
-            well in my opition if the force is between particle A and B, then the speed of A will be relative to B.
-
-            so the equation sould look something like this: \\(\vec{v_1}-\vec{v_2}\\)
-
-        4. if we check the equation units, we actually have speed\\(^2\\) and not just speed.
-
-            so why not to make \\((\vec{v_1}-\vec{v_2})^2\\) ? its good for us, because now the equation is symetric, no matter from which perspective you look the result is the same
-
-        5. dont forget to multiply by the charge q: \\((\vec{v_1}-\vec{v_2})^2 \cdot q_1 \cdot q_2\\) and now we will have something similar to units of \\(I_1 \cdot I_2\\)
-
-        6. but we have a new problem, the result is always positive, does it means that we will always end up with pulling force?
-
-            yes, thats why we need to find something else that will give us also negative result. and if we look at the Coulomb's law, there is +q and -q...
-
-            now why exactly are we ignoring the positive charges? the wire is nutral right? then why do we look only on the negative electrons, and ignore the positive charges?
-
-            thats racist! (not really), if we look at -q of moving electrons, then we also look at +q of the protons with 0 speed.
-
-            and now we end up with 2 parts from each wire, positive and negative:
-
-        $$F = \begin{aligned}
-            \frac{(\vec{v_1}_\+ - \vec{v_2}_\-)^2 \cdot {q_1}_\+ \cdot {q_2}_\-}{r^2} \\\\
-            \+ \frac{(\vec{v_1}_\- - \vec{v_2}_\+)^2 \cdot {q_1}_\- \cdot {q_2}_\+}{r^2} \\\\
-            \+ \frac{(\vec{v_1}_\- - \vec{v_2}_\-)^2 \cdot {q_1}_\- \cdot {q_2}_\-}{r^2} \\\\
-            \+ \frac{(\vec{v_1}_\+ - \vec{v_2}_\+)^2 \cdot {q_1}_\+ \cdot {q_2}_\+}{r^2} \end{aligned}$$
-
-        7. but lets focuse on seperating to 4 parts later. i was wondering, from the perspective of particle A all he sees is particle B getting closer and further, and the rotation around speed doesnt matters, the only speed that matters if particle 2 gets closer or further:
-
-            \\((\vec{v_1} \cdot \hat{r}-\vec{v_2} \cdot \hat{r})^2\\) which is the same as \\(((\vec{v_1}-\vec{v_2}) \cdot \hat{r})^2\\)
-
-        8. now when doing the integral between 2 circle wires to check the total force result with my new equation, it was perfectly the same as the total force with the right hand law equation.
-
-            but the rotation force was different. each equation told that the circuit would want to rotate in a different way.
-
-            now i assume that people from all around the world did many experiments and had many practice with the right hand law, so their rotation must be correct.
-
-            thats why i also checked whats the rotation when using just simple \\((\vec{v_1}-\vec{v_2})^2\\). it also had rotation problem so i also checked when the speeds were vertical to the r direction: \\(((\vec{v_1}-\vec{v_2}) \bot \hat{r})^2\\), but the rotation was still wrong.
-
-            but i did noticed that i got close, and i saw that when doing \\((\vec{v_1}-\vec{v_2}) \parallel \hat{r})^2 -0.5 ((\vec{v_1}-\vec{v_2}) \bot \hat{r})^2\\) i get the perfect total force, and the perfect rotation.
-
-            you can see the total force and that rotation force in it in [that](#calc_two_circles) diagram if you press the calculate button
-
-        After finally finding a well fitting equation, lets simplify it:
-
-        $$\color{#79da2a} \vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot Top\ Part}{\vec{r}\ ^2}$$
-        <br/>
-        $$\color{#79da2a} Top\ Part = \begin{aligned}
-        \+ ((\vec{v_1} - \vec{v_2})\ \bot\ \hat{r})^2 \\\\
-        \- ((\vec{v_1} - \vec{v_2})\ \parallel\ \hat{r})^2\ /\ 2 \end{aligned}$$
-        <br/>
-      </div>
-      <details class="collapse">
-        <summary>Simplification: (click on this text)</summary>
-        <div style="text-align: left;">
-          <div class="markdown">
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ ((\vec{v_1} - \vec{v_2})\ \bot\ \hat{r})^2\ \cdot\ 2 \\\\
-            \- ((\vec{v_1} - \vec{v_2})\ \parallel\ \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ ((\vec{v_1} - \vec{v_2}) - ((\vec{v_1} - \vec{v_2}) \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
-            \- (((\vec{v_1} - \vec{v_2}) \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ ((\vec{v_1} - \vec{v_2}) - (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
-            \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ ((\vec{v_1} - \vec{v_2}) - (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2\ \cdot\ 2 \\\\
-            \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ ((\vec{v_1} - \vec{v_2})^2 - 2 \cdot (\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2)\ \cdot\ 2 \\\\
-            \- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + {\color{#79da2a}2}((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \\\\
-            \color{#79da2a}\- ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} - \vec{v_2}) \cdot ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r}) + ((\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot \hat{r})^2 $$
-            <br/>
-            $$\color{#f7c860}(s \cdot \hat{v})^2 = s^2 \cdot \hat{v}^2 = s^2 \cdot 1 = s^2$$
-            <br/>
-            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 4(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) \cdot (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r}) + (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
-            <br/>
-            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - {\color{#79da2a}4}(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 \color{#79da2a} + (\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$
-            <br/>
-            $$2 \cdot Top\ Part = 2(\vec{v_1} - \vec{v_2})^2 - 3(\vec{v_1} \cdot \hat{r} - \vec{v_2} \cdot \hat{r})^2 $$      
-            <br/>
-            $$\color{#f7c860} Top\ Part = (\vec{v_1} - \vec{v_2})^2 - 3/2((\vec{v_1} - \vec{v_2}) \cdot \hat{r})^2 $$      
-          </div>
-        </div>
-      </details>
-      <div class="markdown">
-        So the equation is:
-
-        $$\color{#f7c860} \vec{F} = \frac{Constant \cdot q_1 \cdot q_2 \cdot ((\vec{v_1} - \vec{v_2})^2 - 3/2((\vec{v_1} - \vec{v_2}) \cdot \hat{r})^2)}{\vec{r}\ ^2} \cdot \hat{r}$$
-
-      </div>
-      <details class="collapse">
-        <summary>And if we check between two wire parts, there are 4 parts: (click on this text)</summary>
-        <div style="text-align: left;">
-          <div class="markdown">
-            $$2 \cdot Top\ Part = \begin{aligned}
-            {\color{#fc9a88} {q_1}_\+ \ \\&\  {q_2}_\- \rightarrow} + 2(\vec{v_1}_\+ - \vec{v_2}_\-)^2 - 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
-            {\color{#fc9a88} {q_1}_\- \ \\&\  {q_2}_\+ \rightarrow} + 2(\vec{v_1}_\- - \vec{v_2}_\+)^2 - 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\+ \cdot \hat{r})^2 \\\\
-            {\color{#fc9a88} {q_1}_\- \ \\&\  {q_2}_\- \rightarrow} - 2(\vec{v_1}_\- - \vec{v_2}_\-)^2 + 3(\vec{v_1}_\- \cdot \hat{r} - \vec{v_2}_\- \cdot \hat{r})^2 \\\\
-            {\color{#fc9a88} {q_1}_\+ \ \\&\  {q_2}_\+ \rightarrow} - 2(\vec{v_1}_\+ - \vec{v_2}_\+)^2 + 3(\vec{v_1}_\+ \cdot \hat{r} - \vec{v_2}_\+ \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \+ 2(\vec{v_1}_\+^2 - 2 \cdot \vec{v_1}_\+ \cdot \vec{v_2}_\- + \vec{v_2}_\-^2) - 3((\vec{v_1}_\+ \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) + (\vec{v_2}_\- \cdot \hat{r})^2) \\\\
-            \+ 2(\vec{v_1}_\-^2 - 2 \cdot \vec{v_1}_\- \cdot \vec{v_2}_\+ + \vec{v_2}_\+^2) - 3((\vec{v_1}_\- \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) + (\vec{v_2}_\+ \cdot \hat{r})^2) \\\\
-            \- 2(\vec{v_1}_\-^2 - 2 \cdot \vec{v_1}_\- \cdot \vec{v_2}_\- + \vec{v_2}_\-^2) + 3((\vec{v_1}_\- \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) + (\vec{v_2}_\- \cdot \hat{r})^2) \\\\
-            \- 2(\vec{v_1}_\+^2 - 2 \cdot \vec{v_1}_\+ \cdot \vec{v_2}_\+ + \vec{v_2}_\+^2) + 3((\vec{v_1}_\+ \cdot \hat{r})^2 - 2 \cdot (\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) + (\vec{v_2}_\+ \cdot \hat{r})^2) \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            {\color{#79da2a} \+ 2\vec{v_1}_\+^2} - 4\vec{v_1}_\+ \cdot \vec{v_2}_\- {\color{#79da2a} + 2\vec{v_2}_\-^2 - 3(\vec{v_1}_\+ \cdot \hat{r})^2} + 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \color{#79da2a} - 3(\vec{v_2}_\- \cdot \hat{r})^2 \\\\
-            {\color{#79da2a} \+ 2\vec{v_1}_\-^2} - 4\vec{v_1}_\- \cdot \vec{v_2}_\+ {\color{#79da2a} + 2\vec{v_2}_\+^2 - 3(\vec{v_1}_\- \cdot \hat{r})^2} + 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \color{#79da2a} - 3(\vec{v_2}_\+ \cdot \hat{r})^2 \\\\
-            {\color{#79da2a} \- 2\vec{v_1}_\-^2} + 4\vec{v_1}_\- \cdot \vec{v_2}_\- {\color{#79da2a} - 2\vec{v_2}_\-^2 + 3(\vec{v_1}_\- \cdot \hat{r})^2} - 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \color{#79da2a} + 3(\vec{v_2}_\- \cdot \hat{r})^2 \\\\
-            {\color{#79da2a} \- 2\vec{v_1}_\+^2} + 4\vec{v_1}_\+ \cdot \vec{v_2}_\+ {\color{#79da2a} - 2\vec{v_2}_\+^2 + 3(\vec{v_1}_\+ \cdot \hat{r})^2} - 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \color{#79da2a} + 3(\vec{v_2}_\+ \cdot \hat{r})^2 \end{aligned}$$
-            <br/>
-            $$2 \cdot Top\ Part = \begin{aligned}
-            \- 4\vec{v_1}_\+ \cdot \vec{v_2}_\- + 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-            \- 4\vec{v_1}_\- \cdot \vec{v_2}_\+ + 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
-            \+ 4\vec{v_1}_\- \cdot \vec{v_2}_\- - 6(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-            \+ 4\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 6(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
-            <br/>
-            $$Top\ Part = \begin{aligned}
-            \- 2\vec{v_1}_\+ \cdot \vec{v_2}_\- + 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-            \- 2\vec{v_1}_\- \cdot \vec{v_2}_\+ + 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \\\\
-            \+ 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-            \+ 2\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) \end{aligned}$$
-            <br/>
-            $$Top\ Part = \begin{aligned}
-            \+ 2\vec{v_1}_\- \cdot \vec{v_2}_\- - 2\vec{v_1}_\+ \cdot \vec{v_2}_\- \\\\
-            \+ 2\vec{v_1}_\+ \cdot \vec{v_2}_\+ - 2\vec{v_1}_\- \cdot \vec{v_2}_\+ \\\\
-            \+ 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) - 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\- \cdot \hat{r}) \\\\
-            \+ 3(\vec{v_1}_\- \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r}) - 3(\vec{v_1}_\+ \cdot \hat{r}) \cdot (\vec{v_2}_\+ \cdot \hat{r})  \end{aligned}$$
-            <br/>
-            $$Top\ Part = \begin{aligned}
-            \+ 2\vec{v_2}_\- \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
-            \+ 2\vec{v_2}_\+ \cdot (\vec{v_1}_\+ - \vec{v_1}_\-) \\\\
-            \+ 3(\vec{v_2}_\- \cdot \hat{r}) \cdot ((\vec{v_1}_\+ \cdot \hat{r}) - (\vec{v_1}_\- \cdot \hat{r})) \\\\
-            \+ 3(\vec{v_2}_\+ \cdot \hat{r}) \cdot ((\vec{v_1}_\- \cdot \hat{r}) - (\vec{v_1}_\+ \cdot \hat{r}))  \end{aligned}$$
-            <br/>
-            $$Top\ Part = \begin{aligned}
-            \+ 2\vec{v_2}_\- \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
-            \- 2\vec{v_2}_\+ \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
-            \+ 3(\vec{v_2}_\- \cdot \hat{r}) \cdot ((\vec{v_1}_\+ \cdot \hat{r}) - (\vec{v_1}_\- \cdot \hat{r})) \\\\
-            \- 3(\vec{v_2}_\+ \cdot \hat{r}) \cdot ((\vec{v_1}_\+ \cdot \hat{r}) - (\vec{v_1}_\- \cdot \hat{r}))  \end{aligned}$$
-            <br/>
-            $$Top\ Part = \begin{aligned}
-            \+ 2(\vec{v_2}_\- - \vec{v_2}_\+) \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
-            \- 3((\vec{v_2}_\- \cdot \hat{r}) - (\vec{v_2}_\+ \cdot \hat{r})) \cdot ((\vec{v_1}_\- \cdot \hat{r}) - (\vec{v_1}_\+ \cdot \hat{r})) \end{aligned}$$
-            <br/>
-            $$Top\ Part = \begin{aligned}
-            \+ 2(\vec{v_2}_\- - \vec{v_2}_\+) \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
-            \- 3((\vec{v_2}_\- - \vec{v_2}_\+) \cdot \hat{r}) \cdot ((\vec{v_1}_\- - \vec{v_1}_\+) \cdot \hat{r}) \end{aligned}$$
-    
-            Multiply by the charge:
-    
-            $$Top\ Part \cdot q_1 \cdot q_2 = \begin{aligned}
-            \+ 2 \cdot q_2 \cdot (\vec{v_2}_\- - \vec{v_2}_\+) \cdot q_1 \cdot (\vec{v_1}_\- - \vec{v_1}_\+) \\\\
-            \- 3 \cdot q_2 \cdot ((\vec{v_2}_\- - \vec{v_2}_\+) \cdot \hat{r}) \cdot q_1 \cdot ((\vec{v_1}_\- - \vec{v_1}_\+) \cdot \hat{r}) \end{aligned}$$
-            <br/>
-            $$Top\ Part \cdot q_1 \cdot q_2 = \begin{aligned}
-            \+ 2 \cdot I_2 \cdot I_1 \\\\
-            \- 3 \cdot (I_2 \cdot \hat{r}) \cdot (I_1 \cdot \hat{r}) \end{aligned}$$
-
-            So we will get:
-
-            <div id="final_equation">
-            $$\vec{F} = \frac{Constant \cdot (2 \cdot I_2 \cdot I_1 - 3 \cdot (I_2 \cdot \hat{r}) \cdot (I_1 \cdot \hat{r}))}{\vec{r}\ ^2}$$
-            </div>
-          </div>
-        </div>
-      </details>
-      <div class="markdown">
-        $$\color{#f7c860} Force\ between\ two\ wire\ parts = \frac{Constant \cdot (2 \cdot I_1 \cdot I_2 - 3 \cdot (I_1 \cdot \hat{r}) \cdot (I_2 \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
-        when the constant is:
-        $$\color{#f7c860} Constant = \frac{μ_0}{4\pi}$$
-      </div>
-      <details class="collapse">
-        <summary>Equations comparing (click here for instructions)</summary>
-        <div style="text-align: left;">
-          <div class="markdown">
-            symbols:
-            - GREEN WIRE IS THE TOP ONE
-            - BLUE WIRE IS THE BOTTOM ONE
-            - rotating arrow is the rotation force that the wires make on each other
-            - middle arrow is the total force that the circuits make on each other
-            - 4 small aroows on the top circuit are the speed of the loop
-            - orange arrows show the direction of the voltage that the green wire causes on the blue wire
-
-            usage:
-            - toggle switch is for the force type: off -> the right hand law + Faraday's Law, on: my new equation is used to calculate both forces and the voltage
-            - inputs are for rotation (drag/tap to choose)
-            - the caulculator button is for calculating
-            - you can also rotate the object just by dragging it
-            - you can also zoom in or zoom out with fingers \\ mouse scroll
-            - you can also move in space by grabbing with 2 fingers in the same direction or with keyboard arrows
-            - refresh the page to reset
-
-            <!-- TODO copy this to other charts explanations. -->
-            calculations and units: <!--these values and configurations can be found in 3d_forces.js-->
-            - distance between the coils is 400 [m]
-            - radius of the coils is 150 [m]
-            - the current in the wires is 1 [ampere]
-            - the speed of green/top coil when one of the sliders is on max is 5 [m/s]
-            - the force between the coils when there is no speed on green coil and their are parallel is 7.43e-14 [N]
-            - the rotation force on the blue/top wire when its rotated vertically (and the green/botton wire stays at default values) is 5.54-14 [N*m]
-            - the blue wire voltage is in [volts*2670.7946485/10^-7]. so if you want the real volts simply divide by 2670.7946485 and multiply by 10^-7.
-
-            <span style="color:rgb(207, 165, 48)">IMPORTANT</span> Notes:
-            - the integral is manual, so of-cource the results wont be 100% accurate
-            - the voltage on the blue wire with my method is calculated when there is some current in that wire. if there is no current in the blue wire then the reults may be different.
-          </div>
-        </div>
-      </details>
-      <br/>
-      <canvas-video id="calc_two_circles" name="calc_two_circles" type="calculate" style="position: relative;"></canvas-video>
     </article>
     <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
   </div>
