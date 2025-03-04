@@ -38,6 +38,7 @@
   TODO Plans:
   - page that explains the final results
   - page with deep dive explanations of the discoveries
+  - how i found the equation page
   - comparing page
 -->
 
@@ -89,41 +90,51 @@
         I present the potential energy between 2 charges, which automatically ensures that energy and Newton's laws are not violated:
 
         TODO check whats the constant
-        $$\color{#79da2a} E = \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r} k$$
-
-        For a detailed explanation of how I derived this, "click here". (its not something I did in a few days it took me 7 years)
+        $$\color{#79da2a} E_p = \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r} k$$
 
         When \\(\Delta v_{\hat r}\\) is the difference between the charges speed in \\(\hat r\\) (\\(\Delta v \cdot cos(\alpha)\\)),  
         and \\(\Delta v_{\hat r_\bot}\\) is value of \\(\Delta v\\) in \\(\hat r_\bot\\) (\\(\Delta v \cdot sin(\alpha)\\))
 
-        END
+        For a detailed explanation of how I derived this, "click here(TODO)". (its not something I did in a few days it took me 7 years)
 
-        the true force between two particles is:
+        From this energy we get that the force is seperate into 2 parts f(r) f(v)...  
+        The full explanation is in the "deep dive(TODO)". shortly:
 
-        $$\color{#79da2a} \vec{F} = \frac{μ_0}{4\pi} \cdot \frac{q_1 \cdot q_2 \cdot ((\Delta \vec{v}\ \bot\ \hat{r})^2 \- \frac{(\Delta \vec{v}\ \parallel\ \hat{r})^2}{2})}{\vec{r}\ ^2}$$
-        
-        but we actually want to compare it to the right hand law, so:  
-        taking wire \\(\vec{I_1}\\) and \\(\vec{I_2}\\) lenght super small relative to \\(\vec{r}\\) (basically \\(\vec{I_1} \to d\vec{I_1}\\) and \\(\vec{I_2} \to d\vec{I_2}\\))
+        $$E \thickapprox \frac{-v^2}{r}$$
+        $$F_{Total} = -\frac{dE}{ds} = \frac{-dE}{dr}\frac{dr}{ds} + \frac{-dE}{dv}\frac{dv}{ds} = \frac{-v^2}{r^2}\cdot 1 + \frac{2v}{r} \cdot \frac{a}{v} =$$
+        $$\frac{-v^2}{r^2} + \frac{2a}{r} = F_r + F_v = F(v) + F(a)$$
 
-        The old equation is:
+        so for our E we get:
 
-        $$ Force\ \vec{I_1}\ makes\ on\ \vec{I_2} = \frac{\frac{μ_0}{4\pi} \cdot (\vec{I_1} \times \hat{r}) \times \vec{I_2} }{\vec{r}\ ^2}$$
-        $$\color{#f7c860} = \frac{\frac{μ_0}{4\pi} \cdot |I_1| \cdot |I_2| }{\vec{r}\ ^2} \cdot ((\hat{I_1} \times \hat{r}) \times \hat{I_2} )$$
+        $$F(v) = \frac{-\frac{1}{2}(\Delta v \cdot \hat r)^2 + (\Delta v \times \hat r)^2}{r^2} \hat r = = \frac{-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} \hat r$$
+        $$F(a) = \frac{\Delta a \cdot \hat r}{r}\hat r - \frac{2 \cdot \hat r \times (\Delta a \times \hat r)}{r} = \frac{\Delta \vec a_r}{r} - \frac{2 \Delta \vec a_{r_\bot}}{r}$$
 
-        The new equation is:
+        But this force is only for charges in cable. Charges that are free to move will have changing \\(\vec v\\) and \\(\vec a\\) so F(a) will also change.  
+        If you wanna see force for freely moving electrons (like in plasma) visit "deep dive (TODO)"
 
-        $$ Force\ \vec{I_1}\ makes\ on\ \vec{I_2} = \frac{\frac{μ_0}{4\pi} \cdot (2 \cdot \vec{I_1} \cdot \vec{I_2} - 3(\vec{I_1} \cdot \hat{r}) \cdot (\vec{I_2} \cdot \hat{r}))}{\vec{r}\ ^2} \cdot \hat{r}$$
-        $$\color{#f7c860} = \frac{\frac{μ_0}{4\pi} \cdot |I_1| \cdot |I_2| }{\vec{r}\ ^2} \cdot (2 \cdot \hat{I_1} \cdot \hat{I_2} - 3(\hat{I_1} \cdot \hat{r}) \cdot (\hat{I_2} \cdot \hat{r})) \cdot \hat{r}$$
+        I wrote a code the does manual integration by separating the wires into 1000 parts.  
+        The code is available oh Github (TODO) and it compares the new vs old methods.  
+        The following lines are the forces using ThreeJS:
 
-        You may say "but zahar it looks so complicated",  
-        bro, maybe complicated but makes soooo much more sense. go over previous links to dive deeper.
+        ```js
+        function f_v(dv) {
+          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  )
+        }
+        function f_a(da) {
+          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -2/R.length()  ))
+        }
+        ```
 
-        After doing integral on closed wire loop, the results of the right hand law and the new equation are the same.
+        But this force is only between 2 charges, and in wire we have both protons and electrons.  
+        So we need to calculate the force 4 times:
+        ```js
+        const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n))).negate()
+        const f_n_p = f_v(v_1_n.clone().sub(v_2_p)).add(f_a(a_1_n.clone().sub(a_2_p))).negate()
+        const f_n_n = f_v(v_1_n.clone().sub(v_2_n)).add(f_a(a_1_n.clone().sub(a_2_n)))
+        const f_p_p = f_v(v_1_p.clone().sub(v_2_p)).add(f_a(a_1_p.clone().sub(a_2_p)))
+        ```
 
-        here is a tool that demonstrates their total force results after doing manual integral:  
-
-        (if you dont trust me you can check the code on GitHub)
-        
+        This is the result of the code (exactly the same results for old and new methods):
       </div>
       <details class="collapse">
         <summary>Equations comparing (click here for instructions)</summary>
@@ -155,7 +166,12 @@
       <br/>
       <canvas-video id="calc_two_circles" name="calc_two_circles" type="calculate" style="position: relative;"></canvas-video>
       <div id="new_equation" class="markdown">
-        [More thoughts here](discussion.html)
+        END  
+
+        blah blah
+
+        TODO add colors
+        
       </div>
     </article>
     <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>

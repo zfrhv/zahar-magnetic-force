@@ -681,7 +681,7 @@ window.calc_force = function (toolbar, scene) {
         const a_2_p = new THREE.Vector3(0,0,0)
 
         function f_v(dv) {
-          // better to use pure dv and not v so i wont do v = dv/2.
+          // better to use pure dv and not v so I wont do v = dv/2.
           return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  )
         }
         function f_a(da) {
