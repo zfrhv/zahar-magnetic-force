@@ -21,22 +21,21 @@ sidebar.innerHTML = `
   <link rel="stylesheet" type="text/css" href="sidebar/sidebar.css" />
   <a id="close_sidebar" style="cursor: pointer;"><<</a>
   <a href="physics.html">Main Page</a>
-  <a href="discovering_equation.html">Discovering Equation</a>
   <a href="deep_dive.html">Deep Dive</a>
+  <a href="discovering_equation.html">Discovering Equation</a>
   <a href="comparing_equations.html">Comparing Equations</a>
-  <a href="discussion.html">Discussion</a>
   <a href="https://github.com/zfrhv/zahar-magnetic-force/issues" target="_blank"><img src="./svg/feedback.svg" style="height: 18px;"/> Feedback</a>
 </div>
 `
 document.getElementById("SideBar").replaceWith(sidebar)
 
-if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))){
-  openNav()
-}
+// if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))){
+//   openNav()
+// }
 
-document.getElementById("close_sidebar").addEventListener('click', function () {
-  closeNav()
-})
+// document.getElementById("close_sidebar").addEventListener('click', function () {
+//   closeNav()
+// })
 
 // hightlight current page
 const selected = sidebar.querySelector('[href="'+window.location.pathname.match(/[^/]+$/g)[0]+'"]')

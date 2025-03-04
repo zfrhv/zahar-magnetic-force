@@ -16,7 +16,6 @@
   <title>Physics</title>
   <link rel="icon" type="image/svg+xml" href="physics.svg">
 
-  <script src="equations.js"></script>
   <link rel="stylesheet" type="text/css" href="physics.css" />
 </head>
 
@@ -36,6 +35,8 @@
         - diagram updates after 3 sec when not modfying
         - if it didnt updated, then the input values are not valid
         - recommended using straight lines or a shape made of 500 points
+
+        Note: the path is piece of a wire (electrons + protons), its not freely moving electrons! freely moving electrons will have completely different force.
 
         ### Circuit 1 Path:
       </div>
@@ -120,6 +121,9 @@
       <button onclick="window.apply_paths(...document.getElementsByClassName('original_problem')); new Promise(r => setTimeout(r, 100)).then(() => {
         const toolbar = document.getElementById('calc_custom_paths').children[1];
         toolbar.getElementsByClassName('force_type')[0].checked = true;
+        const distance = toolbar.querySelectorAll('.distance.y')[0];
+        distance.value = 75;
+        distance.onchange();
         document.getElementById('calc_custom_paths').scrollIntoView();
         toolbar.children[0].children[0].click()
         })">Check</button>
