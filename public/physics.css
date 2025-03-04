@@ -182,3 +182,7 @@ textarea {
 pre {
   overflow: auto;
 }
+
+code {
+  color: rgb(247, 143, 215);
+}
