@@ -61,7 +61,8 @@
         Instead of relying on these separate theories, I introduce a single model that directly determines the force between charges—and, as a consequence, it naturally produces the exact results of Ampère's force law, Biot-Savart law, and Faraday's Law combined.
 
         Additionally, when using Ampère's force law and the Biot-Savart law to calculate the force between two coils, the positive charges of protons, which remain stationary, are completely ignored.  
-        If we account for electrons with charge -q and velocity v, we should also consider protons with charge q and velocity v=0.
+        If we account for electrons with charge -q and velocity v, we should also consider protons with charge q and velocity v=0.  
+        It's also unclear what reference frame we're using to measure the speed of the electron. What if both coils are moving at different speeds?
 
         Furthermore, the "old method" has several issues, such as violating Newton's Third Law, which leads to a breakdown of global momentum conservation.  
         It also disrupts the conservation of angular momentum and violates energy conservation laws, making it mathematically possible, under certain conditions, to generate infinite energy.
@@ -85,11 +86,15 @@
       <div id="new_equation" class="markdown">
         # <center><u>New Equation</u></center>
 
-        I present the potential energy equation, which automatically ensures that energy and Newton's laws are not violated:
+        I present the potential energy between 2 charges, which automatically ensures that energy and Newton's laws are not violated:
 
-        E=…
-        
-        For a detailed explanation of how I derived this, "click here."
+        TODO check whats the constant
+        $$\color{#79da2a} E = \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r} k$$
+
+        For a detailed explanation of how I derived this, "click here". (its not something I did in a few days it took me 7 years)
+
+        When \\(\Delta v_{\hat r}\\) is the difference between the charges speed in \\(\hat r\\) (\\(\Delta v \cdot cos(\alpha)\\)),  
+        and \\(\Delta v_{\hat r_\bot}\\) is value of \\(\Delta v\\) in \\(\hat r_\bot\\) (\\(\Delta v \cdot sin(\alpha)\\))
 
         END
 
