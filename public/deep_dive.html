@@ -28,15 +28,22 @@
         ...
 
         Although there are some issues:
-        - Force thats not in \\(\hat r\\) direction will create additional spin forces to not violate the rotational momentum.  
-          If we check the force we get \\(τ \thickapprox a\\), so the torque will be the same no matter how far the particles are apart.  
+        - If we look of F(a), it cant have a value in \\(\hat r_\bot\\) direction, and in order to not violate the angular momentum it also have to create spin torque:  
+          $$F(a) \text{ in }\hat r_\bot \thickapprox \frac{\vec a_{r_\bot}}{r} = \frac{a \cdot sin(\text{degree from } \hat r)}{r}$$
+          $$\text{Voilated spin} = \frac{a \cdot sin(\text{degree from } \hat r)}{r} \cdot \frac{r}{2} \cdot 2 = a \cdot sin(\text{degree from } \hat r)$$
+          $$\text{Torque force} = a \cdot sin(\text{degree from } \hat r) \cdot \frac{1}{2} = \frac{a_{r_\bot}}{2}$$
+          (Voilated spin is multiplied by 2 because we have symmetric force on the other particle. same reson for deviding Torque force by 2.)  
+          We get that the torque will be the same no matter how far the particles are apart.  
           This answers the quantum entangelment but for me it doesnt makes sense, so it requires further investigation.
-        - That E was just my guess, I couldnt find anything else but there could be other equations that fit same conditions.  
+        - That E was just my guess, I couldnt find anything else and there could be other equations that fit the same conditions.  
           additionally to E there could also be \\(E \thickapprox \omega^2\\) or \\(E \thickapprox \frac{\omega^2}{r}\\) when \\(\omega\\) is the spin of the charged particle.  
           Need more data than what I currently know.
-        - Why is it \\(-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2\\)? No clue, but maybe its something that can hint us of how the charges are made inside.
+        - Why is it \\(-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2\\)? No clue, but maybe its something that can hint us of how the charges are made.
 
-        You can also post any revies\\issues or contribute on github: [zahar-magnetic-force](https://github.com/zfrhv/zahar-magnetic-force)
+        You can navigate between the pages by clicking on the gear at the top left.  
+        contact info:  
+        - zahar.pech.13.3@gmail.com
+        - open case on github: [zahar-magnetic-force](https://github.com/zfrhv/zahar-magnetic-force)
       </div>
     </article>
     <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
