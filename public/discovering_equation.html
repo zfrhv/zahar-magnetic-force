@@ -27,57 +27,57 @@
     <article class="page-content">
 
       <div class="markdown">
-        # <center><span style="color:#7fd6d6"><u>Discovering process</u></span></center>
+        # <center><span class="auto_color"><u>Discovering process</u></span></center>
         The method I used to find the solution followed this pattern:
         - Start with no clear idea.
         - Make a random guess.
         - Identify why the guess is wrong.
         - Understand the mistake and refine the guess with better knowledge.
 
-        ### <span style="color:#F8E71C">First Steps</span>
+        ### <span class="auto_color">First Steps</span>
         The initial issue was that the traditional method violates Newton's Third Law. To fix this, I started by guessing a force that depends on the angle between the velocities.  
         I then realized that velocity must be considered relative, meaning the force between two particles can only depend on their relative velocity \\(\Delta v\\).
 
-        ### <span style="color:#A7E0A4">Refining the Approach</span>
+        ### <span class="auto_color">Refining the Approach</span>
         Through logical reasoning and unit analysis, I concluded that the force should depend on \\(\Delta v^2\\) rather than just \\(\Delta v\\).  
         However, no force equation I tested seemed to work. Eventually, I realized that ignoring the charge of protons was a mistake, protons also contribute to the force, just like electrons.  
         I have also discovered myself the trick of using mass center as a reference point, and that the angular momentum also cannot be violated. (this was before I learned it in the university)
 
-        ### <span style="color:#FFB27A">A Key Breakthrough</span>
+        ### <span class="auto_color">A Key Breakthrough</span>
         I performed a quick check to see if a force of the form  
         $$F = \frac{\Delta v^2}{r^2}$$
         flipped correctly when the electron's velocity was flipped, and it worked. (2 parallel wires, and we flip the currect of one of the wires)  
         This gave me confidence that a better force equation existed. (this is around 1-2 years since the beginning).
 
 
-        ### <span style="color:#87CFFF">Exploring Charge and Resistance</span>
+        ### <span class="auto_color">Exploring Charge and Resistance</span>
         I then focused on understanding the speed + charges of electrons within wires, investigating how charge and velocity change with different resistances. Unfortunately, I wasted about a year on this approach.
 
-        ### <span style="color:#E6A8D7">Switching to a Computational Approach</span>
+        ### <span class="auto_color">Switching to a Computational Approach</span>
         Starting over, I wrote a Python program to manually integrate the force equations and began testing forces that would match the results of the traditional method.  
         After another 1-2 years, I found a strange force equation:  
         $$F = \frac{v^2 - v_r^2}{r^2}$$
         However, it violated energy conservation.  
         While experimenting with the code, I discovered another force term of the form \\(F \thickapprox a/r\\). This suggested something was off, so I discarded the approach.
 
-        ### <span style="color:#D4A373">Shifting to Wire part as a "particle"</span>
+        ### <span class="auto_color">Shifting to Wire part as a "particle"</span>
         Instead of analyzing individual electrons and protons separately, I started treating each wire segment as a whole one particle. This led me to a critical realization:  
         Instead of working with force directly, I should focus on energy, since force can be derived from energy in a way that naturally preserves energy and momentum.
         I eventually found a perfect equation for wire segments, but it failed to account for changing currents.
 
 
-        ### <span style="color:#B4E1E6">Speed Realization</span>
+        ### <span class="auto_color">Speed Realization</span>
         I then realized that when the wire moves, all that changes is the velocity, meaning force must depend on velocity. This led me back to analyzing protons and electrons separately.  
 
         I discovered another force equation:  
         $$F = \frac{\frac{1}{2}v_r^2 - v_{r_\bot}^2}{r^2}$$
         which turned out to be mathematically equivalent to my previous result (just a simple Pythagorean relation). This hinted that I was converging on the only solution thats there.
 
-        ### <span style="color:#F4C2C2">Energy Breakthrough</span>
+        ### <span class="auto_color">Energy Breakthrough</span>
         This time, I approached the problem from an energy perspective. To avoid violating energy conservation, I realized that force must also depend on acceleration.  
         From this, I finally arrived at the complete solution, which exactly describes the forces between wire segments (for freely moving particles advanced investigation is required).
 
-        ### <span style="color:#c9e75a">Summary Thoughts</span>
+        ### <span class="auto_color">Summary Thoughts</span>
         At first glance, the final solution seems simple, as if it could have been discovered in just a few months using standard school knowledge.  
         However, the real challenge was that some of the knowledge taught in school was incorrect. I couldn't determine which parts were reliable and which weren't.  
         Because of this uncertainty, I had to rebuild everything from the ground up to ensure a solid foundation where every assumption was 100% correct.  
@@ -89,6 +89,33 @@
     <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
   </div>
 
+  <script async>
+    // Color the headers
+    function num_to_color(num) {
+      if (num < 0 || num > 1) {
+        return "gold"
+      }
+      const color_limit = 100 // from 0 to 255
+      const color_offset = 155 // color_offset + color_limit <= 255
+      return "#" + [
+          Math.floor(color_offset + color_limit / 2 * (Math.sin((num      ) * 2*Math.PI) + 1)),
+          Math.floor(color_offset + color_limit / 2 * (Math.sin((num + 1/3) * 2*Math.PI) + 1)),
+          Math.floor(color_offset + color_limit / 2 * (Math.sin((num + 2/3) * 2*Math.PI) + 1))
+        ].map(num => {
+          const hex = num.toString(16)
+          return hex.length === 1 ? '0' + hex : hex
+        }).join('')
+    }
+    const spans = document.querySelectorAll(".auto_color")
+    spans.forEach((span, i) => {
+      const color = num_to_color(i/spans.length)
+      span.style.color = color
+      if (span.tagName.toLowerCase() === "summary") {
+        const border_el = span.nextElementSibling
+        border_el.style.borderLeft = border_el.style.borderLeft.replace("white", color)
+      }
+    })
+  </script>
   <script async>
     // Parse markdown
     document.querySelectorAll('.markdown').forEach(elmNode => {

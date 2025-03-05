@@ -109,6 +109,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 12px;
+  height: 6px;
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
@@ -161,7 +162,7 @@ summary {
   text-align: center;
 }
 .collapse[open] {
-  border-left: 4px solid #8aafff;
+  border-left: 4px solid #fc9a88;
 }
 
 mjx-container {
