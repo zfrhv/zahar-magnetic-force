@@ -35,8 +35,6 @@
 
 <!--
   TODO Plans:
-  - remove the trash folder
-  - fill all the TODO's links on all pages
   - update main_page.png
 -->
 
@@ -89,32 +87,32 @@
 
         I present the potential energy between 2 charges, which automatically ensures that energy and Newton's laws are not violated:
 
-        TODO check whats the constant
-        $$\color{#79da2a} E_p = \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r} k$$
+        $$\color{#e7c472} E_p = \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r}$$
 
         When \\(\Delta v_{\hat r}\\) is the difference between the charges speed in \\(\hat r\\) (\\(\Delta v \cdot cos(\alpha)\\)),  
         and \\(\Delta v_{\hat r_\bot}\\) is value of \\(\Delta v\\) in \\(\hat r_\bot\\) (\\(\Delta v \cdot sin(\alpha)\\))
 
-        For a detailed explanation of how I derived this, "click here(TODO)". (its not something I did in a few days it took me 7 years)
+        Its not something I did in a few days it took me 7 years.  
+        For a detailed explanation of how I derived this, check [deep dive](/deep_dive.html) page.
 
         From this energy we get that the force is seperate into 2 parts f(r) f(v)...  
-        The full explanation is in the "deep dive(TODO)". shortly:
+        The full explanation is in the [deep dive](/deep_dive.html). shortly:
 
-        $$\color{#79da2a} E \thickapprox \frac{-v^2}{r}$$
+        $$\color{#e7c472} E \thickapprox \frac{-v^2}{r}$$
         $$\color{#89CFF0} F_{Total} = -\frac{dE}{ds} = \frac{-dE}{dr}\frac{dr}{ds} + \frac{-dE}{dv}\frac{dv}{ds} = \frac{-v^2}{r^2}\cdot 1 + \frac{2v}{r} \cdot \frac{a}{v} =$$
         $$\color{#89CFF0} \frac{-v^2}{r^2} + \frac{2a}{r} = F_r + F_v = F(v) + F(a)$$
 
         so for our E we get:
 
-        $$\color{#89CFF0} F(v) = \frac{-\frac{1}{2}(\Delta v \cdot \hat r)^2 + (\Delta v \times \hat r)^2}{r^2} \hat r = \frac{-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} \hat r$$
-        $$\color{#89CFF0} F(a) = \frac{\Delta a \cdot \hat r}{r}\hat r - \frac{2 \cdot \hat r \times (\Delta a \times \hat r)}{r} = \frac{\Delta \vec a_r}{r} - \frac{2 \Delta \vec a_{r_\bot}}{r}$$
+        $$\color{#89CFF0} F(v) = \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}(\Delta v \cdot \hat r)^2 + (\Delta v \times \hat r)^2}{r^2} \hat r = \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} \hat r$$
+        $$\color{#89CFF0} F(a) = \frac{\mu_0}{4\pi} (\frac{\Delta a \cdot \hat r}{r}\hat r - \frac{2 \cdot \hat r \times (\Delta a \times \hat r)}{r}) = \frac{\mu_0}{4\pi} \frac{\Delta \vec a_r - 2 \Delta \vec a_{r_\bot}}{r}$$
 
         But this force is only for charges in cable. Charges that are free to move will have changing \\(\vec v\\) and \\(\vec a\\) so F(a) will also change.  
-        If you wanna see force for freely moving electrons (like in plasma) visit "deep dive (TODO)"
+        If you wanna see force for freely moving electrons (like in plasma) visit [deep dive](/deep_dive.html)
 
         ### <span class="auto_color">Methods comparison via manual integration</span>
-        I wrote a code the does manual integration by separating the wires into 1000 parts.  
-        The code is available oh Github (TODO) and it compares the new vs old methods.  
+        I wrote a code that does manual integration by separating the wires into 1000 parts.  
+        The code is available oh [Github](https://github.com/zfrhv/zahar-magnetic-force/blob/main/public/3d_forces.js) and it compares the new vs old methods.  
         The following lines are the forces using ThreeJS:
 
         ```js

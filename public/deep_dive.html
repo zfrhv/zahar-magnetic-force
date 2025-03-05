@@ -25,7 +25,7 @@
       <div id="magnetic_force" class="markdown">
         # <center><span class="auto_color"><u>Deep Dive</u></span></center>
         
-        During the [equation disvocery](TODO) I saw that we are dealing with \\(E \thickapprox \frac{-\Delta v^2}{r}\\),  
+        During the [equation disvocery](/discovering_equation.html) I saw that we are dealing with \\(E \thickapprox \frac{-\Delta v^2}{r}\\),  
         and I have found that:
         $$\color{#99d5e3} F \thickapprox \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
         So lets do energy calculations and see what are the real forces that are derivitated from:
@@ -160,6 +160,29 @@
           additionally to E there could also be \\(E \thickapprox \omega^2\\) or \\(E \thickapprox \frac{\omega^2}{r}\\) when \\(\omega\\) is the spin of the charged particle.  
           Need more data than what I currently know.
         - Why is it \\(-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2\\)? No clue, but maybe its something that can hint us of how the charges are made.
+
+        ### <span class="auto_color">Wire understanding</span>
+        For easier understanding lets say we have a circular coil of wire.  
+        When the wire has a current I assume that always the same amount of charges q is being moved, and the only thing that changes is the speed of the charges.  
+        In reality both may change but I couldnt fine a simple equation to express them both so I just assumed that the change of q is negligible and only v is changing (at least on normal currents. super low or high currents may be different).  
+        
+        When we have constant current \\(I_A\\) in coil A it means that there are electrons with charge -q moving in constant speed v inside the coil.  
+        This also means that there is charge +q of the protons that "stay without electron", the rest of the charges cancel out each other.  
+
+        Because our coil is closed loop and circular, we also have acceleration that rotates the speed and this results additional force f(a).  
+        And when we have changing current, then its another acceleration but this time its in \\(\hat v\\) direction.  
+
+        The calculator tool made on this website accounts for all of these features (you can view it on [github](https://github.com/zfrhv/zahar-magnetic-force/blob/main/public/3d_forces.js) file '3d_forces.js' or simply press f12).
+
+        ### <span class="auto_color">Next steps</span>
+        I have discovered the energy and the forces between two wire parts, now we need to investigate what will be the force when the particles are freely moving.  
+        For example electrons in plasma, or electrons around the atom.  
+        The forces on a freely moving electron <u>using the same enery equation</u> will be different.  
+        Because now the electron is not bound to the speed and acceleration inside the wire, the f(a) will create additional force that will cause additional acceleration that will cause the F(a) itself to change.  
+        I think its better to recalculated the forces from the potential energy instead of adapting the forces that we found. (and compare it to forces that we found to understand better)  
+
+        Currently I am very tired so I will delay this for a while.  
+        If you are interested or will do it before me you are very welcome to contact me or open a pull request it will be added as part of this website.
 
         You can navigate between the pages by clicking on the gear at the top left.  
         contact info:  
