@@ -24,9 +24,100 @@
 
       <div id="magnetic_force" class="markdown">
         # <center><u>Deep Dive</u></center>
+        During the [equation disvocery](TODO) I saw that we are dealing with \\(E \thickapprox \frac{-\Delta v^2}{r}\\),  
+        and I have found that:
+        $$F \thickapprox \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
+        So lets do energy calculations and see what are the real forces that are derivitated from:
+        $$E_p \thickapprox \frac{?\Delta v^2}{r}$$
 
-        ...
+        ## Finding energy
+        ### Sending particle to infinity
+        The work that is required to send a particle to infinity at constant speed v is:
+        $$F_{my} = \text{Force that I apply to cancel all of the forces} = -F_T$$
+        $$W = \int_{0}^{\infty} F_{my} \cdot \text{distance}$$
+        $$W = \Delta E_p = \int_{0}^{\infty} - \vec F_T \cdot \vec v \cdot dt$$
+        $$E_f - E_i = \frac{?\Delta v^2}{\infty} - \frac{?\Delta v^2}{r} = \int_{0}^{\infty} - \vec F_T \cdot \vec v \cdot dt$$
+        $$\frac{?\Delta v^2}{r} = E_p = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
+        $$E_p \thickapprox \int_{0}^{\infty} \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r \cdot \vec v \cdot dt$$
+        $$E_p \thickapprox \int_{0}^{\infty} \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} v_r \cdot dt$$
+        $$E_p \thickapprox \int_{r}^{\infty} \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} dr$$
+        $$E_p \thickapprox - \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{\infty} - (-\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r})$$
+        $$E_p \thickapprox \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r}$$
 
+        If we take \\(\vec v = \frac{\Delta \vec v}{2}\\) then in the energy we will have extra \\(\frac{1}{2}\\), but we also perform work on 2 particles now so we have to multiply back by 2.  
+        If we take \\(\vec v = \Delta \vec v\\) then from the start we dont need to perform anything (harder to imagine but easier to calculate).  
+
+        ## Finding forces
+        Lets find the real forces if we use:
+        $$E_p = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r}$$
+
+        ### Sending particle to infinity
+        Imma straight skip using previous calculations:
+        $$E_p = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
+        $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
+
+        In our case we send particle to infinity with constant speed so we can treat v as constants:
+        $$\frac{-1}{r} \thickapprox \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
+
+        and this is simple integral similar to \\(\frac{-GMm}{r}\\) so:
+        $$F_T = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
+
+        so whe the speed is constant we get:
+        $$F(v) = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
+
+        ### changing the speed of the particle
+        We will change the speed of a particle with constant acceleration.  
+        $$F_{my} = \text{Force that I apply to cancel all of the forces} + \text{Force to keep particle at const acceleration}$$
+        $$F_{my} = -F_T + F_{my\ a} = -F_T + ma$$
+        $$W = \int F_{my} \cdot ds$$
+        $$W = \int_{0}^{t} (-F_T + F_{my\ a}) \cdot v(t)\cdot dt$$
+        $$W = \int_{0}^{t} (-F_T + ma) \cdot a\cdot t \cdot dt$$
+
+        We will give huge acceleration at tiny amount of time so that we will see only \\(\Delta E_p\\) caused from changing the speed and not changing that position (changing position we already discovered)  
+        So \\(t \to 0\\):
+        $$W = - \int_{0}^{t} F_T \cdot a\cdot t \cdot dt + \int_{0}^{t} ma \cdot a\cdot t \cdot dt$$
+        $$W = - a \int_{0}^{t} F_T \cdot t \cdot dt + ma^2\int_{0}^{t} t \cdot dt$$
+        $$W = - a \int_{0}^{t} F_T \cdot t \cdot dt + ma^2\frac{t^2}{2}$$
+
+        And in order to not get 0 we will use the trick: \\(a \cdot t = v\\).  
+        If there is no a in there, then the result will just go to 0.  
+        $$W = - a \int_{0}^{t} F_T \cdot t \cdot dt + \frac{1}{2}mv^2$$
+
+        We can receive \\(\frac{1}{2}mv^2\\) easily back when we are at infinity, so it is not the energy that we have spent into the potential energy thus we can ignore it.
+
+        $$\Delta E_p = - a \int_{0}^{t} F_T \cdot t \cdot dt$$
+
+        Lets separate our force:
+        $$F_T = force that depends on a + force that doesnt depends on a = F(a) + F(not a)$$
+        $$\Delta E_p = - a \int_{0}^{t} (F(a) \cdot t + F(not\ a) \cdot t) \cdot dt$$
+
+        As mentioned before we have \\(t \to 0\\) so anything that doesnt has a will simply go to 0:
+        $$\Delta E_p = - a \int_{0}^{t} F(a) \cdot t \cdot dt$$
+
+        Our a is constant so we can bring F(a) out:
+        $$\Delta E_p = - a \cdot F(a)\int_{0}^{t} t \cdot dt$$
+
+        Lets assume that we started from v=0 for simplicity:
+        $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} - \frac{-\frac{1}{2} 0^2 + 0^2}{r} = - a \cdot F(a) \cdot \frac{t^2}{2}$$
+        $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = - a \cdot F(a) \cdot \frac{t^2}{2}$$
+        $$F(a) = a \cdot ?$$
+        $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = - a \cdot a \cdot ? \cdot \frac{t^2}{2} = - ? \cdot \frac{v^2}{2}$$
+
+        TODO idk
+
+        And the direction of the force is in the direction of the movement:
+        $$F(a) = TODO...\hat a$$
+
+        but ofc we dont wanna violate the angular momentum so ...
+
+        Now we have covered the force when particles move at constant speed F(v), and the force when particles move in constant acceleration F(a).  
+        You may think "what if there is a force for changing acceleration?", but I bet there isnt, because if we look on our energy equation:  
+        $$E_p \thickapprox \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r}$$
+        Energy always goes to a lower value, and the only variables we have are r,v.  
+        - How does the energy gets to lower value through r? via force \\(F_r = F(v)\\) that we already found.
+        - How does the energy gets to lower value through v? via force \\(F_v = F(a)\\) that we already found.
+
+        ### Theory issues
         Although there are some issues:
         - If we look of F(a), it cant have a value in \\(\hat r_\bot\\) direction, and in order to not violate the angular momentum it also have to create spin torque:  
           $$F(a) \text{ in }\hat r_\bot \thickapprox \frac{\vec a_{r_\bot}}{r} = \frac{a \cdot sin(\text{degree from } \hat r)}{r}$$
