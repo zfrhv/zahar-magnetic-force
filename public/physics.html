@@ -33,15 +33,11 @@
   <link rel="stylesheet" type="text/css" href="physics.css" />
 </head>
 
-<!--
-  TODO Plans:
-  - update main_page.png
--->
-
 <body>
   <script id="SideBar" src="./sidebar/sidebar.js"></script>
   <div class="page">
     <img src="./svg/top-branch.svg" style="position: absolute; width: 100%; transform: translateY(-6.2%) translateX(5%); height: auto; pointer-events: none;"/>
+    <img class="random_flower" style="position: absolute; width: 15%; transform: translateY(-40%) translateX(-40%); height: auto; pointer-events: none;"/>
     <article class="page-content">
 
       <div id="magnetic_force" class="markdown">
@@ -181,33 +177,7 @@
     <img src="./svg/bottom-branch.svg" style="position: absolute; width: 100%; bottom: 0; transform: translateY(40%); height: auto; pointer-events: none;"/>
   </div>
 
-  <script async>
-    // Color the headers
-    function num_to_color(num) {
-      if (num < 0 || num > 1) {
-        return "gold"
-      }
-      const color_limit = 100 // from 0 to 255
-      const color_offset = 155 // color_offset + color_limit <= 255
-      return "#" + [
-          Math.floor(color_offset + color_limit / 2 * (Math.sin((num      ) * 2*Math.PI) + 1)),
-          Math.floor(color_offset + color_limit / 2 * (Math.sin((num + 1/3) * 2*Math.PI) + 1)),
-          Math.floor(color_offset + color_limit / 2 * (Math.sin((num + 2/3) * 2*Math.PI) + 1))
-        ].map(num => {
-          const hex = num.toString(16)
-          return hex.length === 1 ? '0' + hex : hex
-        }).join('')
-    }
-    const spans = document.querySelectorAll(".auto_color")
-    spans.forEach((span, i) => {
-      const color = num_to_color(i/spans.length)
-      span.style.color = color
-      if (span.tagName.toLowerCase() === "summary") {
-        const border_el = span.nextElementSibling
-        border_el.style.borderLeft = border_el.style.borderLeft.replace("white", color)
-      }
-    })
-  </script>
+  <script src="random_headers_colors.js"></script>
   <script async>
     // Parse markdown
     document.querySelectorAll('.markdown').forEach(elmNode => {
@@ -218,5 +188,6 @@
   <script type="module" src="3d_forces.js"></script>
   <script id="CanvasVideo" type="module" src="./canvas_video/animation.js"></script>
   <script src="spider_web/spider_web.js"></script>
+  <script src="svg/flowers/random.js"></script>
 </body>
 </html>
