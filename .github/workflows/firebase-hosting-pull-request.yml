@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Install Dependencies
-        run: npm install --prefix public
+        run: cd public; npm install; cd ..
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:

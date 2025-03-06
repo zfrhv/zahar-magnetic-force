@@ -20,11 +20,11 @@ sidebar.innerHTML = `
 <div id="mySidenav" class="sidenav sidebar-closed">
   <link rel="stylesheet" type="text/css" href="sidebar/sidebar.css" />
   <a id="close_sidebar" style="cursor: pointer;"><<</a>
-  <a href="physics.html"><span style="filter: brightness(80%);">📜</span> Main Page</a>
-  <a href="deep_dive.html"><span style="filter: brightness(80%);">🔬</span> Deep Dive</a>
-  <a href="discovering_equation.html"><span style="filter: brightness(80%);">🧠</span> Discovering Equation</a>
-  <a href="comparing_equations.html"><span style="filter: brightness(80%);">⚖️</span> Comparing Equations</a>
-  <a href="https://github.com/zfrhv/zahar-magnetic-force/issues" target="_blank"><span style="filter: brightness(80%);">✅</span> Feedback</a>
+  <a href="physics.html">Main Page</a>
+  <a href="deep_dive.html">Deep Dive</a>
+  <a href="discovering_equation.html">Discovering Equation</a>
+  <a href="comparing_equations.html">Comparing Equations</a>
+  <a href="https://github.com/zfrhv/zahar-magnetic-force/issues" target="_blank">Feedback</a>
 </div>
 `
 document.getElementById("SideBar").replaceWith(sidebar)
