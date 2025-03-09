@@ -54,90 +54,76 @@
         s(0) = 0
         r(t) = r_0 + s(t)
         can you find f(t):
-        -1/2 v(t)^2 / r(t) = int(0, t) f(t) * ds
+        -1/2 v(t)^2 / r(t) = int(0, s(t)) f(t) * ds
         and then express f(t) as f(a_ext, v, r)?
         ```
       </div>
       <details>
         <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">answer:</summary>
         <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
-          We are given the following relationships:
+          We need to solve for \\( f(t) \\) in terms of \\( a_{\text{ext}}(t) \\), \\( v(t) \\), and \\( r(t) \\). Given:
 
-          - \\( f(t) \\) is the force as a function of time.
-          - \\( a(t) = \frac{f(t)}{m} \\), where \\( m \\) is mass.
-          - \\( a_{\text{ext}}(t) \\) is some external acceleration function.
-          - \\( v(t) = \int_0^t \left( a(t) + a_{\text{ext}}(t) \right) \, dt \\), with the initial condition \\( v(0) = 0 \\).
-          - \\( s(t) = \int_0^t v(t) \, dt \\), with the initial condition \\( s(0) = 0 \\).
-          - \\( r(t) = r_0 + s(t) \\), where \\( r_0 \\) is the initial position.
+          1. \\( a(t) = \frac{f(t)}{m} \\)
+          2. \\( v(t) = \int_0^t (a(t) + a_{\text{ext}}(t)) \, dt \\), with \\( v(0) = 0 \\)
+          3. \\( s(t) = \int_0^t v(t) \, dt \\), with \\( s(0) = 0 \\)
+          4. \\( r(t) = r_0 + s(t) \\)
           
-          We are tasked with solving for \\( f(t) \\) given the equation:
+          And the integral equation:
           
-          $$- \frac{1}{2} v(t)^2 / r(t) = \int_0^t f(t) \, ds$$
+          $$- \frac{1}{2} \frac{v(t)^2}{r(t)} = \int_0^{s(t)} f(t) \, ds$$
           
-          ### Step 1: Understand the equation
-          We want to express the force \\( f(t) \\) as a function of \\( a_{\text{ext}}(t) \\), \\( v(t) \\), and \\( r(t) \\).
+          ### Step 1: Differentiate Both Sides w.r.t. \\( t \\)
           
-          We know that:
+          We differentiate both sides with respect to \\( t \\) using the Leibniz rule:
           
-          $$- \frac{1}{2} \frac{v(t)^2}{r(t)} = \int_0^t f(t) \, ds$$
+          $$\frac{d}{dt} \left( -\frac{1}{2} \frac{v(t)^2}{r(t)} \right) = \frac{d}{dt} \left( \int_0^{s(t)} f(t) \, ds \right)$$
           
-          The right-hand side involves the integral of the force over displacement, \\( s(t) \\), where the displacement \\( s(t) \\) is the integral of velocity:
+          Using the Fundamental Theorem of Calculus on the right-hand side:
           
-          $$s(t) = \int_0^t v(t) \, dt$$
+          $$-\frac{d}{dt} \left( \frac{1}{2} \frac{v^2}{r} \right) = f(t) \frac{ds}{dt}$$
+          
+          Since \\( \frac{ds}{dt} = v(t) \\), we get:
+          
+          $$-\frac{d}{dt} \left( \frac{1}{2} \frac{v^2}{r} \right) = f(t) v(t)$$
+          
+          ### Step 2: Compute the Left-Hand Side
+          
+          Expanding:
+          
+          $$\frac{d}{dt} \left( \frac{1}{2} \frac{v^2}{r} \right) = \frac{1}{2} \left( \frac{2 v v'}{r} - \frac{v^2 r'}{r^2} \right)$$
+          
+          Since \\( v' = a + a_{\text{ext}} \\) and \\( r' = s' = v \\), we substitute:
+          
+          $$\frac{1}{2} \left( \frac{2 v (a + a_{\text{ext}})}{r} - \frac{v^2 v}{r^2} \right)$$
+          
+          $= \frac{v (a + a_{\text{ext}})}{r} - \frac{v^3}{2 r^2}$$
           
           Thus, the equation becomes:
           
-          $$- \frac{1}{2} \frac{v(t)^2}{r(t)} = \int_0^t f(t) \, ds(t)$$
+          $$- \left( \frac{v (a + a_{\text{ext}})}{r} - \frac{v^3}{2 r^2} \right) = f(t) v$$
           
-          ### Step 2: Differentiating the equation
-          To find \\( f(t) \\), we differentiate both sides with respect to \\( t \\).
+          ### Step 3: Solve for \\( f(t) \\)
           
-          The left-hand side involves \\( v(t) \\) and \\( r(t) \\), so we apply the chain rule:
+          $$f(t) = - \frac{1}{v} \left( \frac{v (a + a_{\text{ext}})}{r} - \frac{v^3}{2 r^2} \right)$$
           
-          $$\frac{d}{dt} \left( - \frac{1}{2} \frac{v(t)^2}{r(t)} \right) = - \frac{v(t)}{r(t)} \cdot \frac{dv(t)}{dt} + \frac{v(t)^2}{r(t)^2} \cdot \frac{dr(t)}{dt}$$
+          $$= - \left( \frac{a + a_{\text{ext}}}{r} - \frac{v^2}{2 r^2} \right)$$
           
-          Using \\( v(t) = \int_0^t (a(t) + a_{\text{ext}}(t)) \, dt \\), the derivative of \\( v(t) \\) is simply:
+          $$= - \frac{a + a_{\text{ext}}}{r} + \frac{v^2}{2 r^2}$$
           
-          $$\frac{dv(t)}{dt} = a(t) + a_{\text{ext}}(t)$$
+          ### Conclusion
           
-          The derivative of \\( r(t) \\) is:
+          The force \\( f(t) \\) is given by:
           
-          $$\frac{dr(t)}{dt} = v(t)$$
+          $$f(t) = m \left( - \frac{a + a_{\text{ext}}}{r} + \frac{v^2}{2 r^2} \right)$$
           
-          Thus, the left-hand side becomes:
-          
-          $$- \frac{v(t)}{r(t)} \cdot (a(t) + a_{\text{ext}}(t)) + \frac{v(t)^2}{r(t)^2} \cdot v(t)$$
-          
-          Now, for the right-hand side, we differentiate the integral:
-          
-          $$\frac{d}{dt} \left( \int_0^t f(t) \, ds(t) \right) = f(t) \cdot \frac{ds(t)}{dt} = f(t) \cdot v(t)$$
-          
-          ### Step 3: Set up the equation for \\( f(t) \\)
-          Equating both sides:
-          
-          $$- \frac{v(t)}{r(t)} \cdot (a(t) + a_{\text{ext}}(t)) + \frac{v(t)^2}{r(t)^2} \cdot v(t) = f(t) \cdot v(t)$$
-          
-          Dividing both sides by \\( v(t) \\) (assuming \\( v(t) \neq 0 \\)):
-          
-          $$- \frac{1}{r(t)} \cdot (a(t) + a_{\text{ext}}(t)) + \frac{v(t)}{r(t)^2} = f(t)$$
-          
-          ### Step 4: Express \\( f(t) \\) as a function of \\( a(t) \\), \\( a_{\text{ext}}(t) \\), and \\( r(t) \\)
-          Now, we can express \\( f(t) \\) as:
-          
-          $$f(t) = - \frac{1}{r(t)} \cdot (a(t) + a_{\text{ext}}(t)) + \frac{v(t)}{r(t)^2}$$
-          
-          Thus, the force \\( f(t) \\) is:
-          
-          $$f(t) = - \frac{1}{r(t)} (a(t) + a_{\text{ext}}(t)) + \frac{v(t)}{r(t)^2}$$
-          
-          This expression provides \\( f(t) \\) in terms of the accelerations \\( a(t) \\), \\( a_{\text{ext}}(t) \\), the velocity \\( v(t) \\), and the position function \\( r(t) \\).
+          This expresses \\( f(t) \\) in terms of \\( a_{\text{ext}}(t) \\), \\( v(t) \\), and \\( r(t) \\).
         </div>
       </details>
       <div class="markdown">
         and then i asked:
         ```
         can you solve for f:
-        f=-(f/m + a_ext)/r + v^2/r^2
+        f=-(f+m*a_ext)/r+m*v^2/(2r)
         ```
       </div>
       <details>
@@ -145,41 +131,40 @@
         <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
           Let's solve for \\( f \\) in the equation:
 
-          $$f = -\left( \frac{f}{m} + a_{\text{ext}} \right) / r + \frac{v^2}{r^2}$$
+          $$f = -\frac{f + m a_{\text{ext}}}{r} + \frac{m v^2}{2r}$$
           
-          Step 1: Multiply both sides of the equation by \\( r \\) to eliminate the denominator on the left side:
+          ### Step 1: Eliminate the Fraction
+          Multiply both sides by \\( r \\) to eliminate the fractions:
           
-          $$f r = -\left( \frac{f}{m} + a_{\text{ext}} \right) + \frac{v^2}{r}$$
+          $$f r = - (f + m a_{\text{ext}}) + \frac{m v^2}{2}$$
           
-          Step 2: Distribute the negative sign:
+          Distribute the negative sign:
           
-          $$f r = -\frac{f}{m} - a_{\text{ext}} + \frac{v^2}{r}$$
+          $$f r = - f - m a_{\text{ext}} + \frac{m v^2}{2}$$
           
-          Step 3: Rearrange the equation to collect the terms involving \\( f \\) on one side:
+          ### Step 2: Isolate \\( f \\)
+          Move all terms containing \\( f \\) to one side:
           
-          $$f r + \frac{f}{m} = -a_{\text{ext}} + \frac{v^2}{r}$$
+          $$f r + f = - m a_{\text{ext}} + \frac{m v^2}{2}$$
           
-          Step 4: Factor out \\( f \\) from the left side:
+          Factor out \\( f \\):
           
-          $$f \left( r + \frac{1}{m} \right) = -a_{\text{ext}} + \frac{v^2}{r}$$
+          $$f (r + 1) = - m a_{\text{ext}} + \frac{m v^2}{2}$$
           
-          Step 5: Solve for \\( f \\):
+          ### Step 3: Solve for \\( f \\)
+          $$f = \frac{- m a_{\text{ext}} + \frac{m v^2}{2}}{r + 1}$$
           
-          $$f = \frac{-a_{\text{ext}} + \frac{v^2}{r}}{r + \frac{1}{m}}$$
+          Thus, the final solution for \\( f \\) is:
           
-          Thus, the solution for \\( f \\) is:
-          
-          $$f = \frac{-a_{\text{ext}} + \frac{v^2}{r}}{r + \frac{1}{m}}$$
+          $$f = \frac{m v^2}{2(r+1)} - \frac{m a_{\text{ext}}}{r+1}$$
         </div>
       </details>
       <div class="markdown">
         so we got:  
 
-        $$\color{#e7c472} f_{E\ in\ \hat r} = \frac{\vec a_{ext\ r}}{r + \frac{1}{m}} + \frac{-v_{r}^2}{r^2 + \frac{r}{m}} \hat r$$
+        $$\color{#e7c472} f_{E\ in\ \hat r} = \frac{-mv_{r}^2}{2(r + 1)} \hat r + \frac{m\vec a_{ext\ r}}{r + 1}$$
 
         (all in \\(\hat r\\), and i forgot to ask with minus so i added now).  
-        which is basically the same just with mass features additions.  
-        althout its weird that there is no extra 2 near a (or 1/2 near v^2), i will check this later.  
         
         now i need \\(f_{r_\bot}\\) ...  
         i can ask chatgpt again but sideways force is so complex, it will have force in \\(\hat r\\) and \\(\hat r_\bot\\).  
@@ -190,10 +175,19 @@
 
         so:  
 
-        $$\color{#e7c472} f_{E\ in\ \hat r_\bot} = \frac{-2\vec a_{ext\ r_\bot}}{r + \frac{1}{m}} + \frac{2v_{r_\bot}^2}{r^2 + \frac{r}{m}} \hat r$$
+        $$\color{#e7c472} f_{E\ in\ \hat r} = \frac{mv_{r_\bot}^2}{r + 1} \hat r + \frac{-2m\vec a_{ext\ r_\bot}}{r + 1}$$
 
         pretty cool.  
         now understanding thinking
+        
+        also it feels like we can approximate that result with something + kqq/r^2???  
+        nah i cant bcz there is always a and v. but maybe if i put 1/m to my energy equation i can get extra kqq/r^2. idk  
+
+        but i need to make sure that in "constant magnetic field" that particle will do circles. and if not then adjust the equation.  
+        but its not the same force, cuz there in wire particles are forces into a,v and the freely moving particles perform different work.  
+
+        i need this force equation but more generic wether he is in a wire or not.  
+        
 
       </div>
     </article>

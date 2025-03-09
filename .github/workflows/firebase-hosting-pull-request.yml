@@ -3,11 +3,11 @@ name: Deploy to Firebase Hosting on PR
 
 on:
   workflow_dispatch: {}
-  push:
-    branches:
-      - main
-    paths:
-      - 'public/*'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'public/*'
       
 jobs:
   all:
