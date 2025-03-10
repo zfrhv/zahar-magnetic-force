@@ -42,129 +42,70 @@
 
       <div class="markdown">
         ## <span class="auto_color">Next steps</span>
-        idk math so i asked chatgpt:  
+        solving:  
         ```
-        can you help me to solve
-        f(t) is force
-        a(t) = f(t)/m
-        a_ext(t) some function
-        v(t) = int(0, t) (a(t) + a_ext(t)) dt
+        m, r_0 some constants
+        a_self(t) = f(t)/m
+        a_extr(t) some function
+        v(t) = int(0, t) (a_self(t) + a_ext(t)) dt
         v(0) = 0
         s(t) = int(0, t) v(t) dt
         s(0) = 0
         r(t) = r_0 + s(t)
-        can you find f(t):
-        -1/2 v(t)^2 / r(t) = int(0, s(t)) f(t) * ds
-        and then express f(t) as f(a_ext, v, r)?
+        
+        calculating the work that prticles perform: (no minus at force bcz its their f and not my calcelling f, yes minus at work bcz its how much he wastes and not gains)
+        -(-1/2 v^2 / r) = int(0, s) f * ds
+        d(1/2 v^2 / r)/ds = f
+        1/2 * d(v^2 / r)/dt * dt/ds = f
+        1/2 * d(v^2 / r)/dt * 1/v = f
+
+        d(v^2)/dt = 2v*(a_self + a_ext)
+        dr/dt = v
+        1/2 * (2v*(a_self + a_ext) * r - v * v^2)/r^2 * 1/v = f
+        ((a_self*m/m + a_ext) * r - 1/2*v^2)/r^2 = f
+        ((f/m + a_ext) * r - 1/2*v^2)/r^2 = f
+        (f/m + a_ext - 1/2*v^2/r)/r = f
+        f/m/r + a_ext/r - 1/2*v^2/r^2 = f
+        a_ext/r - 1/2*v^2/r^2 = f - f/m/r
+        a_ext/r - 1/2*v^2/r^2 = f(1 - 1/m/r)
+        f = (a_ext/r - 1/2*v^2/r^2) / (1 - 1/m/r)
+        f = (a_ext - 1/2*v^2/r) / (r - 1/m)
+        f = a_ext/(r - 1/m) - 1/2*v^2/(r*(r - 1/m))
+
+        not good cuz there is r at which force is infinite, but if i wouldnt put the minus it would have been r + 1/m
+        but a_ext/(r - 1/m) is supposed to be a_ext/r without minus.
+
+        unless its real, then it means that there is some distance (r=1/m) at which the particles cannot get any closer.
+        but 1/m is very big distance, its not at atom level... not good
+
+        im sure its caused bcz the energy equation doesnt includes mass.
+        it wouldnt be a problem if the particle is not moving freely, but when he moves flreely he needs to know his movement resistence (mass).
+        if E = -(-1/2 v^2 / r) * m then:
+        a_ext/r - 1/2*v^2/r^2 = f/m - f/m/r
+        a_ext/r - 1/2*v^2/r^2 = f/m(1 - 1/r)
+        f = m*a_ext/r/(1 - 1/r) - 1/2*m*v^2/r^2/(1 - 1/r)
+        f = m*a_ext/(r - 1) - 1/2*m*v^2/(r(r - 1))
+
+        now mass makes more sence.
+        but the particles cannot pass r=1...
+        another problem now is that the masses of the partciesl are not the same, so the forces between electrons vs protons will be different.
+        i will have to fix my previous calculations.
+
+        lets say its true and look at real values.
+        # is come very small constant:
+        E = -(-1/2 v^2 / r) * m * #
+        f = m*a_ext/(r - 1/#) - 1/2*m*v^2/(r(r - 1/#))
+        now r=1/# is huge, its worse.
+        if # was very big const it would be nice.
+
+        but the big problem is the previous forces, you told they depends on mass...
         ```
-      </div>
-      <details>
-        <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">answer:</summary>
-        <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
-          We need to solve for \\( f(t) \\) in terms of \\( a_{\text{ext}}(t) \\), \\( v(t) \\), and \\( r(t) \\). Given:
 
-          1. \\( a(t) = \frac{f(t)}{m} \\)
-          2. \\( v(t) = \int_0^t (a(t) + a_{\text{ext}}(t)) \, dt \\), with \\( v(0) = 0 \\)
-          3. \\( s(t) = \int_0^t v(t) \, dt \\), with \\( s(0) = 0 \\)
-          4. \\( r(t) = r_0 + s(t) \\)
-          
-          And the integral equation:
-          
-          $$- \frac{1}{2} \frac{v(t)^2}{r(t)} = \int_0^{s(t)} f(t) \, ds$$
-          
-          ### Step 1: Differentiate Both Sides w.r.t. \\( t \\)
-          
-          We differentiate both sides with respect to \\( t \\) using the Leibniz rule:
-          
-          $$\frac{d}{dt} \left( -\frac{1}{2} \frac{v(t)^2}{r(t)} \right) = \frac{d}{dt} \left( \int_0^{s(t)} f(t) \, ds \right)$$
-          
-          Using the Fundamental Theorem of Calculus on the right-hand side:
-          
-          $$-\frac{d}{dt} \left( \frac{1}{2} \frac{v^2}{r} \right) = f(t) \frac{ds}{dt}$$
-          
-          Since \\( \frac{ds}{dt} = v(t) \\), we get:
-          
-          $$-\frac{d}{dt} \left( \frac{1}{2} \frac{v^2}{r} \right) = f(t) v(t)$$
-          
-          ### Step 2: Compute the Left-Hand Side
-          
-          Expanding:
-          
-          $$\frac{d}{dt} \left( \frac{1}{2} \frac{v^2}{r} \right) = \frac{1}{2} \left( \frac{2 v v'}{r} - \frac{v^2 r'}{r^2} \right)$$
-          
-          Since \\( v' = a + a_{\text{ext}} \\) and \\( r' = s' = v \\), we substitute:
-          
-          $$\frac{1}{2} \left( \frac{2 v (a + a_{\text{ext}})}{r} - \frac{v^2 v}{r^2} \right)$$
-          
-          $= \frac{v (a + a_{\text{ext}})}{r} - \frac{v^3}{2 r^2}$$
-          
-          Thus, the equation becomes:
-          
-          $$- \left( \frac{v (a + a_{\text{ext}})}{r} - \frac{v^3}{2 r^2} \right) = f(t) v$$
-          
-          ### Step 3: Solve for \\( f(t) \\)
-          
-          $$f(t) = - \frac{1}{v} \left( \frac{v (a + a_{\text{ext}})}{r} - \frac{v^3}{2 r^2} \right)$$
-          
-          $$= - \left( \frac{a + a_{\text{ext}}}{r} - \frac{v^2}{2 r^2} \right)$$
-          
-          $$= - \frac{a + a_{\text{ext}}}{r} + \frac{v^2}{2 r^2}$$
-          
-          ### Conclusion
-          
-          The force \\( f(t) \\) is given by:
-          
-          $$f(t) = m \left( - \frac{a + a_{\text{ext}}}{r} + \frac{v^2}{2 r^2} \right)$$
-          
-          This expresses \\( f(t) \\) in terms of \\( a_{\text{ext}}(t) \\), \\( v(t) \\), and \\( r(t) \\).
-        </div>
-      </details>
-      <div class="markdown">
-        and then i asked:
-        ```
-        can you solve for f:
-        f=-(f+m*a_ext)/r+m*v^2/(2r)
-        ```
-      </div>
-      <details>
-        <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">answer:</summary>
-        <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
-          Let's solve for \\( f \\) in the equation:
+        TODO fix from here...
 
-          $$f = -\frac{f + m a_{\text{ext}}}{r} + \frac{m v^2}{2r}$$
-          
-          ### Step 1: Eliminate the Fraction
-          Multiply both sides by \\( r \\) to eliminate the fractions:
-          
-          $$f r = - (f + m a_{\text{ext}}) + \frac{m v^2}{2}$$
-          
-          Distribute the negative sign:
-          
-          $$f r = - f - m a_{\text{ext}} + \frac{m v^2}{2}$$
-          
-          ### Step 2: Isolate \\( f \\)
-          Move all terms containing \\( f \\) to one side:
-          
-          $$f r + f = - m a_{\text{ext}} + \frac{m v^2}{2}$$
-          
-          Factor out \\( f \\):
-          
-          $$f (r + 1) = - m a_{\text{ext}} + \frac{m v^2}{2}$$
-          
-          ### Step 3: Solve for \\( f \\)
-          $$f = \frac{- m a_{\text{ext}} + \frac{m v^2}{2}}{r + 1}$$
-          
-          Thus, the final solution for \\( f \\) is:
-          
-          $$f = \frac{m v^2}{2(r+1)} - \frac{m a_{\text{ext}}}{r+1}$$
-        </div>
-      </details>
-      <div class="markdown">
-        so we got:  
-
-        $$\color{#e7c472} f_{E\ in\ \hat r} = \frac{-mv_{r}^2}{2(r + 1)} \hat r + \frac{m\vec a_{ext\ r}}{r + 1}$$
-
-        (all in \\(\hat r\\), and i forgot to ask with minus so i added now).  
+        so we get:  
+        $$\color{#e7c472} f_{E\ in\ \hat r} = \frac{r a_{ext} - v^2/2}{r^2 + r/m}$$
+        $$\color{#e7c472} f_{E\ in\ \hat r} = \frac{\vec a_{ext}}{r + \frac{1}{m}} + \frac{-v^2/2}{r(r + \frac{1}{m})} \hat r$$
         
         now i need \\(f_{r_\bot}\\) ...  
         i can ask chatgpt again but sideways force is so complex, it will have force in \\(\hat r\\) and \\(\hat r_\bot\\).  
