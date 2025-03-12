@@ -669,6 +669,7 @@ window.calc_force = function (toolbar, scene) {
       if (mine_force) {
         // full "mine" force calculation
 
+        // there should be minus on speeds and stuff bcz positive current in v is electrons speed in -v... but im too lazy to fix
         const v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
         const v_2_n = v_2.clone().multiplyScalar(wire2.current)
         const v_1_p = wire1.speed.clone()
