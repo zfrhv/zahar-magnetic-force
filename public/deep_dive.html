@@ -183,14 +183,15 @@
         ## <span class="auto_color">Free electrons</span>
         I have discovered the energy and the forces between two wire parts, now we need to investigate what will be the force when the particles are freely moving.  
         For example electrons in plasma, or electrons around the atom.  
+
         Because now the electron is not bound to the speed and acceleration inside the wire, the f(a) will create additional force that will cause additional acceleration that will cause the F(a) itself to change.  
         I think its better to recalculated the forces from the potential energy instead of adapting the forces that we found. (and compare it to forces that we found to understand better)  
 
         Lets calculate the work of freely moving particle only in \\(\hat r\\):  
-        - m is the mass at which the particle is moving (free electron is mass of the electron, inside wire is mass of the whole wire)  
-        - r_0 some constant  
-        - a_self(t) = f(t)/m  
-        - a_extr(t) some function  
+        - m is the mass at which the particle is moving (free electron is mass of the electron, inside wire its mass of the whole wire because the particle moves with the wire)  
+        - r_0 some constant, distance between particles at t=0  
+        - a_self(t) = f(t)/m, acceleration that the particle causes on himself  
+        - a_extr(t) some function, acceleration that external forces cause on the particle  
         - v(t) = int(0, t) (a_self(t) + a_ext(t)) dt  
         - v(0) = 0  
         - s(t) = int(0, t) v(t) dt  
@@ -201,7 +202,7 @@
       <details>
         <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">free particle work calc</summary>
         <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
-          calculating the work that prticles perform: (no minus at force bcz its their f and not my calcelling f, yes minus at work bcz its how much he wastes and not gains)
+          Calculating the work that prticles perform: (no minus at the force bevause its their f and not the for that we apply to cancel their f, yes minus at work because its how much energy he wastes and not gains)
           $$-\frac{-\frac{1}{2} v^2}{r} = \int_0^s f \cdot  ds$$
           $$\frac{d}{ds}(\frac{\frac{1}{2} v^2}{r}) = f$$
           $$\frac{1}{2} \cdot \frac{d}{dt}(\frac{v^2}{r}) \cdot \frac{dt}{ds} = f$$
@@ -209,6 +210,7 @@
           <br/>
           $$\frac{d}{dt}v^2 = 2v\cdot (a_{self} + a_{ext})$$
           $$\frac{dr}{dt} = v$$
+          <br/>
           $$\frac{1}{2} \cdot \frac{2v \cdot (a_{self} + a_{ext}) \cdot r - v \cdot v^2}{r^2} \cdot \frac{1}{v} = f$$
           $$\frac{(a_{self}\cdot m/m + a_{ext}) \cdot r - \frac{1}{2} \cdot v^2}{r^2} = f$$
           $$\frac{(f/m + a_{ext}) \cdot r - \frac{1}{2} \cdot v^2}{r^2} = f$$
@@ -216,36 +218,36 @@
           $$\frac{f/m}{r} + \frac{a_{ext}}{r} - \frac{\frac{1}{2} v^2}{r^2} = f$$
           $$\frac{a_{ext}}{r} - \frac{\frac{1}{2} v^2}{r^2} = f - \frac{f/m}{r}$$
           $$a_{ext} - \frac{\frac{1}{2} v^2}{r} = f(r - 1/m)$$
-          $$f = \frac{a_{ext}}{r - \frac{1}{m}} + \frac{-\frac{1}{2}v^2}{r(r - \frac{1}{m})}$$
+          $$\color{#e7c472} f = \frac{a_{ext}}{r - \frac{1}{m}} + \frac{-\frac{1}{2}v^2}{r(r - \frac{1}{m})}$$
         </div>
       </details>
       <div class="markdown">
-        looks broken cuz there is r at which the force will be infinite.  
-        unless its real, then it means that there is some distance (r=1/m) at which the particles cannot get any closer.
+        Looks broken because there is \\(r \neq 0\\) at which the force will be infinite.  
+        Unless its real, then it means that there is some distance (\\(r=\frac{1}{m}\\)) at which the particles cannot get any closer.  
 
-        another option that the energy equation from the beginning had mass, and then we wont end up with 1/m:
+        Another option is that the energy equation from the beginning included mass, and then we wont end up with 1/m:  
         $$E = -\frac{-\frac{1}{2} v^2}{r} \cdot m$$
         then:
         $$\frac{a_{ext}}{r} + \frac{- \frac{1}{2} v^2}{r^2} = f/m - \frac{f/m}{r}$$
         $$\frac{a_{ext}}{r} - \frac{\frac{1}{2} v^2}{r^2} = f/m(1 - \frac{1}{r})$$
         $$a_{ext} - \frac{\frac{1}{2} v^2}{r} = f/m(r - 1)$$
-        $$f = \frac{m a_{ext}}{r - 1} - \frac{\frac{1}{2} m v^2}{r(r - 1)}$$
+        $$\color{#e7c472} f = \frac{m a_{ext}}{r - 1} - \frac{\frac{1}{2} m v^2}{r(r - 1)}$$
 
         Looks great because we know that both ma and mv^2/r are forces.  
 
-        It also makes sense because when magnet hovers above coil it creates a voltage, which allows the coil to use the energy.  
-        But the only way to take away energy from the magnet is to slow it down. but if the mass of the magnet is huge then its hard to slow it down, thus more energy.  
-        so yes the energy equation should have some mass parameters g(m1,m2).  
+        It also makes sense because when magnet A hovers above coil B it creates a voltage, which allows the coil to use the energy (by running current).  
+        But the only way to take away energy from the magnet A is to slow it down. but if the mass of the magnet is huge then its hard to slow it down, thus more energy can be used in coil B until A slows down.  
+        So yes the energy equation should have some mass parameters g(m1,m2).  
 
         For particle inside wire the normal and friction forces causes the particle to move with the whole wire, so the m is the whole wire.  
-        Thus 1/m goes to 0 so we end up with old equation.  
-        Although for changing current (not under control) is partially freely moving electrons, so that situation and mass is complex.  
+        Thus \\(\frac{1}{m} \to 0\\) so we end up with the old equation.  
+        Although for changing current (not under control) the particle is partially free, so that situation and mass calculation is complex.  
 
-        But I wont use it yet because I dont have any real life evidence or strong statement.  
+        Mass in the energy looks great but I wont use it yet because I dont have any real life evidence or strong statement (statement that can tell me exactly what is g(m1,m2)).  
 
         # <span class="auto_color">Different masses</span>
-        Now I wanna see result of different masses (for example whole wire vs electrons for plasma)
-        i wanna separate both m1,m2 and a_ext_1 a_ext_2
+        Now I wanna see result of different masses (for example whole wire vs electrons)  
+        I wanna separate both m1,m2 and a_ext_1 a_ext_2
         - m_1 mass at which particle 1 is moving
         - m_2 mass at which particle 2 is moving
         - r_0 some constant
@@ -260,12 +262,11 @@
         - s_2(t) = int(0, t) v_2(t) dt
         - s(0) = 0
         - r(t) = r_0 + s_1(t) + s_2(t)
-
       </div>
       <details>
         <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">free particles different masses work calc</summary>
         <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
-          calculating the work that prticles perform:
+          Calculating the work that prticles perform:
           $$-\frac{-\frac{1}{2} (v_1 + v_2)^2}{r} = \int_0^s f \cdot ds_1 + \int_0^s f \cdot ds_2$$
           $$\frac{d}{dt}(\frac{\frac{1}{2} (v_1 + v_2)^2}{r}) = f \cdot \frac{ds_1}{dt} + f \cdot \frac{ds_2}{dt}$$
           $$\frac{1}{2} \cdot \frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = f \cdot v_1 + f \cdot v_2$$
@@ -277,41 +278,45 @@
           $$f(1 - \frac{1/m_1 + 1/m_2}{r})= \frac{a_{e1} + a_{e2}}{r} - \frac{(v_1 + v_2)^2}{2r^2}$$
           $$f = \frac{(a_{e1} + a_{e2})}{r(1 - (1/m_1 + 1/m_2)/r)} - \frac{(v_1 + v_2)^2}{2r^2(1 - (1/m_1 + 1/m_2)/r)}$$
           $$f = \frac{a_{external_1} + a_{external_2}}{r - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} (v_1 + v_2)^2}{r(r - 1/m_1 - 1/m_2)}$$
-          $$f = \frac{\Delta a_{external}}{r - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} \Delta v^2}{r(r - 1/m_1 - 1/m_2)}$$
+          $$\color{#e7c472} f = \frac{\Delta a_{external}}{r - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} \Delta v^2}{r(r - 1/m_1 - 1/m_2)}$$
+
+          Here \\(\Delta a\\) are the external forces acceleration result.  
+          For wire + plasma the external forces are the wire on its current.  
+          For electron in atom or there are no external forces.  
         </div>
       </details>
       <div class="markdown">
-        Here \\(\Delta a\\) are the external forces acceleration result.  
-        For wire + plasma the external forces are the wire on its current.  
-        For electron in atom or there are no external forces.  
-
-        Now i need to calculate \\(F_{r_\bot}\\) but im lazy so i will just assume its similar:
+        Now I need to calculate \\(F_{r_\bot}\\) but im lazy so I will just assume its similar:
 
         $$\color{#e7c472} F_r = \frac{\Delta a_r}{r - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{-\frac{1}{2} \Delta v_r^2}{r(r - \frac{1}{m_1} - \frac{1}{m_2})}$$
         $$\color{#e7c472} F_{r_\bot} = \frac{-2 \Delta a_{r_\bot}}{r - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{\Delta v_{r_\bot}^2}{r(r - \frac{1}{m_1} - \frac{1}{m_2})}$$
 
         ### <span class="auto_color">Quick test</span>
-        I performed a quick test on how an electron will travel in plasma under a "constant" "magnetic field":
+        I performed a quick test on how an electron will travel in plasma under almost constant magnetic field (inside a circular coil):
 
         ![their method](./svg/plasma_simulation/their_method.png)
 
         ![mine method](./svg/plasma_simulation/mine_method.png)
 
-        The electron starts at center with speed to right side.  
-        (this is test to see how he travels in general, there are initial valuas that make him to travel in circles)  
-        In their method the electron goes up compared to mine method where the electron goes down, its because i simply forgot that positive current is electron moving in the opposite direction.  
-        So "real" results are just flipped along the x axis, im lazy to fix it because i need to fix the whole website code.  
+        The electron starts at the center with speed to right side.  
+
+        Notes:
+        - This is test to see how he travels in general, there are initial valuas that can make him to travel in circles  
+        - In their method the electron goes up compared to mine method where the electron goes down, its because I simply forgot that positive current is electron moving in the opposite direction.  
+          So the "real" results are just flipped along the x axis, im lazy to fix it because I need to fix the whole website code.  
         
-        The old method looks like simple circles, and the new mathod looks like "chaotic" but very stable "circles".
+        The old method looks like simple circles, and the new mathod looks like "chaotic" but very stable circles.  
 
         ### <span class="auto_color">Next steps</span>
-        this is just a sketch, for more progress i need more data whether its subject that i didnt studied yet or some experiments data...
+        This is just a sketch, for more progress I need more data whether its subject that I didnt studied yet or some experiments of trajectory of electrons in plasma.  
+
+        So for now I will leave everything as is until I find out something new.
 
         You can navigate between the pages by clicking on the gear at the top left.  
         contact info:  
         - zahar.pech.13.3@gmail.com  
         - open case on github: [zahar-magnetic-force](https://github.com/zfrhv/zahar-magnetic-force)  
-        
+
         you are also welcome to contribute to edit/correct the content through github/email.  
       </div>
     </article>
