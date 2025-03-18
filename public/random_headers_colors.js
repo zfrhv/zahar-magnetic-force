@@ -14,12 +14,14 @@ function num_to_color(num) {
       return hex.length === 1 ? '0' + hex : hex
     }).join('')
 }
-const headers = document.querySelectorAll(".auto_color")
-headers.forEach((span, i) => {
-  const color = num_to_color(i/headers.length)
-  span.style.color = color
-  if (span.tagName.toLowerCase() === "summary") {
-    const border_el = span.nextElementSibling
-    border_el.style.borderLeft = border_el.style.borderLeft.replace("white", color)
-  }
+document.querySelectorAll(".page").forEach(page => {
+  const headers = page.querySelectorAll(".auto_color")
+  headers.forEach((span, i) => {
+    const color = num_to_color(i/headers.length)
+    span.style.color = color
+    if (span.tagName.toLowerCase() === "summary") {
+      const border_el = span.nextElementSibling
+      border_el.style.borderLeft = border_el.style.borderLeft.replace("white", color)
+    }
+  })
 })

@@ -266,19 +266,22 @@
       <details>
         <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">free particles different masses work calc</summary>
         <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
-          Calculating the work that prticles perform:
-          $$-\frac{-\frac{1}{2} (v_1 + v_2)^2}{r} = \int_0^s f \cdot ds_1 + \int_0^s f \cdot ds_2$$
-          $$\frac{d}{dt}(\frac{\frac{1}{2} (v_1 + v_2)^2}{r}) = f \cdot \frac{ds_1}{dt} + f \cdot \frac{ds_2}{dt}$$
-          $$\frac{1}{2} \cdot \frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = f \cdot v_1 + f \cdot v_2$$
-          $$\frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = f \cdot 2 \cdot (v_1 + v_2)$$
-          $$\frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = \frac{2 \cdot (v_1 + v_2) \cdot (a_{s1} + a_{e1} + a_{s2} + a_{e2}) \cdot r - (v_1 + v_2) \cdot (v_1 + v_2)^2}{r^2} = f \cdot 2 \cdot (v_1 + v_2)$$
-          $$f = \frac{(a_{s1} + a_{e1} + a_{s2} + a_{e2}) \cdot r - (v_1 + v_2)^2 / 2}{r^2}$$
-          $$f = \frac{(f/m_1 + a_{e1} + f/m_2 + a_{e2}) \cdot r - \frac{1}{2}(v_1 + v_2)^2}{r^2}$$
-          $$f = \frac{f/m_1 + a_{e1} + f/m_2 + a_{e2}}{r} - \frac{(v_1 + v_2)^2}{2r^2}$$
-          $$f(1 - \frac{1/m_1 + 1/m_2}{r})= \frac{a_{e1} + a_{e2}}{r} - \frac{(v_1 + v_2)^2}{2r^2}$$
-          $$f = \frac{(a_{e1} + a_{e2})}{r(1 - (1/m_1 + 1/m_2)/r)} - \frac{(v_1 + v_2)^2}{2r^2(1 - (1/m_1 + 1/m_2)/r)}$$
-          $$f = \frac{a_{external_1} + a_{external_2}}{r - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} (v_1 + v_2)^2}{r(r - 1/m_1 - 1/m_2)}$$
-          $$\color{#e7c472} f = \frac{\Delta a_{external}}{r - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} \Delta v^2}{r(r - 1/m_1 - 1/m_2)}$$
+          Calculating the work that prticles perform for \\(E = -C \frac{-\frac{1}{2} (v_1 + v_2)^2}{r}\\),  
+          When C is constant \\(C = q_1 q_2 \frac{\mu_0}{4\pi}\\) with units of mass\*distance  
+          So the units of \\(\frac{\mu_0}{4\pi}\\) is mass\*distance/charge^2  
+
+          $$-C \frac{-\frac{1}{2} (v_1 + v_2)^2}{r} = \int_0^s f \cdot ds_1 + \int_0^s f \cdot ds_2$$
+          $$\frac{d}{dt}(C\frac{\frac{1}{2} (v_1 + v_2)^2}{r}) = f \cdot \frac{ds_1}{dt} + f \cdot \frac{ds_2}{dt}$$
+          $$C\frac{1}{2} \cdot \frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = f \cdot v_1 + f \cdot v_2$$
+          $$\frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = f/C \cdot 2 \cdot (v_1 + v_2)$$
+          $$\frac{d}{dt}(\frac{(v_1 + v_2)^2}{r}) = \frac{2 \cdot (v_1 + v_2) \cdot (a_{s1} + a_{e1} + a_{s2} + a_{e2}) \cdot r - (v_1 + v_2) \cdot (v_1 + v_2)^2}{r^2} = f/C \cdot 2 \cdot (v_1 + v_2)$$
+          $$f/C = \frac{(a_{s1} + a_{e1} + a_{s2} + a_{e2}) \cdot r - (v_1 + v_2)^2 / 2}{r^2}$$
+          $$f/C = \frac{(f/m_1 + a_{e1} + f/m_2 + a_{e2}) \cdot r - \frac{1}{2}(v_1 + v_2)^2}{r^2}$$
+          $$f/C = \frac{f/m_1 + a_{e1} + f/m_2 + a_{e2}}{r} - \frac{(v_1 + v_2)^2}{2r^2}$$
+          $$f(\frac{1}{C} - \frac{1/m_1 + 1/m_2}{r})= \frac{a_{e1} + a_{e2}}{r} - \frac{(v_1 + v_2)^2}{2r^2}$$
+          $$f = \frac{(a_{e1} + a_{e2})}{r(\frac{1}{C} - (1/m_1 + 1/m_2)/r)} - \frac{(v_1 + v_2)^2}{2r^2(\frac{1}{C} - (1/m_1 + 1/m_2)/r)}$$
+          $$f = \frac{a_{external_1} + a_{external_2}}{\frac{r}{C} - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} (v_1 + v_2)^2}{r(\frac{r}{C} - 1/m_1 - 1/m_2)}$$
+          $$\color{#e7c472} f = \frac{\Delta a_{external}}{\frac{r}{C} - 1/m_1 - 1/m_2} + \frac{-\frac{1}{2} \Delta v^2}{r(\frac{r}{C} - 1/m_1 - 1/m_2)}$$
 
           Here \\(\Delta a\\) are the external forces acceleration result.  
           For wire + plasma the external forces are the wire on its current.  
@@ -288,8 +291,8 @@
       <div class="markdown">
         Now I need to calculate \\(F_{r_\bot}\\) but im lazy so I will just assume its similar:
 
-        $$\color{#e7c472} F_r = \frac{\Delta a_r}{r - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{-\frac{1}{2} \Delta v_r^2}{r(r - \frac{1}{m_1} - \frac{1}{m_2})}$$
-        $$\color{#e7c472} F_{r_\bot} = \frac{-2 \Delta a_{r_\bot}}{r - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{\Delta v_{r_\bot}^2}{r(r - \frac{1}{m_1} - \frac{1}{m_2})}$$
+        $$\color{#e7c472} F_r = \frac{\Delta a_r}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{-\frac{1}{2} \Delta v_r^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
+        $$\color{#e7c472} F_{r_\bot} = \frac{-2 \Delta a_{r_\bot}}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{\Delta v_{r_\bot}^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
 
         ### <span class="auto_color">Quick test</span>
         I performed a quick test on how an electron will travel in plasma under almost constant magnetic field (inside a circular coil):
@@ -306,6 +309,23 @@
           So the "real" results are just flipped along the x axis, im lazy to fix it because I need to fix the whole website code.  
         
         The old method looks like simple circles, and the new mathod looks like "chaotic" but very stable circles.  
+
+        ### <span class="auto_color">Atom Test</span>
+        Lets say:
+        - \\(q_1\\) = charge of an electron
+        - \\(m_1\\) = mass of an electron
+        - \\(q_2\\) = charge of a proton
+        - \\(m_2\\) = mass of a proton
+
+        Then we get that the closest the electron can get to a proton is:
+        $$\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2} = 0$$
+        $$\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} = \frac{1}{m_1} + \frac{1}{m_2}$$
+        $$r = q_1 q_2 \frac{\mu_0}{4\pi} \cdot (\frac{1}{m_1} + \frac{1}{m_2})$$
+        $$r = 1.602 \cdot 10^{-19} \cdot 1.602 \cdot 10^{-19} \frac{1.256 \cdot 10^{-6}}{4\pi} \cdot (\frac{1}{9.109 \cdot 10^{-31}} + \frac{1}{1.672 \cdot 10^{-27}})$$
+        $$r = 2.818 \cdot 10^{-15} [m]$$
+        When the distance of the electron from the proton in helium is:
+        $$r = 3.1 \cdot 10^{-11} [m]$$
+        So all good here
 
         ### <span class="auto_color">Next steps</span>
         This is just a sketch, for more progress I need more data whether its subject that I didnt studied yet or some experiments of trajectory of electrons in plasma.  
