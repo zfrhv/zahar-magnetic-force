@@ -83,10 +83,10 @@
 
         I present the potential energy between 2 charges, which automatically ensures that energy and Newton's laws are not violated:
 
-        $$\color{#e7c472} E_p = q_1 q_2 \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r}$$
+        $$\color{#e7c472} E_p = q_1 q_2 \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}\Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r}$$
 
-        When \\(\Delta v_{\hat r}\\) is the difference between the charges speed in \\(\hat r\\) (\\(\Delta v \cdot cos(\alpha)\\)),  
-        and \\(\Delta v_{\hat r_\bot}\\) is value of \\(\Delta v\\) in \\(\hat r_\bot\\) (\\(\Delta v \cdot sin(\alpha)\\))
+        When \\(\Delta v_{\Vert r}\\) is the difference between the charges speed in \\(\hat r\\) (\\(\Delta v \cdot cos(\alpha)\\)),  
+        and \\(\Delta v_{\bot r}\\) is value of \\(\Delta v\\) in \\(\bot r\\) (\\(\Delta v \cdot sin(\alpha)\\))
 
         Its not something I did in a few days it took me 7 years.  
         For a detailed explanation of how I derived this, check [deep dive](/deep_dive.html) page.
@@ -100,8 +100,8 @@
 
         so for our E we get:
 
-        $$\color{#89CFF0} F(v) = q_1 q_2 \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}(\Delta v \cdot \hat r)^2 + (\Delta v \times \hat r)^2}{r^2} \hat r = q_1 q_2 \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} \hat r$$
-        $$\color{#89CFF0} F(a) = q_1 q_2 \frac{\mu_0}{4\pi} (\frac{\Delta a \cdot \hat r}{r}\hat r - \frac{2 \cdot \hat r \times (\Delta a \times \hat r)}{r}) = q_1 q_2 \frac{\mu_0}{4\pi} \frac{\Delta \vec a_r - 2 \Delta \vec a_{r_\bot}}{r}$$
+        $$\color{#89CFF0} F(v) = q_1 q_2 \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}(\Delta v \cdot \hat r)^2 + (\Delta v \times \hat r)^2}{r^2} \hat r = q_1 q_2 \frac{\mu_0}{4\pi} \frac{-\frac{1}{2}\Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2} \hat r$$
+        $$\color{#89CFF0} F(a) = q_1 q_2 \frac{\mu_0}{4\pi} (\frac{\Delta a \cdot \hat r}{r}\hat r - \frac{2 \cdot \hat r \times (\Delta a \times \hat r)}{r}) = q_1 q_2 \frac{\mu_0}{4\pi} \frac{\Delta \vec a_{\Vert r} - 2 \Delta \vec a_{\bot r}}{r}$$
 
         But this force is only for charges in cable. Charges that are free to move will have changing \\(\vec v\\) and \\(\vec a\\) so F(a) will also change.  
         If you wanna see force for freely moving electrons (like in plasma) visit [deep dive](/deep_dive.html)

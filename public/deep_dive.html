@@ -28,7 +28,7 @@
         
         During the [equation disvocery](/discovering_equation.html) I saw that we are dealing with \\(E \thickapprox \frac{-\Delta v^2}{r}\\),  
         and I have found that:
-        $$\color{#99d5e3} F \thickapprox \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
+        $$\color{#99d5e3} F \thickapprox \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2}\hat r$$
         So lets do energy calculations and see what are the real forces that are derivitated from:
         $$\color{#99d5e3} E_p \thickapprox \frac{C \Delta v^2}{r}$$
         
@@ -42,18 +42,18 @@
         $$W = \Delta E_p = \int_{0}^{\infty} - \vec F_T \cdot \vec v \cdot dt$$
         $$E_f - E_i = \frac{C \Delta v^2}{\infty} - \frac{C \Delta v^2}{r} = \int_{0}^{\infty} - \vec F_T \cdot \vec v \cdot dt$$
         $$\frac{C \Delta v^2}{r} = E_p = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
-        $$E_p \thickapprox \int_{0}^{\infty} \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r \cdot \vec v \cdot dt$$
-        $$E_p \thickapprox \int_{0}^{\infty} \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} v_r \cdot dt$$
-        $$E_p \thickapprox \int_{r}^{\infty} \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2} dr$$
-        $$E_p \thickapprox - \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{\infty} - (-\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r})$$
-        $$\color{#e7c472} E_p \thickapprox \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r}$$
+        $$E_p \thickapprox \int_{0}^{\infty} \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2}\hat r \cdot \vec v \cdot dt$$
+        $$E_p \thickapprox \int_{0}^{\infty} \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2} v_{\Vert r} \cdot dt$$
+        $$E_p \thickapprox \int_{r}^{\infty} \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2} dr$$
+        $$E_p \thickapprox - \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{\infty} - (-\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r})$$
+        $$\color{#e7c472} E_p \thickapprox \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r}$$
 
         If we take \\(\vec v = \frac{\Delta \vec v}{2}\\) then in the energy we will have extra \\(\frac{1}{2}\\), but we also perform work on 2 particles now so we have to multiply back by 2.  
         If we take \\(\vec v = \Delta \vec v\\) then from the start we dont need to perform anything (harder to imagine but easier to calculate).  
 
         ### <span class="auto_color">Finding forces</span>
         Lets find the real forces if we use:
-        $$\color{#e7c472} E_p = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r}$$
+        $$\color{#e7c472} E_p = \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r}$$
 
         </div>
         <details>
@@ -61,16 +61,16 @@
           <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
             Imma straight skip using previous calculations:
             $$E_p = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
-            $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
+            $$\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r} = \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
     
             In our case we send particle to infinity with constant speed so we can treat v as constants:
             $$\frac{-1}{r} \thickapprox \int_{0}^{\infty} \vec F_T \cdot \vec v \cdot dt$$
     
             and this is simple integral similar to \\(\frac{-GMm}{r}\\) so:
-            $$F_T = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
+            $$F_T = \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2}\hat r$$
     
             so whe the speed is constant we get:
-            $$\color{#e7c472} F(v) = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r^2}\hat r$$
+            $$\color{#e7c472} F(v) = \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r^2}\hat r$$
           </div>
         </details>
         <br/>
@@ -109,34 +109,34 @@
             $$\Delta E_p = - \vec F(a) \cdot \vec a \int_{0}^{t} t \cdot dt$$
     
             Lets assume that we started from v=0 for simplicity:
-            $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} - \frac{-\frac{1}{2} 0^2 + 0^2}{r} = - \vec F(a) \cdot \vec a \cdot \frac{t^2}{2}$$
-            $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = - \vec F(a) \cdot \vec a \cdot \frac{t^2}{2}$$
+            $$\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r} - \frac{-\frac{1}{2} 0^2 + 0^2}{r} = - \vec F(a) \cdot \vec a \cdot \frac{t^2}{2}$$
+            $$\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r} = - \vec F(a) \cdot \vec a \cdot \frac{t^2}{2}$$
     
-            The energy is separated into two directions \\(\hat r\\) and \\(\hat r_\bot\\), so lets separate the force too:
-            $$\vec F(a) = C_1 \cdot \vec a_r + C_2 \cdot \vec a_{r_\bot} $$
-            $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = - (C_1 \cdot \vec a_r + C_2 \cdot \vec a_{r_\bot}) \cdot (\vec a_r + \vec a_{r_\bot}) \cdot \frac{t^2}{2}$$
-            $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = - (C_1 \cdot a_r^2 + C_2 \cdot a_{r_\bot}^2) \cdot \frac{t^2}{2}$$
-            $$\frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r} = - \frac{C_1 \cdot v_r^2 + C_2 \cdot v_{r_\bot}^2}{2}$$
-            $$\frac{\Delta v_r^2 - 2 \Delta v_{r_\bot}^2}{r} = \frac{\Delta v_r^2}{r} - \frac{2 \Delta v_{r_\bot}^2}{r} = C_1 \cdot v_r^2 + C_2 \cdot v_{r_\bot}^2$$
+            The energy is separated into two directions \\(\hat r\\) and \\(\bot \hat r\\), so lets separate the force too:
+            $$\vec F(a) = C_1 \cdot \vec a_{\Vert r} + C_2 \cdot \vec a_{\bot r} $$
+            $$\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r} = - (C_1 \cdot \vec a_{\Vert r} + C_2 \cdot \vec a_{\bot r}) \cdot (\vec a_{\Vert r} + \vec a_{\bot r}) \cdot \frac{t^2}{2}$$
+            $$\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r} = - (C_1 \cdot a_{\Vert r}^2 + C_2 \cdot a_{\bot r}^2) \cdot \frac{t^2}{2}$$
+            $$\frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r} = - \frac{C_1 \cdot v_{\Vert r}^2 + C_2 \cdot v_{\bot r}^2}{2}$$
+            $$\frac{\Delta v_{\Vert r}^2 - 2 \Delta v_{\bot r}^2}{r} = \frac{\Delta v_{\Vert r}^2}{r} - \frac{2 \Delta v_{\bot r}^2}{r} = C_1 \cdot v_{\Vert r}^2 + C_2 \cdot v_{\bot r}^2$$
             $$C_1 = \frac{1}{r}$$
             $$C_2 = \frac{-2}{r}$$
-            $$\color{#e7c472} \vec F(a) = \frac{\vec a_r}{r} - \frac{2 \vec a_{r_\bot}}{r} = \frac{\vec a_r - 2 \vec a_{r_\bot}}{r} $$
+            $$\color{#e7c472} \vec F(a) = \frac{\vec a_{\Vert r}}{r} - \frac{2 \vec a_{\bot r}}{r} = \frac{\vec a_{\Vert r} - 2 \vec a_{\bot r}}{r} $$
     
             Same trick here, \\(a = \Delta a\\) and not \\(a = \frac{\Delta a}{2}\\).  
     
             But we dont wanna violate the angular momentum, so whatever force not in \\(\hat r\\) we have we need to create spin torque.  
             And the only forces that not in \\(\hat r\\) is:  
-            $$F_{r_\bot} = \frac{- 2 \vec a_{r_\bot}}{r}$$
+            $$F_{\bot r} = \frac{- 2 \vec a_{\bot r}}{r}$$
     
             So the violated amount of torque is:
             $$τ = \text{Force} \cdot \text{distance from center} \cdot \text{two particles} $$
-            $$τ = \frac{- 2 a_{r_\bot}}{r} \cdot \frac{r}{2} \cdot 2 = - 2 a_{r_\bot}$$
+            $$τ = \frac{- 2 a_{\bot r}}{r} \cdot \frac{r}{2} \cdot 2 = - 2 a_{\bot r}$$
     
             The additional spin force that will be created:
             $$τ = - \text{violated torque} \cdot \text{devided by 2 because 2 particles}$$
-            $$\color{#e7c472} τ = a_{r_\bot}$$
+            $$\color{#e7c472} τ = a_{\bot r}$$
             
-            And the direction depends on the direction of \\(\vec a_{r_\bot}\\).
+            And the direction depends on the direction of \\(\vec a_{\bot r}\\).
           </div>
         </details>
         <br/>
@@ -145,7 +145,7 @@
           <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
             Now we have covered the force when particles move at constant speed F(v), and the force when particles move in constant acceleration F(a).  
             You may think "what if there is a force for changing acceleration?", but I bet there isnt, because if we look on our energy equation:  
-            $$\color{#e7c472} E_p = \frac{-\frac{1}{2} \Delta v_r^2 + \Delta v_{r_\bot}^2}{r}$$
+            $$\color{#e7c472} E_p = \frac{-\frac{1}{2} \Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r}$$
             Energy always goes to a lower value, and the only variables we have are r,v.  
             - How does the energy gets to lower value through r? via force \\(F_r = F(v)\\) that we already found.
             - How does the energy gets to lower value through v? via force \\(F_v = F(a)\\) that we already found.
@@ -160,7 +160,7 @@
         - That E was just my guess, I couldnt find anything else and there could be other equations that fit the same conditions.  
           additionally to E there could also be \\(E \thickapprox \omega^2\\) or \\(E \thickapprox \frac{\omega^2}{r}\\) when \\(\omega\\) is the spin of the charged particle.  
           Need more data than what I currently know.
-        - Why is it \\(-\frac{1}{2}\Delta v_r^2 + \Delta v_{r_\bot}^2\\)? No clue, but maybe its something that can hint us of how the charges are made.
+        - Why is it \\(-\frac{1}{2}\Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2\\)? No clue, but maybe its something that can hint us of how the charges are made.
 
         ### <span class="auto_color">Wire understanding</span>
         For easier understanding lets say we have a circular coil of wire.  
@@ -285,10 +285,10 @@
         </div>
       </details>
       <div class="markdown">
-        Now I need to calculate \\(F_{r_\bot}\\) but im lazy so I will just assume its similar:
+        Now I need to calculate \\(F_{\bot r}\\) but im lazy so I will just assume its similar:
 
-        $$\color{#e7c472} F_r = \frac{\Delta a_r}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{-\frac{1}{2} \Delta v_r^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
-        $$\color{#e7c472} F_{r_\bot} = \frac{-2 \Delta a_{r_\bot}}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{\Delta v_{r_\bot}^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
+        $$\color{#e7c472} F_r = \frac{\Delta a_{\Vert r}}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{-\frac{1}{2} \Delta v_{\Vert r}^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
+        $$\color{#e7c472} F_{\bot r} = \frac{-2 \Delta a_{\bot r}}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{\Delta v_{\bot r}^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
 
         ### <span class="auto_color">Quick test</span>
         I performed a quick test on how an electron will travel in plasma under almost constant magnetic field (inside a circular coil):
@@ -329,7 +329,7 @@
 
         Equation for now:
 
-        $$E_p = \underbrace{\frac{-k q_1 q_2}{r}}\_{\text{Coulomb's Law}} + \underbrace{\frac{\mu_0 q_1 q_2}{4\pi} \cdot \frac{-\frac{1}{2}\Delta v_{\hat r}^2 + \Delta v_{\hat r_\bot}^2}{r}}\_{\text{Found yet}} + \underbrace{g(\omega_1,\omega_2)}\_{\text{Need more data}}$$
+        $$E_p = \underbrace{\frac{-k q_1 q_2}{r}}\_{\text{Coulomb's Law}} + \underbrace{\frac{\mu_0 q_1 q_2}{4\pi} \cdot \frac{-\frac{1}{2}\Delta v_{\Vert r}^2 + \Delta v_{\bot r}^2}{r}}\_{\text{Found yet}} + \underbrace{g(\omega_1,\omega_2)}\_{\text{Need more data}}$$
 
         You can navigate between the pages by clicking on the gear at the top left.  
         contact info:  
