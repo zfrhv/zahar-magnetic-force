@@ -57,7 +57,7 @@
         ### <span class="auto_color">Switching to a Computational Approach</span>
         Starting over, I wrote a Python program to manually integrate the force equations and began testing forces that would match the results of the traditional method.  
         After another 1-2 years, I found a strange force equation:  
-        $$F = \frac{v^2 - v_{\Vert r}^2}{r^2}$$
+        $$F = \frac{v^2 - v_{r_\Vert}^2}{r^2}$$
         However, it violated energy conservation.  
         While experimenting with the code, I discovered another force term of the form \\(F \thickapprox a/r\\). This suggested something was off, so I discarded the approach.
 
@@ -71,7 +71,7 @@
         I then realized that when the wire moves, all that changes is the velocity, meaning force must depend on velocity. This led me back to analyzing protons and electrons separately.  
 
         I discovered another force equation:  
-        $$F = \frac{\frac{1}{2} v_{\Vert r}^2 - v_{\bot r}^2}{r^2}$$
+        $$F = \frac{\frac{1}{2} v_{r_\Vert}^2 - v_{r_\bot}^2}{r^2}$$
         which turned out to be mathematically equivalent to my previous result (just a simple Pythagorean relation). This hinted that I was converging on the only solution thats there.
 
         ### <span class="auto_color">Energy Breakthrough</span>
