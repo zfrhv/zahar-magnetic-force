@@ -574,6 +574,9 @@ window.calc_force = function (toolbar, scene) {
   wire2.torque = torque_on_2
   wire2.voltage_arrows = voltage2_arrows
 
+  // take the center of coil, do vector multiplication from wire to center? split it into some parts and thats the tiny areas
+  // not sure how to connect them (areas) tho
+  // and i should fix the minus on the speed first
   if (wire1_mesh.areas) {
     wire1.areas = wire1_mesh.areas.map(vec => vec.clone().applyEuler(wire1.rotation).add(wire1.position))
     wire1.area_value = wire1_mesh.area_value

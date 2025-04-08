@@ -323,13 +323,62 @@
         $$r = 3.1 \cdot 10^{-11} [m]$$
         So all good here
 
+        ### <span class="auto_color">Columb's Force</span>
+        If we pay attention to the equation constant, to achieve columns force scales we simply need to multiply by c^2.  
+        And just so happens that we have v^2 in the equation, it feels like columbs force is charges occilating in theis spot with the speed of c.  
+        Calculating the force between two particles that randomly occilate in all directions:
+        F(a) is cancelled because for \\(\vec a\\) we will get force in the same direction, and for opposite \\(-\vec a\\) we will get exactly the cancelling force.  
+        Which is not the case for F(v) because no matter in which direction we will have \\(\vec v\\) the force will be in \\(\hat r\\).
+      </div>
+      <details>
+        <summary class="auto_color" style="font-size: 1em; font-weight:bold">Statistically sum up the forces:</summary>
+        <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
+          $$F_{avg} = \sum F(\Delta v) \cdot \text{statistical chance to get }\Delta v$$
+          $$F_{avg} = \sum (F_{r_\Vert}(v) + F_{r_\bot}(v)) \cdot \frac{partial area}{total area}$$
+  
+          Statistically total area is all the directions in which \((v_1\)) can be, so half sphere is 50%, and so on...
+          $$F_{avg} = \sum (F_{r_\Vert}(v) + F_{r_\bot}(v)) \cdot \frac{v1\ area}{v1\ sphere\ area} \cdot \frac{v2\ area}{v2\ sphere\ area}$$
+          $$F_{avg} = \sum (F_{r_\Vert}(v) + F_{r_\bot}(v)) \cdot \frac{d \phi_1(r_1 sin(\theta_1)) \cdot d\theta_1 r_1}{4pi\cdot r_1^2} \cdot \frac{d \phi_2(r_2 sin(\theta_2)) \cdot d\theta_2 r_2}{4pi\cdot r_2^2}$$
+          $$F_{avg} = \frac{\mu_0 q_1 q_2}{4\pi} \frac{1}{(4pi)^2} \int_0^{2\pi} d\phi_1 \int_0^\pi d\theta_1 \int_0^{2\pi} d\phi_2 \int_0^\pi d\theta_2 \cdot (F_{r_\Vert}(v) + F_{r_\bot}(v)) \cdot sin(\theta_1) sin(\theta_2)$$
+  
+          Lets mark:
+          $$C = \frac{\mu_0 q_1 q_2}{4\pi} \frac{1}{(4pi)^2}$$
+          $$\int = \int_0^{2\pi} d\phi_1 \int_0^\pi d\theta_1 \int_0^{2\pi} d\phi_2 \int_0^\pi d\theta_2$$
+  
+          Continue:
+          $$F_{avg} = C \int (F_{r_\Vert}(v) + F_{r_\bot}(v)) \cdot sin(\theta_1) sin(\theta_2)$$
+          $$F_{avg} = C \int (\frac{-\frac{1}{2} (v_{1\ r_\Vert} - v_{2\ r_\Vert})^2}{r^2} + \frac{(\vec v_{1 r\bot} \cdot \vec v_{2 r\bot})^2}{r^2}) \cdot sin(\theta_1) sin(\theta_2)$$
+  
+          assuming \\(|v_1| = |v_2| = v\\):
+          $$v_{1\ r_\Vert} = v\cdot cos(\theta_1)$$
+          $$v_{2\ r_\Vert} = v\cdot cos(\theta_2)$$
+          $$v_{1\ r\bot} = v\cdot sin(\theta_1)$$
+          $$v_{2\ r\bot} = v\cdot sin(\theta_2)$$
+          $$(\vec v_{1\ r\bot} \cdot \vec v_{2\ r\bot})^2 = v_{1\ r\bot}^2 + v_{2\ r\bot}^2 - 2 v_{1\ r\bot} v_{2\ r\bot} cos(\phi_1 - \phi_2)$$
+  
+          After the integration we get:
+  
+          $$F_{avg} = \frac{\mu_0 q_1 q_2}{4\pi} \frac{v^2}{r^2}$$
+          And if the particles occilate at v=c we get:
+          $$F_{avg} = \frac{\mu_0 q_1 q_2}{4\pi} \frac{c^2}{r^2} = \frac{k q_1 q_2}{r^2}$$
+
+          Pretty surprising that such chaotic force statistically only gives \\(\frac{\mu_0 q_1 q_2}{4\pi} \frac{c^2}{r^2}\\)  
+          Same as it gave F(a) that I didnt expected, and it solved the changing current effects as well.  
+          Not sure if its a coincidence.
+        </div>
+      </details>
+      <div class="markdown">
+        So we can see that its exactly the columbs force.  
+        Also if the charges occilate at speed C it also makes sense why the light always exits at speed C from the electron.  
+        The occilating idea came from the Double-Slit Experiment, when we dont observe the particles are not stationary.  
+
         ### <span class="auto_color">Next steps</span>
         This is just a sketch, for more progress I need more data whether its subject that I didnt studied yet or some experiments of trajectory of electrons in plasma.  
         So for now I will leave everything as is until I find out something new.  
 
         Equation for now:
 
-        $$E_p = \underbrace{\frac{-k q_1 q_2}{r}}\_{\text{Coulomb's Law}} + \underbrace{\frac{\mu_0 q_1 q_2}{4\pi} \cdot \frac{-\frac{1}{2}\Delta v_{r_\Vert}^2 + \Delta v_{r_\bot}^2}{r}}\_{\text{Found yet}} + \underbrace{g(\omega_1,\omega_2)}\_{\text{Need more data}}$$
+        $$E_p = \underbrace{\frac{\mu_0 q_1 q_2}{4\pi} \cdot \frac{-\frac{1}{2}\Delta v_{r_\Vert}^2 + \Delta v_{r_\bot}^2}{r}}\_{\text{Found yet}} + \underbrace{g(\omega_1,\omega_2)}\_{\text{Need more data}}$$
 
         You can navigate between the pages by clicking on the gear at the top left.  
         contact info:  
