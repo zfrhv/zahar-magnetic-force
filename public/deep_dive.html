@@ -290,22 +290,154 @@
         $$\color{#e7c472} F_r = \frac{\Delta a_{r_\Vert}}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{-\frac{1}{2} \Delta v_{r_\Vert}^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
         $$\color{#e7c472} F_{r_\bot} = \frac{-2 \Delta a_{r_\bot}}{\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2}} + \frac{\Delta v_{r_\bot}^2}{r(\frac{r}{q_1 q_2 \frac{\mu_0}{4\pi}} - \frac{1}{m_1} - \frac{1}{m_2})}$$
 
-        ### <span class="auto_color">Quick test</span>
-        I performed a quick test on how an electron will travel in plasma under almost constant magnetic field (inside a circular coil):
+      </div>
+      <details>
+        <summary class="auto_color" style="font-size: 1.17em; font-weight:bold">Quick test</summary>
+        <div class="markdown" style="text-align: left; padding-left: 15px; border-left: 4px solid white;">
+          I performed a quick test for electrons trajectory in plasma under almost constant magnetic field (inside a circular coil, mark as orange dots):
 
-        ![their method](./svg/plasma_simulation/their_method.png)
+          A single electron starts at (0.5, 0) with speed (0, 0.5) and the dots are his simulated path after dt=0.01 (units were ignored in quick simulation)  
 
-        ![mine method](./svg/plasma_simulation/mine_method.png)
+          ![circular path](./svg/plasma_simulation/circular_path.png)
+  
+          Same conditions but twice stronger magnetic field:
 
-        The electron starts at the center with speed to right side.  
+          ![twice field](./svg/plasma_simulation/twice_field.png)
 
-        Notes:
-        - This is test to see how he travels in general, there are initial valuas that can make him to travel in circles  
-        - In their method the electron goes up compared to mine method where the electron goes down, its because I simply forgot that positive current is electron moving in the opposite direction.  
-          So the "real" results are just flipped along the x axis, im lazy to fix it because I need to fix the whole website code.  
-        
-        The old method looks like simple circles, and the new mathod looks like "chaotic" but very stable circles.  
+          Releasing the electron from the center:
 
+          ![from center](./svg/plasma_simulation/from_center.png)
+
+          As we can see the methods give very similar results.
+
+          The code used for the quick simulation (its not available on this github its in my private repo):
+          ```
+          ## sagemath ##
+          import numpy as np
+          from datetime import datetime
+
+          def num(exp):
+            return numerical_approx(exp)
+
+          def parallel_1(v1, v2): # v1 projection when parallel to v2 => (v1 ∥ v2)
+            v2_unit = v2.normalized()
+            return v1.dot_product(v2_unit) * v2_unit
+          def vertical_1(v1, v2): # v1 projection when vertical to v2 => (v1 ⊥ v2)
+            v2_unit = v2.normalized()
+            # same result:
+            return v2_unit.cross_product( v1.cross_product(v2_unit) )
+            # return v1 - parallel_1(v1, v2)
+
+          def val(v):
+            return v.norm()
+          def unit(v):
+            if v.norm() == 0:
+              return vector([0,0,0])
+            else:
+              return v.normalized()
+
+          def circles_force(absolute_place_2, v_2, mass_2):
+            F_T = vector([0,0,0])
+            parts = 256
+
+            new_x = vector([1,0,0])
+            new_y = vector([0,1,0])
+
+            for part in range(parts):
+              degree = num(2*pi * part/parts)
+
+              relative_place_1 = num(sin(degree)*new_x + cos(degree)*new_y)
+
+              v_1 = num(unit(vector([0,0,1]).cross_product(relative_place_1)))
+              # stronger magnetif field by 2
+              # v_1 = v_1*2
+
+              # a = v^2/r_coil * r_c_hat (|v|=1 so i can skip it for faster calc)
+              # a_1 = num(v_1.dot_product(v_1) / val(relative_place_1) * unit(relative_place_1))
+              a_1 = num(unit(relative_place_1)/val(relative_place_1))
+
+              absolute_place_1 = num(vector([0,0,0]) + relative_place_1)
+
+              R = num(absolute_place_2 - absolute_place_1)
+
+              R_hat = num(unit(R))
+              R_val = num(val(R))
+
+              # mine
+              def particles_force(dv, da):
+                dv_hat = num(dv)
+                f = vector([0,0,0])
+
+                dv_r = num( parallel_1(dv, R_hat) )
+                dv_h = num( vertical_1(dv, R_hat) )
+                da_r = num( parallel_1(da, R_hat) )
+                da_h = num( vertical_1(da, R_hat) )
+
+                # mine old, 1/m is negligible for these scales
+                # f(r)
+                f += num( -1/2 * val(dv_r)^2 / R_val^2 * R_hat )
+                f += num( val(dv_h)^2 / R_val^2 * R_hat )
+                # f(v)
+                f += num( da_r / R_val )
+                f += num( 2 * da_h / R_val )
+
+                return f
+              
+              # "mine" force calculation
+              # minus on v_1 bcz positive current in v means electrons travel in -v.
+              v_1 = -v_1
+              f_2 = vector([0,0,0])
+              f_p_n = - particles_force(-v_1, -a_1)
+              f_n_n = particles_force( v_2 - v_1, -a_1)
+              f_2 = f_p_n + f_n_n
+
+              # "their" force calculation
+              # f_2 = v_1.cross_product(R_hat).cross_product(v_2) / R_val^2
+
+              F_T += num(f_2)
+
+            return num(F_T/parts)
+
+
+          # file_name = 'their-perfect.txt'
+          # location = vector([0.5,0,0])
+          # speed = vector([0,0.5,0])
+          # duration = 940
+
+          # file_name = 'mine-perfect.txt'
+          # location = vector([0.5,0,0])
+          # speed = vector([0,0.5,0])
+          # duration = 1000
+
+          # file_name = 'their-from-center.txt'
+          # location = vector([0,0,0])
+          # speed = vector([0,0.5,0])
+          # duration = 940
+
+          file_name = 'mine-from-center.txt'
+          location = vector([0,0,0])
+          speed = vector([0,0.5,0])
+          duration = 1000
+
+          f = {}
+          ## clean resutls and calculate over
+          open(file_name, 'w').close()
+          out_file = open(file_name, 'a')
+          sys.stdout = out_file
+
+          mass = 1
+
+          dt = 0.01
+
+          for i in range(duration):
+            F_T = circles_force(location, speed, mass)
+            speed = speed + F_T/mass * dt
+            location = location + speed * dt
+            print(location[0], location[1])
+          ```
+        </div>
+      </details>
+      <div class="markdown">
         ### <span class="auto_color">Atom Test</span>
         Lets say:
         - \\(q_1\\) = charge of an electron
