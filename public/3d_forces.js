@@ -686,10 +686,14 @@ window.calc_force = function (toolbar, scene) {
 
         function f_v(dv) {
           // better to use pure dv and not v so I wont do v = dv/2.
-          return R_hat.clone().multiplyScalar(  (-1/2*dv.dot(R_hat)**2 + dv.clone().cross(R_hat).length()**2) / R.length()**2  )
+          // r_hat * (-1/2*dv_r^2 + 2/3*dv_h^2)/r^2 + dv_h * (-2/3*dv_r*r_hat)/r^2
+          const dv_r = R_hat.clone().multiplyScalar(dv.dot(R_hat))
+          const dv_h = dv.clone().sub(dv_r)
+          return R_hat.clone().multiplyScalar(  (-1/2*dv_r.length()**2 + 2/3*dv_h.length()**2) / R.length()**2  ).add(dv_h.clone().multiplyScalar(-2/3 * dv_r.dot(R_hat) / R.length()**2))
         }
         function f_a(da) {
-          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  ).add(R_hat.clone().cross(da.clone().cross(R_hat)).multiplyScalar(  -2/R.length()  ))
+          // da_r/r
+          return R_hat.clone().multiplyScalar(  da.dot(R_hat) / R.length()  )
         }
 
         const f_p_n = f_v(v_1_p.clone().sub(v_2_n)).add(f_a(a_1_p.clone().sub(a_2_n))).negate()
