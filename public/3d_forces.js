@@ -171,88 +171,6 @@ window.calc_force_init = function (toolbar, scene, path1, path2) {
     const speed = new THREE.ArrowHelper( direction, position, 0, 0xe6763e )
     voltages2.add(speed)
   }
-  
-
-  // Check if 2d shape, to be able to use Faraday's law
-  function areas_for_faradays_law(wire) {
-    is_2d: if (wire.points_vec.length >= 3) {
-      const main_point = wire.points_vec[0]
-      // make sure that the shape is closed
-      if (!wire.closed) {
-        break is_2d
-      }
-      const new_x = wire.points_vec[1].clone().sub(main_point).normalize()
-      const surface_vec = wire.points_vec[2].clone().sub(main_point).cross(new_x).normalize()
-      const new_y = new_x.clone().cross(surface_vec).normalize()
-  
-      // yea i can probably use here 4D matrix instead of doing "sub(main_point)" and then "add(main_point)". but idk how to use matrixes so maybe in the future
-      const to_original_axis = new THREE.Matrix3()
-      // to_original_axis.set(new_x.x, new_x.y, new_x.z, new_y.x, new_y.y, new_y.z, surface_vec.x, surface_vec.y, surface_vec.z)
-      to_original_axis.set(new_x.x, new_y.x, surface_vec.x, new_x.y, new_y.y, surface_vec.y, new_x.z, new_y.z, surface_vec.z)
-      const to_new_axis = to_original_axis.clone().invert()
-      // check if each dot is on the surface + get the max and min points of the surface
-      const relative_locations = []
-      for (let i=0; i < wire.points_vec.length; i++) {
-        relative_locations.push(wire.points_vec[i].clone().sub(main_point).applyMatrix3(to_new_axis))
-      }
-      
-      const min = new THREE.Vector2()
-      const max = new THREE.Vector2()
-      for (let i=1; i < relative_locations.length; i++) {
-        if ( relative_locations[i].z != 0 ) {
-          break is_2d
-        }
-        if (relative_locations[i].x > max.x) { max.x = relative_locations[i].x }
-        if (relative_locations[i].x < min.x) { min.x = relative_locations[i].x }
-        if (relative_locations[i].y > max.y) { max.y = relative_locations[i].y }
-        if (relative_locations[i].y < min.y) { min.y = relative_locations[i].y }
-      }
-  
-      function is_intersecting(a, b, c, d)
-      {
-          const denominator = ((b.x - a.x) * (d.y - c.y)) - ((b.y - a.y) * (d.x - c.x));
-          const numerator1 = ((a.y - c.y) * (d.x - c.x)) - ((a.x - c.x) * (d.y - c.y));
-          const numerator2 = ((a.y - c.y) * (b.x - a.x)) - ((a.x - c.x) * (b.y - a.y));
-  
-          if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
-          
-          const r = numerator1 / denominator;
-          const s = numerator2 / denominator;
-  
-          return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
-      }
-  
-      // check which dots are inside the surface and add them as small squares (like 2d integral squares)
-      wire.areas = []
-      const step = Math.sqrt((max.x-min.x) * (max.y-min.y) / parts_2)
-      let width = min.x
-      let height = min.y
-  
-      while (height < max.y) {
-        let crosses = 0
-        // not efficient check if spot (width, height) is inside the shape by measuring intersections with the edge
-        for (let i=0; i < relative_locations.length-1; i++) {
-          if ( is_intersecting({x: min.x-1, y: min.y-1}, {x: width, y: height}, relative_locations[i], relative_locations[i+1]) ) {
-            crosses++
-          }
-        }
-  
-        if (crosses % 2 == 1) {
-          wire.areas.push(new THREE.Vector3(width, height, 0).applyMatrix3(to_original_axis).add(main_point))
-        }
-  
-        width += step
-        if (width > max.x) {
-          width = min.x
-          height += step
-        }
-      }
-      wire.area_value = step*step // no need to convert back to original axis because the bases axis are normolized
-      wire.surface_vec = surface_vec
-    }
-  }
-  areas_for_faradays_law(wire1)
-  areas_for_faradays_law(wire2)
 
   // speed arrows
   const wire1_speeds = new THREE.Group()
@@ -574,20 +492,6 @@ window.calc_force = function (toolbar, scene) {
   wire2.torque = torque_on_2
   wire2.voltage_arrows = voltage2_arrows
 
-  // take the center of coil, do vector multiplication from wire to center? split it into some parts and thats the tiny areas
-  // not sure how to connect them (areas) tho
-  // and i should fix the minus on the speed first
-  if (wire1_mesh.areas) {
-    wire1.areas = wire1_mesh.areas.map(vec => vec.clone().applyEuler(wire1.rotation).add(wire1.position))
-    wire1.area_value = wire1_mesh.area_value
-    wire1.surface_vec = wire1_mesh.surface_vec.clone().applyEuler(wire1.rotation)
-  }
-  if (wire2_mesh.areas) {
-    wire2.areas = wire2_mesh.areas.map(vec => vec.clone().applyEuler(wire2.rotation).add(wire2.position))
-    wire2.area_value = wire2_mesh.area_value
-    wire2.surface_vec = wire2_mesh.surface_vec.clone().applyEuler(wire2.rotation)
-  }
-
   const mine_force = toolbar.children[0].children[1].children[0].checked
   const results = wire2_mesh.results
 
@@ -716,42 +620,22 @@ window.calc_force = function (toolbar, scene) {
         wire2.voltage += f_p_n.clone().add(f_n_n).negate().dot(v_2.clone().normalize().multiplyScalar(wire2.length / parts_2))
       } else {
         // "their" force calculation
-        f_1 = v_2.clone().cross(R_hat.clone().negate()).cross(v_1).divideScalar(R.length()**2).multiplyScalar(wire1.current*wire2.current)
-        f_2 = v_1.clone().cross(R_hat                 ).cross(v_2).divideScalar(R.length()**2).multiplyScalar(wire1.current*wire2.current)
+        f_1 = v_1.clone().cross(v_2.clone().cross(R_hat                 )).divideScalar(R.length()**2).multiplyScalar(wire1.current*wire2.current)
+        f_2 = v_2.clone().cross(v_1.clone().cross(R_hat.clone().negate())).divideScalar(R.length()**2).multiplyScalar(wire1.current*wire2.current)
 
-        // "their" voltage calculation
-        if (wire1.areas && point_1 === 1) {
-          for (let i = 0; i < wire1.areas.length; i++) {
-            const dt = err_num
-            const area_place = wire1.areas[i]
-
-            const R_A_old = absolute_place_2.clone().sub(area_place)
-            const R_A_hat_old = R_A_old.clone().normalize().negate() // instead of (a-b) to (b-a) i just do (a-b).negate()
-            const old_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_old).dot(wire1.surface_vec) / R_A_old.length()**2 * wire1.area_value
-
-            const R_A_new = absolute_place_2.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
-            const R_A_hat_new = R_A_new.clone().normalize().negate()
-            const new_flux = v_2.clone().multiplyScalar(wire2.current).cross(R_A_hat_new).dot(wire1.surface_vec) / R_A_new.length()**2 * wire1.area_value
-
-            wire1.voltage += -(new_flux - old_flux) / dt
-          }
-        }
-        if (wire2.areas && point_2 === 1) {
-          for (let i = 0; i < wire2.areas.length; i++) {
-            const dt = err_num
-            const area_place = wire2.areas[i]
-
-            const R_A_old = absolute_place_1.clone().sub(area_place)
-            const R_A_hat_old = R_A_old.clone().normalize()
-            const old_flux = v_1.clone().multiplyScalar(wire1.current).cross(R_A_hat_old).dot(wire2.surface_vec) / R_A_old.length()**2 * wire2.area_value
-
-            const R_A_new = absolute_place_1.clone().add(wire1.speed.clone().multiplyScalar(dt)).sub(area_place)
-            const R_A_hat_new = R_A_new.clone().normalize()
-            const new_flux = v_1.clone().multiplyScalar(wire1.current + wire1.current_change * dt).cross(R_A_hat_new).dot(wire2.surface_vec) / R_A_new.length()**2 * wire2.area_value
-
-            wire2.voltage += -(new_flux - old_flux) / dt
-          } 
-        }
+        // "their" voltage calculation, not sure whats going on here, used chatgpt + adjustmnets
+        let v_1_n = v_1.clone().multiplyScalar(wire1.current).add(wire1.speed)
+        let v_2_n = v_2.clone().multiplyScalar(wire2.current)
+        let B = v_2_n.cross(R_hat                 ).divideScalar(R.length()**2)
+        let F = v_1_n.cross(B)
+        let wire_direction = v_1.clone().normalize().multiplyScalar(wire1.length / parts_1)
+        wire1.voltage += F.dot(wire_direction)
+        v_1_n = v_1.clone().multiplyScalar(wire1.current)
+        v_2_n = v_2.clone().multiplyScalar(wire2.current).add(wire1.speed)
+        B = v_1_n.clone().cross(R_hat.clone().negate()).divideScalar(R.length()**2)
+        F = v_2_n.clone().cross(B)
+        wire_direction = v_2.clone().normalize().multiplyScalar(wire2.length / parts_2)
+        wire2.voltage -= F.dot(wire_direction)
       }
 
       F_1_T.add(f_1)
@@ -848,11 +732,7 @@ window.calc_force = function (toolbar, scene) {
   // update voltages
   results.querySelector(".voltage_results").innerHTML = "Voltage on Green wire: 0\nVoltage on Blue wire : 0";
   [wire1, wire2].forEach(wire => {
-    if (!mine_force && !wire.areas) { // if not valid: their method and weird shape
-      update_voltage(wire, "can't calc this shape")
-    } else { // rest just print the result
-      update_voltage(wire)
-    }
+    update_voltage(wire)
   })
 
 }
