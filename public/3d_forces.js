@@ -630,10 +630,13 @@ window.calc_force = function (toolbar, scene) {
         let F = v_1_n.cross(B)
         let wire_direction = v_1.clone().normalize().multiplyScalar(wire1.length / parts_1)
         wire1.voltage += F.dot(wire_direction)
+        
         v_1_n = v_1.clone().multiplyScalar(wire1.current)
-        v_2_n = v_2.clone().multiplyScalar(wire2.current).add(wire1.speed)
+        v_2_n = v_2.clone().multiplyScalar(wire2.current)
+        const a_1_n = v_1.clone().multiplyScalar(wire1.current_change)
+        const E = a_1_n.clone().multiplyScalar(1 / R.length()).add(v_1_n.multiplyScalar(-wire1.speed.dot(R_hat) / R.length()**2))
         B = v_1_n.clone().cross(R_hat.clone().negate()).divideScalar(R.length()**2)
-        F = v_2_n.clone().cross(B)
+        F = E.clone().add(v_2_n.clone().cross(B))
         wire_direction = v_2.clone().normalize().multiplyScalar(wire2.length / parts_2)
         wire2.voltage -= F.dot(wire_direction)
       }
